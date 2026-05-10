@@ -1,0 +1,2656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>#2Meals2Lives — A Movement Born in India</title>
+<meta name="description" content="Two hands. Two meals. Two lives. One movement. Glenn Freezman's humanitarian movement turning food waste into human connection, born in India.">
+<meta name="keywords" content="2Meals2Lives, food waste, humanitarian, Glenn Freezman, India, movement, speakers">
+<meta name="author" content="Glenn Freezman, Chief Evangelist">
+<meta property="og:title" content="#2Meals2Lives">
+<meta property="og:description" content="Two hands. Two meals. Two lives. One movement. No permission required. No forms to sign.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="#2Meals2Lives">
+<meta name="twitter:description" content="Two hands. Two meals. Two lives. One movement.">
+<meta name="theme-color" content="#B8860B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   DESIGN SYSTEM — GOLD & BLACK
+═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   THEME TOKENS — swapped by JS via data-theme
+═══════════════════════════════════════════════ */
+
+/* DEFAULT: Electric Gold (vivid) */
+:root {
+  --g0: #080600;
+  --g1: #0d0a00;
+  --g2: #161100;
+  --g3: #221b00;
+  --g4: #332800;
+  --g5: #8a6a00;
+  --g6: #c9960a;   /* accent dark */
+  --g7: #f0b800;   /* accent mid  */
+  --g8: #ffe033;   /* accent bright */
+  --g9: #ffec6e;   /* highlight */
+  --ga: #fff3a0;   /* pale */
+  --gb: #fffbe6;   /* tint */
+  --ink:  #070600;
+  --dark: #100d00;
+  --mid:  #1c1600;
+  --warm: #4e3d00;
+  --mute: #9a8030; /* raised from #7a6010 — card contrast 4.49 */
+  --line: rgba(240,184,0,.2);
+  --wh:   #ffffff;
+  --nav-h: 66px;
+  --r: 3px;
+  --ease: .22s cubic-bezier(.4,0,.2,1);
+  --ease-out: .35s cubic-bezier(0,.55,.45,1);
+}
+
+/* THEME: Crimson & Black */
+[data-theme="crimson"] {
+  --g0: #080000;
+  --g1: #0e0000;
+  --g2: #180000;
+  --g3: #260000;
+  --g4: #3a0000;
+  --g5: #8b0000;
+  --g6: #c0001a;
+  --g7: #e8001f;
+  --g8: #ff2040;
+  --g9: #ff607a;
+  --ga: #ffb3be;
+  --gb: #fff0f2;
+  --ink:  #070000;
+  --dark: #100000;
+  --mid:  #1c0000;
+  --warm: #500010;
+  --mute: #c06070; /* lifted from #7a2030 — contrast 6.1:1 on bg */
+  --line: rgba(232,0,31,.2);
+}
+
+/* THEME: Electric Blue & Black */
+[data-theme="blue"] {
+  --g0: #000408;
+  --g1: #00060e;
+  --g2: #000c1a;
+  --g3: #001428;
+  --g4: #001e3c;
+  --g5: #0050a0;
+  --g6: #0070d4;
+  --g7: #0096ff;
+  --g8: #33b0ff;
+  --g9: #70caff;
+  --ga: #b8e4ff;
+  --gb: #e6f5ff;
+  --ink:  #000408;
+  --dark: #000810;
+  --mid:  #001020;
+  --warm: #003060;
+  --mute: #4488d0; /* raised from #205080 — bg 5.56, card 5.02 */
+  --line: rgba(0,150,255,.2);
+}
+
+/* THEME: Neon Green & Black */
+[data-theme="green"] {
+  --g0: #000800;
+  --g1: #000e00;
+  --g2: #001800;
+  --g3: #002600;
+  --g4: #003800;
+  --g5: #007000;
+  --g6: #00a000;
+  --g7: #00cc00;
+  --g8: #00ff44;
+  --g9: #66ff88;
+  --ga: #b3ffcc;
+  --gb: #e6fff0;
+  --ink:  #000800;
+  --dark: #000e00;
+  --mid:  #001600;
+  --warm: #004400;
+  --mute: #30a060; /* raised from #206040 — bg 6.11, card 4.95 */
+  --line: rgba(0,204,0,.2);
+}
+
+/* THEME: Deep Purple & Black */
+[data-theme="purple"] {
+  --g0: #060008;
+  --g1: #0a000e;
+  --g2: #120018;
+  --g3: #1e0028;
+  --g4: #2e003e;
+  --g5: #7000b0;
+  --g6: #9400d4;
+  --g7: #c000ff;   /* brightened from #b800ff — label/btn contrast 4.63 on bg */
+  --g8: #d066ff;
+  --g9: #e49aff;
+  --ga: #f3ccff;
+  --gb: #faf0ff;
+  --ink:  #060008;
+  --dark: #0c0014;
+  --mid:  #160022;
+  --warm: #420060;
+  --mute: #b050d0; /* raised from #601080 — bg 4.85, card 4.52 */
+  --line: rgba(184,0,255,.2);
+}
+
+/* THEME: Molten Orange & Black */
+[data-theme="orange"] {
+  --g0: #080200;
+  --g1: #0e0400;
+  --g2: #180800;
+  --g3: #260e00;
+  --g4: #3c1600;
+  --g5: #8c3200;
+  --g6: #c04800;
+  --g7: #e85c00;
+  --g8: #ff7a1a;
+  --g9: #ffa060;
+  --ga: #ffc8a0;
+  --gb: #fff0e6;
+  --ink:  #080200;
+  --dark: #100400;
+  --mid:  #1c0a00;
+  --warm: #4a1800;
+  --mute: #c07840; /* raised from #703000 — bg 5.89, card 5.24 */
+  --line: rgba(232,92,0,.2);
+}
+
+/* THEME: Ice White & Black */
+[data-theme="ice"] {
+  --g0: #040608;
+  --g1: #080c10;
+  --g2: #101820;
+  --g3: #182430;
+  --g4: #203040;
+  --g5: #607080;
+  --g6: #90a8b8;
+  --g7: #c0d8e8;
+  --g8: #e0f0f8;
+  --g9: #f0f8fc;
+  --ga: #f8fcff;
+  --gb: #ffffff;
+  --ink:  #040608;
+  --dark: #08101a;
+  --mid:  #101c28;
+  --warm: #304050;
+  --mute: #5a7e90; /* raised from #507080 — card contrast 3.61 */
+  --line: rgba(192,216,232,.2);
+}
+
+/* THEME: Original Light — Cream & Ember (matches the earlier pasted HTML)
+   Inverted ramp: g0=lightest cream → ga=darkest ink
+   Accent: ember orange #ea580c / amber #fbbf24
+*/
+[data-theme="original"] {
+  /* Backgrounds: cream → paper → warm white (light ramp) */
+  --g0: #fafaf9;   /* body bg — cream */
+  --g1: #f5f1ea;   /* paper / section alt bg */
+  --g2: #ede9e0;   /* slightly deeper section bg */
+  --g3: #e8e3d8;   /* card bg */
+  --g4: #d8d3c8;   /* deeper card / dividers */
+  --g5: #a8a29e;   /* muted text / mist */
+  --g6: #c2410c;   /* ember — dark accent */
+  --g7: #ea580c;   /* ember-bright — primary accent */
+  --g8: #fbbf24;   /* amber-soft — bright accent / buttons */
+  --g9: #fde68a;   /* pale amber highlight */
+  --ga: #1c1917;   /* ink — body text (dark on light) */
+  --gb: #ffffff;   /* pure white */
+
+  /* Neutrals mapped to warm ink */
+  --ink:  #fafaf9;  /* body bg (light) */
+  --dark: #f5f1ea;
+  --mid:  #ede9e0;
+  --warm: #44403c;  /* ink-soft */
+  --mute: #78716c;  /* ash */
+  --line: #e7e5e4;  /* warm grey line */
+  --wh:   #ffffff;
+}
+
+/* Override body text color for light theme — text must be dark */
+[data-theme="original"] body { color: #1c1917; }
+[data-theme="original"] h2   { color: #1c1917; }
+[data-theme="original"] .body-text { color: #44403c; }
+[data-theme="original"] .bt  { color: #44403c; }
+[data-theme="original"] blockquote.pull { color: #ea580c; border-color: #ea580c; }
+[data-theme="original"] .lbl { color: #c2410c; }
+[data-theme="original"] .g-line { background: #c2410c; opacity: .5; }
+
+/* Nav: cream bg, dark links */
+[data-theme="original"] nav { background: rgba(250,250,249,.95); border-bottom-color: #e7e5e4; }
+[data-theme="original"] .nav-logo { color: #c2410c; }
+[data-theme="original"] .nav-links a { color: #78716c; }
+[data-theme="original"] .nav-links a:hover,
+[data-theme="original"] .nav-links a.active { color: #ea580c; }
+[data-theme="original"] .nav-links a::after { background: #ea580c; }
+[data-theme="original"] .nav-li-btn { background: #f5f1ea; color: #78716c; border-color: #e7e5e4; }
+[data-theme="original"] .nav-li-btn:hover { background: #ea580c; color: #fff; border-color: #ea580c; }
+[data-theme="original"] .nav-toggle { color: #1c1917; }
+[data-theme="original"] .mob-menu { background: rgba(250,250,249,.98); }
+[data-theme="original"] .mob-menu a { color: #1c1917; }
+[data-theme="original"] .mob-menu a:hover { color: #ea580c; }
+[data-theme="original"] .mob-cta { background: #fbbf24 !important; color: #1c1917 !important; }
+
+/* Hero: dark photographic bg with ember gradient — stays dark */
+[data-theme="original"] .hero { background: #1c1917; }
+[data-theme="original"] .hero h1 em { color: #fbbf24; }
+[data-theme="original"] .kicker { color: #fbbf24; border-color: rgba(251,191,36,.35); background: rgba(255,255,255,.08); }
+[data-theme="original"] .kicker-dot { background: #fbbf24; }
+
+/* Buttons */
+[data-theme="original"] .btn-gold { background: #fbbf24; color: #1c1917; box-shadow: 0 8px 28px rgba(251,191,36,.3); }
+[data-theme="original"] .btn-gold:hover { background: #f59e0b; }
+
+/* Section backgrounds */
+[data-theme="original"] .bg-black { background: #fafaf9; }
+[data-theme="original"] .bg-dark  { background: #f5f1ea; }
+[data-theme="original"] .bg-mid   { background: #ede9e0; }
+
+/* Gratitude band */
+[data-theme="original"] .gratitude { background: #fff7ed; border-color: #e7e5e4; }
+[data-theme="original"] .gratitude::before { background: linear-gradient(to right, transparent, #ea580c, transparent); }
+[data-theme="original"] .gratitude-quote { color: #44403c; }
+[data-theme="original"] .gratitude-sig { color: #78716c; }
+
+/* Story pullquote */
+[data-theme="original"] .story-pullquote { color: #ea580c; border-left-color: #ea580c; }
+
+/* Step cards */
+[data-theme="original"] .step-card { background: #ffffff; border-top-color: #ea580c; border-color: #e7e5e4; }
+[data-theme="original"] .step-card::before { background: linear-gradient(to right, #c2410c, #fbbf24); }
+[data-theme="original"] .step-num-bg { color: rgba(194,65,12,.08); }
+[data-theme="original"] .step-icon { background: #fff7ed; border-color: #fde8cc; color: #ea580c; }
+[data-theme="original"] .step-card h3 { color: #1c1917; }
+[data-theme="original"] .step-card p  { color: #78716c; }
+
+/* Speakers section stays dark photographic */
+[data-theme="original"] .speakers-wrap::after { background: linear-gradient(90deg,rgba(12,10,9,.97) 0%,rgba(28,25,23,.92) 55%,rgba(124,45,18,.8) 100%); }
+[data-theme="original"] .speakers-highlight { color: #fbbf24; }
+
+/* Stats */
+[data-theme="original"] .stat { background: #ffffff; border-color: #e7e5e4; }
+[data-theme="original"] .stat-num { color: #c2410c; }
+[data-theme="original"] .stat-label { color: #78716c; }
+
+/* How-note */
+[data-theme="original"] .how-note-inner { background: #ffffff; border-color: #e7e5e4; }
+[data-theme="original"] .how-note-inner svg { color: #ea580c; }
+[data-theme="original"] .how-note-inner strong { color: #1c1917; }
+[data-theme="original"] .how-note-inner span { color: #78716c; }
+
+/* Postcards */
+[data-theme="original"] .postcard { background: #ffffff; border-color: #e7e5e4; }
+[data-theme="original"] .postcard-caption { color: #44403c; }
+[data-theme="original"] .postcard-meta { border-color: #e7e5e4; color: #a8a29e; }
+[data-theme="original"] .postcard-meta .author { color: #44403c; }
+
+/* Photo slots */
+[data-theme="original"] .photo-slot { background: linear-gradient(135deg,#fff7ed,#fde8cc); border-color: rgba(194,65,12,.22); }
+[data-theme="original"] .photo-slot:hover { border-color: #ea580c; background: linear-gradient(135deg,#fff1e0,#fcd9b0); }
+[data-theme="original"] .s-icon { stroke: rgba(194,65,12,.35); }
+[data-theme="original"] .s-lbl { color: #78716c; }
+[data-theme="original"] .s-cap { background: linear-gradient(to top,rgba(28,25,23,.85),transparent); }
+[data-theme="original"] .slot-num { color: rgba(194,65,12,.2); }
+
+/* Gallery bar & toggle */
+[data-theme="original"] .gallery-counter span { color: #ea580c; }
+[data-theme="original"] .gallery-progress-track { background: rgba(194,65,12,.1); }
+[data-theme="original"] .gallery-progress-fill { background: linear-gradient(to right,#c2410c,#fbbf24); }
+[data-theme="original"] .gallery-toggle-btn { background: #ffffff; color: #ea580c; border-color: #e7e5e4; }
+[data-theme="original"] .gallery-toggle-btn:hover { background: #fff7ed; border-color: #fbbf24; }
+[data-theme="original"] .toggle-count { background: rgba(194,65,12,.1); color: #c2410c; }
+
+/* G-note */
+[data-theme="original"] .g-note { background: #fff7ed; border-left-color: #d97706; color: #78716c; }
+[data-theme="original"] .g-note svg { stroke: #d97706; }
+
+/* Upload card / dropzone */
+[data-theme="original"] .upload-card { background: #ffffff; border-color: #e7e5e4; }
+[data-theme="original"] .dropzone { background: #fffbeb; border-color: #e7e5e4; }
+[data-theme="original"] .dropzone:hover { border-color: #ea580c; background: #fff3cc; }
+[data-theme="original"] .dropzone-label { color: #1c1917; }
+[data-theme="original"] .dropzone-hint { color: #78716c; }
+
+/* Join / CTA — stays orange gradient */
+[data-theme="original"] .join-wrap::before { background: linear-gradient(135deg,#ea580c,#f59e0b); }
+[data-theme="original"] .join-inner h2 { color: #1c1917; }
+[data-theme="original"] .join-gratitude { color: rgba(0,0,0,.72); }
+[data-theme="original"] .join-sub { color: rgba(0,0,0,.6); }
+[data-theme="original"] .join-input { background: rgba(0,0,0,.1); border-color: rgba(0,0,0,.2); color: #1c1917; }
+[data-theme="original"] .join-input::placeholder { color: rgba(0,0,0,.4); }
+[data-theme="original"] .join-btn { background: #1c1917; color: #fbbf24; }
+[data-theme="original"] .join-btn:hover { background: #000; color: #fde68a; }
+[data-theme="original"] .join-fine { color: rgba(0,0,0,.5); }
+
+/* Glenn card */
+[data-theme="original"] .glenn-card { background: rgba(194,65,12,.06); border-color: rgba(251,191,36,.15); }
+[data-theme="original"] .glenn-card:hover { background: rgba(194,65,12,.1); border-color: rgba(251,191,36,.3); }
+[data-theme="original"] .glenn-card-name { color: #1c1917 !important; }
+[data-theme="original"] .glenn-card-title { color: #c2410c !important; }
+[data-theme="original"] .glenn-card-cta { background: rgba(194,65,12,.08); color: #c2410c !important; border-color: #e7e5e4; }
+
+/* Footer — stays very dark */
+[data-theme="original"] footer { background: #0c0a09; border-color: rgba(251,191,36,.1); }
+[data-theme="original"] .footer-brand { color: #fbbf24; }
+[data-theme="original"] .footer-brand svg { fill: #ea580c; }
+[data-theme="original"] .footer-col h4 { color: #fbbf24; }
+[data-theme="original"] .footer-col p,
+[data-theme="original"] .footer-col a { color: rgba(255,255,255,.5); }
+[data-theme="original"] .footer-col a:hover { color: #fbbf24; }
+[data-theme="original"] .footer-socials { border-color: rgba(255,255,255,.06); }
+[data-theme="original"] .socials-label { color: rgba(255,255,255,.3); }
+[data-theme="original"] .social-btn { background: rgba(255,255,255,.05); color: rgba(255,255,255,.5); border-color: rgba(255,255,255,.1); }
+[data-theme="original"] .social-btn:hover { background: #ea580c; color: #fff; border-color: #ea580c; }
+[data-theme="original"] .footer-bottom p { color: rgba(255,255,255,.35); }
+[data-theme="original"] .footer-tagline { color: #fbbf24 !important; }
+
+/* Back to top */
+[data-theme="original"] #btt { background: #c2410c; box-shadow: 0 4px 20px rgba(194,65,12,.4); }
+[data-theme="original"] #btt:hover { background: #ea580c; }
+
+/* Hero scroll bar */
+[data-theme="original"] .scroll-bar { background: linear-gradient(to bottom,#ea580c,transparent); }
+
+/* Theme dock in light mode */
+[data-theme="original"] .theme-dock-toggle { background: #ffffff; color: #c2410c; border-color: #e7e5e4; }
+[data-theme="original"] .theme-dock-toggle:hover { background: #fff7ed; border-color: rgba(194,65,12,.4); }
+[data-theme="original"] .theme-panel { background: #ffffff; border-color: #e7e5e4; }
+[data-theme="original"] .theme-panel-label { color: #a8a29e; }
+[data-theme="original"] .theme-btn { background: #fafaf9; border-color: #e7e5e4; color: #44403c; }
+[data-theme="original"] .theme-btn:hover { background: #fff7ed; border-color: rgba(194,65,12,.35); }
+[data-theme="original"] .theme-btn.active { border-color: #ea580c; background: #fff7ed; }
+[data-theme="original"] .theme-btn.active::after { color: #ea580c; }
+
+/* THEME: Digital Speaker Agent™ — Cyan / Teal on Pure Black */
+[data-theme="dsa"] {
+  --g0: #000000;   /* pure black background */
+  --g1: #020408;
+  --g2: #040c14;
+  --g3: #071620;
+  --g4: #0a2030;
+  --g5: #005880;
+  --g6: #0085be;   /* DSA teal-blue accent dark */
+  --g7: #00b4ff;   /* DSA cyan — primary accent */
+  --g8: #33c8ff;   /* bright cyan */
+  --g9: #66d8ff;   /* highlight */
+  --ga: #b3edff;   /* pale cyan text */
+  --gb: #e6f8ff;   /* tint */
+  --ink:  #000000;
+  --dark: #020408;
+  --mid:  #060e18;
+  --warm: #003a5c;
+  --mute: #1a7090;
+  --line: rgba(0,180,255,.18);
+  --wh:   #ffffff;
+}
+
+[data-theme="dsa"] {
+  --g0: #000000;   /* pure black background */
+  --g1: #020408;
+  --g2: #040c14;
+  --g3: #071620;
+  --g4: #0a2030;
+  --g5: #005880;
+  --g6: #0085be;   /* DSA teal-blue accent dark */
+  --g7: #00b4ff;   /* DSA cyan — primary accent */
+  --g8: #33c8ff;   /* bright cyan */
+  --g9: #66d8ff;   /* highlight */
+  --ga: #b3edff;   /* pale cyan text */
+  --gb: #e6f8ff;   /* tint */
+  --ink:  #000000;
+  --dark: #020408;
+  --mid:  #060e18;
+  --warm: #003a5c;
+  --mute: #1a7090;
+  --line: rgba(0,180,255,.18);
+  --wh:   #ffffff;
+}
+
+/* THEME: Thynkwise — Electric Purple + Cyan on Pearl White
+   Extracted from Thynkwise brand imagery:
+   Base: lavender-white #f0f0ff / #f8f6ff
+   Primary: electric violet #7b2fff → deep purple #4a00a0
+   Accent: electric cyan #00d4ff
+   Text: deep indigo #1a0050
+*/
+[data-theme="thynkwise"] {
+  /* Light backgrounds — pearl whites and lavender tints */
+  --g0: #f8f6ff;   /* pearl white body bg */
+  --g1: #f0ecff;   /* lavender-white section alt */
+  --g2: #e8e0ff;   /* light purple section */
+  --g3: #ffffff;   /* card white */
+  --g4: #ede8ff;   /* card hover */
+  --g5: #7b2fff;   /* electric violet mid */
+  --g6: #5a00d4;   /* deep purple accent dark */
+  --g7: #7b2fff;   /* electric violet — primary accent */
+  --g8: #a855f7;   /* bright violet */
+  --g9: #00d4ff;   /* electric cyan — spark accent */
+  --ga: #1a0050;   /* deep indigo — body text */
+  --gb: #ffffff;
+
+  --ink:  #f8f6ff;  /* body bg = light */
+  --dark: #f0ecff;
+  --mid:  #e8e0ff;
+  --warm: #3b0080;  /* dark purple text */
+  --mute: #7c6fa0;  /* muted purple */
+  --line: rgba(123,47,255,.15);
+  --wh:   #ffffff;
+}
+
+/* Body & global text — dark on light */
+[data-theme="thynkwise"] body   { color: #1a0050; background: #f8f6ff; }
+[data-theme="thynkwise"] h2     { color: #1a0050; }
+[data-theme="thynkwise"] .body-text { color: #3b0080; }
+[data-theme="thynkwise"] .bt    { color: #3b0080; }
+[data-theme="thynkwise"] blockquote.pull { color: #7b2fff; border-left-color: #7b2fff; }
+[data-theme="thynkwise"] .lbl   { color: #5a00d4; }
+[data-theme="thynkwise"] .g-line { background: #7b2fff; opacity: .5; }
+
+/* Nav */
+[data-theme="thynkwise"] nav { background: rgba(248,246,255,.96); border-bottom-color: rgba(123,47,255,.12); box-shadow: none; }
+[data-theme="thynkwise"] nav.scrolled { box-shadow: 0 2px 20px rgba(123,47,255,.1); }
+[data-theme="thynkwise"] .nav-logo { color: #7b2fff; }
+[data-theme="thynkwise"] .nav-logo svg { fill: #5a00d4; }
+[data-theme="thynkwise"] .nav-links a { color: #7c6fa0; }
+[data-theme="thynkwise"] .nav-links a:hover,
+[data-theme="thynkwise"] .nav-links a.active { color: #7b2fff; }
+[data-theme="thynkwise"] .nav-links a::after { background: #7b2fff; }
+[data-theme="thynkwise"] .nav-li-btn { background: #f0ecff; color: #7c6fa0; border-color: rgba(123,47,255,.15); }
+[data-theme="thynkwise"] .nav-li-btn:hover { background: #7b2fff; color: #fff; border-color: #7b2fff; }
+[data-theme="thynkwise"] .nav-toggle { color: #1a0050; }
+[data-theme="thynkwise"] .mob-menu { background: rgba(248,246,255,.98); }
+[data-theme="thynkwise"] .mob-menu a { color: #1a0050; }
+[data-theme="thynkwise"] .mob-menu a:hover { color: #7b2fff; }
+[data-theme="thynkwise"] .mob-cta { background: #7b2fff !important; color: #fff !important; }
+
+/* Hero — stays rich dark with purple gradient overlay */
+[data-theme="thynkwise"] .hero { background: #0d0020; }
+[data-theme="thynkwise"] .hero::before {
+  background:
+    radial-gradient(ellipse 70% 55% at 65% 50%, rgba(123,47,255,.28) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 12% 80%, rgba(0,212,255,.15) 0%, transparent 60%);
+}
+[data-theme="thynkwise"] .hero::after { background: linear-gradient(to right, transparent, #7b2fff, transparent); }
+[data-theme="thynkwise"] .hero h1 em { color: #00d4ff; }
+[data-theme="thynkwise"] .kicker { color: #00d4ff; border-color: rgba(0,212,255,.35); background: rgba(123,47,255,.12); }
+[data-theme="thynkwise"] .kicker-dot { background: #00d4ff; box-shadow: 0 0 0 4px rgba(0,212,255,.2); }
+[data-theme="thynkwise"] .hero-sub { color: rgba(255,255,255,.68); }
+[data-theme="thynkwise"] .scroll-bar { background: linear-gradient(to bottom, #7b2fff, transparent); }
+[data-theme="thynkwise"] .hero-tagline { color: rgba(123,47,255,.5); }
+
+/* Buttons */
+[data-theme="thynkwise"] .btn-gold { background: #7b2fff; color: #fff; box-shadow: 0 8px 28px rgba(123,47,255,.35); }
+[data-theme="thynkwise"] .btn-gold:hover { background: #6600ee; box-shadow: 0 14px 36px rgba(123,47,255,.45); }
+[data-theme="thynkwise"] .btn-outline { color: rgba(255,255,255,.7); border-color: rgba(123,47,255,.35); }
+[data-theme="thynkwise"] .btn-outline:hover { border-color: #7b2fff; color: #fff; }
+
+/* Section backgrounds */
+[data-theme="thynkwise"] .bg-black { background: #f8f6ff; }
+[data-theme="thynkwise"] .bg-dark  { background: #f0ecff; }
+[data-theme="thynkwise"] .bg-mid   { background: #e8e0ff; }
+
+/* Gratitude band */
+[data-theme="thynkwise"] .gratitude { background: linear-gradient(to right, #f0ecff, #e8e0ff, #f0ecff); border-color: rgba(123,47,255,.12); }
+[data-theme="thynkwise"] .gratitude::before { background: linear-gradient(to right, transparent, #7b2fff, transparent); }
+[data-theme="thynkwise"] .gratitude-quote { color: #3b0080; }
+[data-theme="thynkwise"] .gratitude-sig { color: #7c6fa0; }
+
+/* Story pullquote */
+[data-theme="thynkwise"] .story-pullquote { color: #7b2fff; border-left-color: #7b2fff; }
+[data-theme="thynkwise"] .story-img-wrap { border-color: rgba(123,47,255,.15); }
+
+/* Step cards */
+[data-theme="thynkwise"] .step-card { background: #fff; border-top: none; border: 1px solid rgba(123,47,255,.12); border-radius: 14px; }
+[data-theme="thynkwise"] .step-card::before { background: linear-gradient(to right, #7b2fff, #00d4ff); }
+[data-theme="thynkwise"] .step-num-bg { color: rgba(123,47,255,.07); }
+[data-theme="thynkwise"] .step-icon { background: linear-gradient(135deg, #f0ecff, #e8e0ff); border-color: rgba(123,47,255,.15); color: #7b2fff; }
+[data-theme="thynkwise"] .step-card h3 { color: #1a0050; }
+[data-theme="thynkwise"] .step-card p  { color: #7c6fa0; }
+[data-theme="thynkwise"] .step-card:hover { border-color: rgba(123,47,255,.35); box-shadow: 0 8px 32px rgba(123,47,255,.12); }
+
+/* Speakers section — stays dark, gets purple tint */
+[data-theme="thynkwise"] .speakers-wrap::after { background: linear-gradient(90deg, rgba(13,0,32,.97) 0%, rgba(26,0,80,.92) 55%, rgba(90,0,212,.7) 100%); }
+[data-theme="thynkwise"] .speakers-highlight { color: #00d4ff; }
+
+/* Stats */
+[data-theme="thynkwise"] .stat { background: #fff; border-color: rgba(123,47,255,.12); }
+[data-theme="thynkwise"] .stat:hover { border-color: rgba(123,47,255,.35); }
+[data-theme="thynkwise"] .stat-num { color: #7b2fff; }
+[data-theme="thynkwise"] .stat-label { color: #7c6fa0; }
+[data-theme="thynkwise"] .global-banner-content h3 { color: #fff; }
+
+/* How-note */
+[data-theme="thynkwise"] .how-note-inner { background: #fff; border-color: rgba(123,47,255,.15); }
+[data-theme="thynkwise"] .how-note-inner svg { color: #7b2fff; }
+[data-theme="thynkwise"] .how-note-inner strong { color: #1a0050; }
+[data-theme="thynkwise"] .how-note-inner span { color: #7c6fa0; }
+
+/* Postcards */
+[data-theme="thynkwise"] .postcard { background: #fff; border-color: rgba(123,47,255,.12); }
+[data-theme="thynkwise"] .postcard:hover { border-color: rgba(123,47,255,.3); box-shadow: 0 16px 40px rgba(123,47,255,.1); }
+[data-theme="thynkwise"] .postcard-caption { color: #3b0080; }
+[data-theme="thynkwise"] .postcard-meta { border-color: rgba(123,47,255,.1); color: #7c6fa0; }
+[data-theme="thynkwise"] .postcard-meta .author { color: #1a0050; }
+[data-theme="thynkwise"] .postcard-img img { filter: none; }
+
+/* Photo slots */
+[data-theme="thynkwise"] .photo-slot { background: linear-gradient(135deg, #f0ecff, #e8e0ff); border-color: rgba(123,47,255,.2); }
+[data-theme="thynkwise"] .photo-slot:hover { border-color: #7b2fff; background: linear-gradient(135deg, #e8e0ff, #ddd0ff); transform: translateY(-2px); }
+[data-theme="thynkwise"] .s-icon { stroke: rgba(123,47,255,.35); }
+[data-theme="thynkwise"] .s-lbl { color: #7c6fa0; }
+[data-theme="thynkwise"] .slot-num { color: rgba(123,47,255,.22); }
+[data-theme="thynkwise"] .s-cap { background: linear-gradient(to top, rgba(13,0,32,.88), transparent); }
+
+/* Gallery bar + toggle */
+[data-theme="thynkwise"] .gallery-counter span { color: #7b2fff; }
+[data-theme="thynkwise"] .gallery-progress-track { background: rgba(123,47,255,.1); }
+[data-theme="thynkwise"] .gallery-progress-fill { background: linear-gradient(to right, #5a00d4, #00d4ff); }
+[data-theme="thynkwise"] .gallery-toggle-btn { background: #fff; color: #7b2fff; border-color: rgba(123,47,255,.2); }
+[data-theme="thynkwise"] .gallery-toggle-btn:hover { background: #f0ecff; border-color: #7b2fff; }
+[data-theme="thynkwise"] .toggle-count { background: rgba(123,47,255,.1); color: #7b2fff; }
+[data-theme="thynkwise"] #toggle-chevron { color: #7c6fa0; }
+
+/* G-note */
+[data-theme="thynkwise"] .g-note { background: #f0ecff; border-left-color: #7b2fff; color: #7c6fa0; }
+[data-theme="thynkwise"] .g-note svg { stroke: #7b2fff; }
+
+/* Upload dropzone */
+[data-theme="thynkwise"] .dropzone { background: #f8f6ff; border-color: rgba(123,47,255,.2); }
+[data-theme="thynkwise"] .dropzone:hover { border-color: #7b2fff; background: #f0ecff; }
+[data-theme="thynkwise"] .dropzone-label { color: #1a0050; }
+[data-theme="thynkwise"] .dropzone-hint { color: #7c6fa0; }
+
+/* Join CTA — rich purple gradient */
+[data-theme="thynkwise"] .join-wrap::before { background: linear-gradient(135deg, #5a00d4 0%, #7b2fff 50%, #00d4ff 100%); }
+[data-theme="thynkwise"] .join-inner h2 { color: #fff; }
+[data-theme="thynkwise"] .join-gratitude { color: rgba(255,255,255,.85); }
+[data-theme="thynkwise"] .join-sub { color: rgba(255,255,255,.7); }
+[data-theme="thynkwise"] .join-input { background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.25); color: #fff; }
+[data-theme="thynkwise"] .join-input::placeholder { color: rgba(255,255,255,.45); }
+[data-theme="thynkwise"] .join-input:focus { border-color: #00d4ff; }
+[data-theme="thynkwise"] .join-btn { background: #fff; color: #7b2fff; }
+[data-theme="thynkwise"] .join-btn:hover { background: #f0ecff; color: #5a00d4; }
+[data-theme="thynkwise"] .join-fine { color: rgba(255,255,255,.5); }
+[data-theme="thynkwise"] .join-err { color: #ffb3b3; }
+[data-theme="thynkwise"] .join-success { background: rgba(255,255,255,.15); border-color: rgba(0,212,255,.4); color: #00d4ff; }
+
+/* Glenn card */
+[data-theme="thynkwise"] .glenn-card { background: rgba(123,47,255,.06); border-color: rgba(0,212,255,.15); }
+[data-theme="thynkwise"] .glenn-card:hover { background: rgba(123,47,255,.12); border-color: rgba(0,212,255,.3); }
+[data-theme="thynkwise"] .glenn-card-name { color: #1a0050 !important; }
+[data-theme="thynkwise"] .glenn-card-title { color: #7b2fff !important; }
+[data-theme="thynkwise"] .glenn-card-cta { background: rgba(123,47,255,.08); color: #7b2fff !important; border-color: rgba(123,47,255,.2); }
+
+/* Footer — stays very dark, purple-tinged */
+[data-theme="thynkwise"] footer { background: #080010; border-color: rgba(123,47,255,.15); }
+[data-theme="thynkwise"] .footer-brand { color: #a855f7; }
+[data-theme="thynkwise"] .footer-brand svg { fill: #7b2fff; }
+[data-theme="thynkwise"] .footer-col h4 { color: #a855f7; }
+[data-theme="thynkwise"] .footer-col p,
+[data-theme="thynkwise"] .footer-col a { color: rgba(200,180,255,.55); }
+[data-theme="thynkwise"] .footer-col a:hover { color: #00d4ff; }
+[data-theme="thynkwise"] .footer-socials { border-color: rgba(123,47,255,.08); }
+[data-theme="thynkwise"] .socials-label { color: rgba(123,47,255,.4); }
+[data-theme="thynkwise"] .social-btn { background: rgba(123,47,255,.06); color: rgba(200,180,255,.5); border-color: rgba(123,47,255,.12); }
+[data-theme="thynkwise"] .social-btn:hover { background: #7b2fff; color: #fff; border-color: #7b2fff; }
+[data-theme="thynkwise"] .footer-bottom p { color: rgba(200,180,255,.3); }
+[data-theme="thynkwise"] .footer-tagline { color: #a855f7 !important; }
+
+/* Back to top */
+[data-theme="thynkwise"] #btt { background: #7b2fff; box-shadow: 0 4px 20px rgba(123,47,255,.45); }
+[data-theme="thynkwise"] #btt:hover { background: #6600ee; }
+
+/* Theme dock in light mode */
+[data-theme="thynkwise"] .theme-dock-toggle { background: #fff; color: #7b2fff; border-color: rgba(123,47,255,.2); box-shadow: 0 4px 20px rgba(123,47,255,.15); }
+[data-theme="thynkwise"] .theme-dock-toggle:hover { background: #f0ecff; border-color: #7b2fff; }
+[data-theme="thynkwise"] .theme-panel { background: #fff; border-color: rgba(123,47,255,.15); }
+[data-theme="thynkwise"] .theme-panel-label { color: #7c6fa0; }
+[data-theme="thynkwise"] .theme-btn { background: #f8f6ff; border-color: rgba(123,47,255,.12); color: #3b0080; }
+[data-theme="thynkwise"] .theme-btn:hover { background: #f0ecff; border-color: rgba(123,47,255,.35); }
+[data-theme="thynkwise"] .theme-btn.active { border-color: #7b2fff; background: #f0ecff; }
+[data-theme="thynkwise"] .theme-btn.active::after { color: #7b2fff; }
+
+/* THEME: Sunrise — Peach #ffebc7 bg · Orange #f6881f accent · Blue #3a59a8 contrast */
+[data-theme="sunrise"] {
+  --g0: #ffebc7;   /* peach background — body */
+  --g1: #fde0aa;   /* slightly deeper peach section */
+  --g2: #fbd490;   /* warm amber section alt */
+  --g3: #ffffff;   /* card white */
+  --g4: #fff4e0;   /* card hover */
+  --g5: #a04800;   /* orange dark text — 5.25:1 on peach, 6.14 on white */
+  --g6: #a04800;   /* accent dark — WCAG AA on light bg */
+  --g7: #a04800;   /* PRIMARY text — passes 4.5 on peach AND white */
+  --g8: #f6881f;   /* display/decorative — large text, icons, gradients */
+  --g9: #ffb866;   /* highlight */
+  --ga: #1e2c52;   /* deep navy — body text */
+  --gb: #ffffff;
+
+  --ink:  #ffebc7;  /* body bg (light) */
+  --dark: #fde0aa;
+  --mid:  #fbd490;
+  --warm: #2a3f80;  /* blue text */
+  --mute: #3a59a8;  /* BLUE — muted / secondary */
+  --line: rgba(160,72,0,.18);
+  --wh:   #ffffff;
+}
+
+/* Global text — dark on peach */
+[data-theme="sunrise"] body   { color: #1e2c52; background: #ffebc7; }
+[data-theme="sunrise"] h2     { color: #1e2c52; }
+[data-theme="sunrise"] .body-text { color: #2a3f80; }
+[data-theme="sunrise"] .bt    { color: #2a3f80; }
+[data-theme="sunrise"] blockquote.pull { color: #a04800; border-left-color: #f6881f; }
+[data-theme="sunrise"] .lbl   { color: #3a59a8; }
+[data-theme="sunrise"] .g-line { background: #f6881f; opacity: .55; }
+
+/* Nav */
+[data-theme="sunrise"] nav { background: rgba(255,235,199,.95); border-bottom-color: rgba(246,136,31,.18); }
+[data-theme="sunrise"] nav.scrolled { box-shadow: 0 2px 20px rgba(246,136,31,.12); }
+[data-theme="sunrise"] .nav-logo { color: #a04800; }
+[data-theme="sunrise"] .nav-logo svg { fill: #a04800; }
+[data-theme="sunrise"] .nav-links a { color: #3a59a8; }
+[data-theme="sunrise"] .nav-links a:hover,
+[data-theme="sunrise"] .nav-links a.active { color: #a04800; }
+[data-theme="sunrise"] .nav-links a::after { background: #a04800; }
+[data-theme="sunrise"] .nav-li-btn { background: #fff4e0; color: #3a59a8; border-color: rgba(246,136,31,.2); }
+[data-theme="sunrise"] .nav-li-btn:hover { background: #a04800; color: #fff; border-color: #a04800; }
+[data-theme="sunrise"] .nav-toggle { color: #1e2c52; }
+[data-theme="sunrise"] .mob-menu { background: rgba(255,235,199,.98); }
+[data-theme="sunrise"] .mob-menu a { color: #1e2c52; }
+[data-theme="sunrise"] .mob-menu a:hover { color: #a04800; }
+[data-theme="sunrise"] .mob-cta { background: #a04800 !important; color: #fff !important; }
+
+/* Hero — stays dark but warms to deep navy/orange */
+[data-theme="sunrise"] .hero { background: #0e1830; }
+[data-theme="sunrise"] .hero::before {
+  background:
+    radial-gradient(ellipse 75% 55% at 65% 50%, rgba(246,136,31,.25) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 12% 82%, rgba(58,89,168,.2) 0%, transparent 60%);
+}
+[data-theme="sunrise"] .hero::after { background: linear-gradient(to right, transparent, #f6881f, transparent); }
+[data-theme="sunrise"] .hero h1 em { color: #ffb866; }
+[data-theme="sunrise"] .kicker { color: #ffb866; border-color: rgba(255,184,102,.35); background: rgba(246,136,31,.1); }
+[data-theme="sunrise"] .kicker-dot { background: #ffb866; box-shadow: 0 0 0 4px rgba(255,184,102,.2); }
+[data-theme="sunrise"] .scroll-bar { background: linear-gradient(to bottom, #f6881f, transparent); }
+[data-theme="sunrise"] .hero-tagline { color: rgba(246,136,31,.45); }
+
+/* Buttons */
+[data-theme="sunrise"] .btn-gold { background: #f6881f; color: #1e2c52; box-shadow: 0 8px 28px rgba(246,136,31,.35); }
+[data-theme="sunrise"] .btn-gold:hover { background: #e07010; box-shadow: 0 14px 36px rgba(246,136,31,.45); }
+[data-theme="sunrise"] .btn-outline { color: rgba(255,255,255,.75); border-color: rgba(255,184,102,.35); }
+[data-theme="sunrise"] .btn-outline:hover { border-color: #ffb866; color: #fff; }
+
+/* Section backgrounds */
+[data-theme="sunrise"] .bg-black { background: #ffebc7; }
+[data-theme="sunrise"] .bg-dark  { background: #fde0aa; }
+[data-theme="sunrise"] .bg-mid   { background: #fbd490; }
+
+/* Gratitude */
+[data-theme="sunrise"] .gratitude { background: linear-gradient(to bottom, #fff4e0, #ffebc7); border-color: rgba(246,136,31,.15); }
+[data-theme="sunrise"] .gratitude::before { background: linear-gradient(to right, transparent, #f6881f, transparent); }
+[data-theme="sunrise"] .gratitude-quote { color: #2a3f80; }
+[data-theme="sunrise"] .gratitude-sig { color: #3a59a8; }
+
+/* Story pullquote */
+[data-theme="sunrise"] .story-pullquote { color: #a04800; border-left-color: #f6881f; }
+[data-theme="sunrise"] .story-img-wrap { border-color: rgba(246,136,31,.18); }
+
+/* Step cards */
+[data-theme="sunrise"] .step-card { background: #fff; border-top: none; border: 1px solid rgba(246,136,31,.15); }
+[data-theme="sunrise"] .step-card::before { background: linear-gradient(to right, #3a59a8, #f6881f); }
+[data-theme="sunrise"] .step-num-bg { color: rgba(246,136,31,.08); }
+[data-theme="sunrise"] .step-icon { background: linear-gradient(135deg, #fff4e0, #fde0aa); border-color: rgba(160,72,0,.2); color: #a04800; }
+[data-theme="sunrise"] .step-card h3 { color: #1e2c52; }
+[data-theme="sunrise"] .step-card p  { color: #3a59a8; }
+[data-theme="sunrise"] .step-card:hover { border-color: rgba(246,136,31,.4); box-shadow: 0 8px 32px rgba(246,136,31,.1); }
+
+/* Speakers — stays dark, orange-tinged */
+[data-theme="sunrise"] .speakers-wrap::after { background: linear-gradient(90deg, rgba(14,24,48,.97) 0%, rgba(30,44,82,.92) 55%, rgba(200,94,0,.75) 100%); }
+[data-theme="sunrise"] .speakers-highlight { color: #ffb866; }
+
+/* Stats */
+[data-theme="sunrise"] .stat { background: #fff; border-color: rgba(246,136,31,.15); }
+[data-theme="sunrise"] .stat:hover { border-color: rgba(246,136,31,.4); }
+[data-theme="sunrise"] .stat-num { color: #a04800; }
+[data-theme="sunrise"] .stat-label { color: #3a59a8; }
+
+/* How-note */
+[data-theme="sunrise"] .how-note-inner { background: #fff; border-color: rgba(246,136,31,.18); }
+[data-theme="sunrise"] .how-note-inner svg { color: #a04800; }
+[data-theme="sunrise"] .how-note-inner strong { color: #1e2c52; }
+[data-theme="sunrise"] .how-note-inner span { color: #3a59a8; }
+
+/* Postcards */
+[data-theme="sunrise"] .postcard { background: #fff; border-color: rgba(246,136,31,.15); }
+[data-theme="sunrise"] .postcard:hover { border-color: rgba(246,136,31,.35); box-shadow: 0 16px 40px rgba(246,136,31,.1); }
+[data-theme="sunrise"] .postcard-caption { color: #2a3f80; }
+[data-theme="sunrise"] .postcard-meta { border-color: rgba(246,136,31,.12); color: #3a59a8; }
+[data-theme="sunrise"] .postcard-meta .author { color: #1e2c52; }
+[data-theme="sunrise"] .postcard-img img { filter: none; }
+
+/* Photo slots */
+[data-theme="sunrise"] .photo-slot { background: linear-gradient(135deg, #fff4e0, #fde8c0); border-color: rgba(246,136,31,.25); }
+[data-theme="sunrise"] .photo-slot:hover { border-color: #f6881f; background: linear-gradient(135deg, #fde8c0, #fbd8a0); transform: translateY(-2px); }
+[data-theme="sunrise"] .s-icon { stroke: rgba(246,136,31,.38); }
+[data-theme="sunrise"] .s-lbl { color: #3a59a8; }
+[data-theme="sunrise"] .slot-num { color: rgba(246,136,31,.22); }
+[data-theme="sunrise"] .s-cap { background: linear-gradient(to top, rgba(14,24,48,.88), transparent); }
+
+/* Gallery bar + toggle */
+[data-theme="sunrise"] .gallery-counter span { color: #a04800; }
+[data-theme="sunrise"] .gallery-progress-track { background: rgba(246,136,31,.12); }
+[data-theme="sunrise"] .gallery-progress-fill { background: linear-gradient(to right, #3a59a8, #f6881f); }
+[data-theme="sunrise"] .gallery-toggle-btn { background: #fff; color: #a04800; border-color: rgba(246,136,31,.22); }
+[data-theme="sunrise"] .gallery-toggle-btn:hover { background: #fff4e0; border-color: #f6881f; }
+[data-theme="sunrise"] .toggle-count { background: rgba(160,72,0,.1); color: #a04800; }
+[data-theme="sunrise"] #toggle-chevron { color: #3a59a8; }
+
+/* G-note */
+[data-theme="sunrise"] .g-note { background: #fff4e0; border-left-color: #a04800; color: #3a59a8; }
+[data-theme="sunrise"] .g-note svg { stroke: #a04800; }
+
+/* Dropzone */
+[data-theme="sunrise"] .dropzone { background: #fff4e0; border-color: rgba(246,136,31,.22); }
+[data-theme="sunrise"] .dropzone:hover { border-color: #f6881f; background: #fde8c0; }
+[data-theme="sunrise"] .dropzone-label { color: #1e2c52; }
+[data-theme="sunrise"] .dropzone-hint { color: #3a59a8; }
+
+/* Join CTA — blue to orange gradient — maximum contrast */
+[data-theme="sunrise"] .join-wrap::before { background: linear-gradient(135deg, #3a59a8 0%, #f6881f 60%, #ffb866 100%); }
+[data-theme="sunrise"] .join-inner h2 { color: #fff; }
+[data-theme="sunrise"] .join-gratitude { color: rgba(255,255,255,.9); }
+[data-theme="sunrise"] .join-sub { color: rgba(255,255,255,.75); }
+[data-theme="sunrise"] .join-input { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.28); color: #fff; }
+[data-theme="sunrise"] .join-input::placeholder { color: rgba(255,255,255,.48); }
+[data-theme="sunrise"] .join-input:focus { border-color: #ffb866; }
+[data-theme="sunrise"] .join-btn { background: #1e2c52; color: #ffb866; }
+[data-theme="sunrise"] .join-btn:hover { background: #0e1830; color: #fff; }
+[data-theme="sunrise"] .join-fine { color: rgba(255,255,255,.55); }
+[data-theme="sunrise"] .join-success { background: rgba(255,255,255,.15); border-color: rgba(255,184,102,.4); color: #fff; }
+
+/* Glenn card */
+[data-theme="sunrise"] .glenn-card { background: rgba(246,136,31,.06); border-color: rgba(58,89,168,.18); }
+[data-theme="sunrise"] .glenn-card:hover { background: rgba(246,136,31,.12); border-color: rgba(58,89,168,.35); }
+[data-theme="sunrise"] .glenn-card-name { color: #1e2c52 !important; }
+[data-theme="sunrise"] .glenn-card-title { color: #a04800 !important; }
+[data-theme="sunrise"] .glenn-card-cta { background: rgba(160,72,0,.08); color: #a04800 !important; border-color: rgba(246,136,31,.2); }
+
+/* Footer — deep navy */
+[data-theme="sunrise"] footer { background: #0a1020; border-color: rgba(246,136,31,.1); }
+[data-theme="sunrise"] .footer-brand { color: #ffb866; }
+[data-theme="sunrise"] .footer-brand svg { fill: #a04800; }
+[data-theme="sunrise"] .footer-col h4 { color: #ffb866; }
+[data-theme="sunrise"] .footer-col p,
+[data-theme="sunrise"] .footer-col a { color: rgba(180,200,255,.5); }
+[data-theme="sunrise"] .footer-col a:hover { color: #ffb866; }
+[data-theme="sunrise"] .footer-socials { border-color: rgba(246,136,31,.08); }
+[data-theme="sunrise"] .socials-label { color: rgba(255,184,102,.35); }
+[data-theme="sunrise"] .social-btn { background: rgba(246,136,31,.06); color: rgba(255,184,102,.45); border-color: rgba(246,136,31,.12); }
+[data-theme="sunrise"] .social-btn:hover { background: #a04800; color: #fff; border-color: #a04800; }
+[data-theme="sunrise"] .footer-bottom p { color: rgba(180,200,255,.3); }
+[data-theme="sunrise"] .footer-tagline { color: #ffb866 !important; }
+
+/* Back to top */
+[data-theme="sunrise"] #btt { background: #a04800; box-shadow: 0 4px 20px rgba(246,136,31,.4); }
+[data-theme="sunrise"] #btt:hover { background: #c05500; }
+
+/* Theme dock */
+[data-theme="sunrise"] .theme-dock-toggle { background: #fff; color: #a04800; border-color: rgba(246,136,31,.25); box-shadow: 0 4px 20px rgba(246,136,31,.15); }
+[data-theme="sunrise"] .theme-dock-toggle:hover { background: #fff4e0; border-color: #f6881f; }
+[data-theme="sunrise"] .theme-panel { background: #fff; border-color: rgba(246,136,31,.18); }
+[data-theme="sunrise"] .theme-panel-label { color: #3a59a8; }
+[data-theme="sunrise"] .theme-btn { background: #ffebc7; border-color: rgba(246,136,31,.15); color: #2a3f80; }
+[data-theme="sunrise"] .theme-btn:hover { background: #fff4e0; border-color: rgba(246,136,31,.4); }
+[data-theme="sunrise"] .theme-btn.active { border-color: #a04800; background: #fff4e0; }
+[data-theme="sunrise"] .theme-btn.active::after { color: #a04800; }
+
+/* Sunrise theme button special styling */
+.sunrise-theme-btn {
+  border-color: rgba(246,136,31,.3) !important;
+  background: linear-gradient(135deg, rgba(255,235,199,.25), rgba(58,89,168,.1)) !important;
+}
+.sunrise-theme-btn:hover {
+  border-color: rgba(246,136,31,.65) !important;
+  background: linear-gradient(135deg, rgba(255,235,199,.4), rgba(58,89,168,.15)) !important;
+  box-shadow: 0 0 12px rgba(246,136,31,.18);
+}
+.sunrise-theme-btn.active {
+  border-color: #f6881f !important;
+  box-shadow: 0 0 18px rgba(246,136,31,.25);
+}
+
+/* ═══════════════════════════════════════════════
+   THEME SWITCHER WIDGET
+═══════════════════════════════════════════════ */
+.theme-dock {
+  position: fixed;
+  bottom: 5.5rem;
+  right: 2rem;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+}
+.theme-dock-toggle {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--g3); color: var(--g8);
+  border: 1px solid var(--line); border-radius: 100px;
+  padding: 9px 16px; font-family: 'DM Sans', sans-serif;
+  font-size: .74rem; font-weight: 700; letter-spacing: .06em;
+  cursor: pointer; text-transform: uppercase;
+  box-shadow: 0 4px 20px rgba(0,0,0,.5);
+  transition: all .2s; white-space: nowrap;
+}
+.theme-dock-toggle:hover { border-color: var(--g7); background: var(--g4); }
+.theme-dock-toggle:focus-visible { outline: 2px solid var(--g7); outline-offset: 3px; }
+.theme-dock-toggle .palette-icon {
+  display: flex; gap: 3px; align-items: center;
+}
+.theme-dock-toggle .palette-icon span {
+  width: 8px; height: 8px; border-radius: 50%; display: block;
+  transition: transform .2s;
+}
+.theme-dock-toggle:hover .palette-icon span { transform: scale(1.2); }
+
+.theme-panel {
+  background: var(--g2);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.7);
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 200px;
+}
+.theme-panel.open { display: flex; animation: panelIn .2s ease both; }
+@keyframes panelIn { from { opacity:0; transform: translateY(8px) scale(.97); } to { opacity:1; transform: none; } }
+
+.theme-panel-label {
+  font-size: .62rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--mute); font-weight: 700; margin-bottom: 4px;
+}
+.theme-btn {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--g3); border: 1px solid var(--line);
+  border-radius: 8px; padding: 9px 12px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: .8rem;
+  font-weight: 500; color: var(--ga);
+  transition: all .18s; text-align: left; width: 100%;
+}
+.theme-btn:hover { border-color: var(--g7); background: var(--g4); }
+.theme-btn:focus-visible { outline: 2px solid var(--g7); outline-offset: 2px; }
+.theme-btn.active { border-color: var(--g7); background: var(--g4); }
+.theme-btn.active::after { content: '✓'; margin-left: auto; color: var(--g7); font-size: .85rem; }
+.theme-swatch {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  border: 1.5px solid rgba(255,255,255,.1);
+}
+
+/* Transition everything on theme change */
+body, nav, .hero, section, footer, .step-card, .stat, .postcard,
+.photo-slot, .mc, .glenn-card, .gallery-toggle-btn, .gratitude,
+.how-note-inner, .global-banner-content h3, blockquote.pull,
+.btn-gold, .join-wrap, .footer-grid, .footer-socials {
+  transition: background-color .4s ease, border-color .4s ease, color .4s ease;
+}
+
+/* ═══════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--ga);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.65}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button,input,textarea{font-family:inherit}
+
+/* Skip link */
+.skip{position:absolute;top:-99px;left:1rem;z-index:9999;background:var(--g7);color:var(--ink);padding:.5rem 1rem;border-radius:0 0 3px 3px;font-size:.85rem;font-weight:600;transition:top .2s}
+.skip:focus{top:0}
+
+/* ═══════════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:var(--nav-h);
+  background:rgba(10,8,0,.92);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2.5rem;
+  transition:box-shadow var(--ease);
+}
+nav.scrolled{box-shadow:0 2px 28px rgba(212,160,23,.08)}
+.nav-logo{
+  font-family:'Fraunces',serif;font-weight:500;font-size:.95rem;
+  color:var(--g8);letter-spacing:-.01em;flex-shrink:0;
+  display:flex;align-items:center;gap:9px;
+}
+.nav-logo svg{fill:var(--g7);width:18px;height:18px;flex-shrink:0}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{
+  font-size:.75rem;font-weight:500;color:var(--mute);
+  letter-spacing:.07em;text-transform:uppercase;
+  transition:color var(--ease);position:relative;padding-bottom:3px;
+}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--g7);transition:width var(--ease)}
+.nav-links a:hover,.nav-links a.active{color:var(--g8)}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-li-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(212,160,23,.08);border:1px solid var(--line);
+  color:var(--mute);transition:all var(--ease);
+}
+.nav-li-btn:hover{background:var(--g7);color:var(--ink);border-color:var(--g7);transform:translateY(-1px)}
+.nav-li-btn svg{fill:currentColor;width:15px;height:15px}
+.nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:6px;color:var(--g8);line-height:0}
+.nav-toggle svg{width:22px;height:22px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round}
+.mob-menu{
+  display:none;position:fixed;inset:var(--nav-h) 0 0 0;z-index:199;
+  background:rgba(10,8,0,.97);backdrop-filter:blur(16px);
+  flex-direction:column;align-items:center;justify-content:center;gap:2.2rem;
+}
+.mob-menu.open{display:flex}
+.mob-menu a{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:500;color:var(--ga);transition:color var(--ease)}
+.mob-menu a:hover{color:var(--g8)}
+.mob-cta{
+  margin-top:.75rem;
+  background:var(--g7)!important;color:var(--ink)!important;
+  padding:14px 40px;border-radius:var(--r);
+  font-family:'DM Sans',sans-serif!important;
+  font-size:1rem!important;font-weight:700;letter-spacing:.03em;
+}
+
+/* ═══════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════ */
+.hero{
+  min-height:100vh;
+  background:var(--g0);
+  display:flex;align-items:center;
+  position:relative;overflow:hidden;
+  padding:calc(var(--nav-h) + 70px) 2.5rem 90px;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background-image:url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=2000&q=80&auto=format&fit=crop');
+  background-size:cover;background-position:center;
+  opacity:.12;
+}
+.hero-glow{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 70% 50%, rgba(212,160,23,.14) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 10% 80%, rgba(184,134,11,.1) 0%, transparent 60%);
+}
+/* Gold border accent line at bottom of hero */
+.hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(to right, transparent, var(--g7), transparent);
+}
+.hero-inner{position:relative;z-index:2;max-width:900px;margin:0 auto;width:100%}
+.kicker{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(212,160,23,.07);
+  border:1px solid rgba(212,160,23,.2);
+  padding:7px 16px;border-radius:100px;
+  font-size:.67rem;letter-spacing:.2em;text-transform:uppercase;color:var(--g8);
+  margin-bottom:2rem;
+  animation:fadeUp .7s .05s ease both;
+}
+.kicker-dot{width:6px;height:6px;border-radius:50%;background:var(--g8);box-shadow:0 0 0 4px rgba(212,160,23,.2)}
+.hero h1{
+  font-family:'Fraunces',serif;
+  font-size:clamp(3rem,7.5vw,5.8rem);
+  font-weight:400;line-height:.98;letter-spacing:-.02em;
+  color:var(--ga);margin-bottom:1.8rem;
+  animation:fadeUp .7s .2s ease both;
+}
+.hero h1 em{font-style:italic;color:var(--g8)}
+.hero-sub{
+  font-size:1.1rem;line-height:1.78;
+  color:rgba(253,230,138,.5);
+  max-width:520px;margin-bottom:2.8rem;font-weight:300;
+  animation:fadeUp .7s .34s ease both;
+}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .7s .48s ease both}
+.btn-gold{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--g7);color:var(--ink);
+  font-weight:700;font-size:.9rem;padding:15px 30px;
+  border-radius:100px;letter-spacing:.03em;
+  border:none;cursor:pointer;
+  box-shadow:0 8px 28px rgba(212,160,23,.28);
+  transition:all var(--ease);
+}
+/* Orange theme: dark text on orange button for WCAG compliance */
+[data-theme="orange"] .btn-gold { color: #0a0200; }
+.btn-gold:hover{background:var(--g8);transform:translateY(-2px);box-shadow:0 14px 36px rgba(212,160,23,.38)}
+.btn-gold:focus-visible{outline:2px solid var(--g9);outline-offset:3px}
+.btn-gold svg{transition:transform var(--ease)}
+.btn-gold:hover svg{transform:translateX(3px)}
+.btn-outline{
+  display:inline-flex;align-items:center;gap:8px;
+  background:transparent;color:rgba(253,230,138,.65);
+  font-weight:500;font-size:.9rem;padding:14px 24px;
+  border-radius:100px;
+  border:1px solid rgba(212,160,23,.22);
+  transition:all var(--ease);
+}
+.btn-outline:hover{border-color:rgba(212,160,23,.5);color:var(--g8)}
+.hero-scroll{
+  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  color:rgba(212,160,23,.28);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
+  animation:fadeIn 1.2s 1.2s ease both;
+}
+.scroll-bar{width:1px;height:38px;background:linear-gradient(to bottom,var(--g7),transparent);animation:pulse 2s 1.8s infinite}
+.hero-tagline{
+  margin-top:3.5rem;display:flex;align-items:center;gap:10px;
+  font-family:'Fraunces',serif;font-style:italic;
+  font-size:.95rem;color:rgba(212,160,23,.45);
+  animation:fadeIn 1s .6s ease both;
+}
+.hero-tagline svg{fill:rgba(212,160,23,.4);flex-shrink:0}
+
+/* ═══════════════════════════════════════════════
+   GRATITUDE BAND
+═══════════════════════════════════════════════ */
+.gratitude{
+  padding:52px 2.5rem;
+  background:var(--g3);
+  border-bottom:1px solid var(--line);
+  text-align:center;
+  position:relative;
+}
+.gratitude::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(to right,transparent,var(--g7),transparent);
+}
+.gratitude-quote{
+  font-family:'Fraunces',serif;font-style:italic;
+  font-size:clamp(1.1rem,2.2vw,1.5rem);
+  line-height:1.55;color:var(--ga);max-width:700px;margin:0 auto;font-weight:400;
+}
+.gratitude-sig{margin-top:14px;font-size:.82rem;color:var(--g6);letter-spacing:.06em}
+
+/* ═══════════════════════════════════════════════
+   SHARED SECTION
+═══════════════════════════════════════════════ */
+.sec{padding:100px 2.5rem}
+.inn{max-width:820px;margin:0 auto}
+.inn.w{max-width:1080px}
+.lbl{
+  font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+  font-weight:700;color:var(--g7);margin-bottom:.7rem;display:block;
+}
+.g-line{width:36px;height:1px;background:var(--g7);margin-bottom:1.8rem;border:none;opacity:.6}
+h2{
+  font-family:'Fraunces',serif;font-weight:400;
+  font-size:clamp(1.9rem,4vw,3rem);
+  line-height:1.1;letter-spacing:-.02em;
+  margin-bottom:2rem;color:var(--ga);
+}
+h2 em{font-style:italic;color:var(--g8)}
+.body-text{font-size:1.04rem;line-height:1.92;color:rgba(253,230,138,.62)}
+.body-text p{margin-bottom:1.3rem}
+.body-text p:last-child{margin-bottom:0}
+.body-text strong{color:var(--ga);font-weight:600}
+blockquote.pull{
+  font-family:'Fraunces',serif;font-style:italic;
+  font-size:clamp(1.2rem,2.4vw,1.65rem);font-weight:400;
+  color:var(--g8);line-height:1.38;
+  border-left:2px solid var(--g6);
+  padding-left:1.4rem;margin:2.5rem 0;
+}
+
+/* BG variants */
+.bg-black{background:var(--ink)}
+.bg-dark{background:var(--g2)}
+.bg-mid{background:var(--g3)}
+.bg-gold{background:var(--g7)}
+.bg-gold h2{color:var(--ink)}
+.bg-gold .lbl{color:rgba(0,0,0,.55)}
+.bg-gold .body-text{color:rgba(0,0,0,.75)}
+
+/* ═══════════════════════════════════════════════
+   STORY SECTION
+═══════════════════════════════════════════════ */
+.story-grid{
+  display:grid;grid-template-columns:1.2fr 1fr;gap:80px;align-items:center;
+}
+@media(max-width:900px){.story-grid{grid-template-columns:1fr;gap:48px}}
+.story-pullquote{
+  font-family:'Fraunces',serif;font-style:italic;
+  font-size:1.25rem;line-height:1.5;color:var(--g8);
+  border-left:2px solid var(--g7);padding-left:1.2rem;margin:1.5rem 0;
+}
+.story-images{display:flex;flex-direction:column;gap:14px}
+.story-img-wrap{border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.story-img-wrap img{width:100%;height:100%;object-fit:cover;aspect-ratio:4/3}
+.story-img-wrap.tall img{aspect-ratio:4/5}
+/* Gold image overlay tint */
+.story-img-wrap::after{content:'';position:absolute;inset:0;background:rgba(184,134,11,.06);pointer-events:none}
+.story-img-wrap{position:relative}
+
+/* ═══════════════════════════════════════════════
+   HOW IT WORKS
+═══════════════════════════════════════════════ */
+.how-head{text-align:center;margin-bottom:60px;max-width:620px;margin-left:auto;margin-right:auto}
+.how-head p{color:var(--mute);font-size:1.05rem}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:820px){.how-grid{grid-template-columns:1fr}}
+.step-card{
+  background:var(--g3);border:1px solid var(--line);
+  border-radius:12px;padding:36px 28px;
+  position:relative;overflow:hidden;
+  transition:transform var(--ease),border-color var(--ease);
+}
+.step-card:hover{transform:translateY(-4px);border-color:rgba(212,160,23,.4)}
+.step-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right,var(--g6),var(--g9));
+}
+.step-num-bg{
+  position:absolute;top:16px;right:20px;
+  font-family:'Fraunces',serif;font-size:72px;font-weight:400;
+  color:rgba(212,160,23,.06);line-height:1;pointer-events:none;
+}
+.step-icon{
+  width:48px;height:48px;border-radius:10px;
+  background:rgba(212,160,23,.1);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--g7);margin-bottom:20px;position:relative;z-index:1;
+}
+.step-card h3{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:400;color:var(--ga);margin-bottom:10px;position:relative;z-index:1}
+.step-card p{color:rgba(253,230,138,.55);font-size:.93rem;line-height:1.7;position:relative;z-index:1}
+.how-note{
+  margin-top:48px;display:flex;justify-content:center;
+}
+.how-note-inner{
+  display:inline-flex;align-items:center;gap:14px;
+  background:var(--g3);padding:14px 28px;border-radius:100px;
+  border:1px solid var(--line);flex-wrap:wrap;justify-content:center;text-align:center;
+}
+.how-note-inner svg{color:var(--g7);flex-shrink:0}
+.how-note-inner strong{font-weight:600;color:var(--ga)}
+.how-note-inner span{color:var(--mute);font-size:.9rem}
+
+/* ═══════════════════════════════════════════════
+   FOR SPEAKERS (dark photographic)
+═══════════════════════════════════════════════ */
+.speakers-wrap{
+  position:relative;padding:120px 2.5rem;overflow:hidden;
+}
+.speakers-wrap::before{
+  content:'';position:absolute;inset:0;
+  background-image:url('https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1800&q=80&auto=format&fit=crop');
+  background-size:cover;background-position:center;opacity:.12;
+}
+.speakers-wrap::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(10,8,0,.97) 0%,rgba(26,21,0,.92) 55%,rgba(58,48,0,.8) 100%);
+}
+.speakers-inner{position:relative;z-index:1;max-width:1080px;margin:0 auto}
+.speakers-body{max-width:680px;display:flex;flex-direction:column;gap:22px;font-size:1.08rem;line-height:1.7;color:rgba(253,230,138,.65)}
+.speakers-highlight{
+  font-family:'Fraunces',serif;font-style:italic;font-size:1.5rem;
+  color:var(--g8);line-height:1.4;
+}
+
+/* ═══════════════════════════════════════════════
+   IMPACT STATS
+═══════════════════════════════════════════════ */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:60px}
+@media(max-width:820px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
+.stat{
+  text-align:center;padding:32px 16px;
+  background:var(--g3);border:1px solid var(--line);border-radius:10px;
+  transition:border-color var(--ease);
+}
+.stat:hover{border-color:rgba(212,160,23,.35)}
+.stat-num{
+  font-family:'Fraunces',serif;font-size:clamp(2.5rem,5vw,3.8rem);
+  color:var(--g7);line-height:1;margin-bottom:8px;font-weight:400;
+}
+.stat-label{font-size:.72rem;color:var(--mute);letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.global-banner{
+  position:relative;border-radius:14px;overflow:hidden;min-height:320px;
+  border:1px solid var(--line);
+}
+.global-banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45}
+.global-banner-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(10,8,0,.96) 0%,rgba(26,21,0,.7) 50%,rgba(10,8,0,.3) 100%);
+  display:flex;align-items:flex-end;padding:44px;
+}
+.global-banner-content{color:var(--ga);max-width:520px}
+.global-banner-content svg{color:var(--g7);margin-bottom:14px}
+.global-banner-content h3{font-family:'Fraunces',serif;font-size:2rem;font-weight:400;margin-bottom:8px;color:var(--ga)}
+.global-banner-content p{color:rgba(253,230,138,.6);font-size:.95rem}
+
+/* ═══════════════════════════════════════════════
+   GALLERY — PHOTO WALL
+═══════════════════════════════════════════════ */
+.wall-head{max-width:780px;margin-bottom:50px}
+.wall-head p{font-size:1rem;color:rgba(253,230,138,.55);line-height:1.7;margin-top:.75rem}
+
+/* Upload card */
+.upload-card{
+  background:var(--g3);border:1px solid var(--line);
+  border-radius:14px;padding:36px;margin-bottom:44px;
+}
+.dropzone{
+  border:1px dashed rgba(212,160,23,.3);border-radius:10px;
+  padding:52px 24px;text-align:center;cursor:pointer;
+  transition:all var(--ease);background:rgba(212,160,23,.04);
+}
+.dropzone:hover{border-color:var(--g7);background:rgba(212,160,23,.08)}
+.dropzone svg{color:rgba(212,160,23,.3);margin:0 auto 14px;display:block;transition:color var(--ease);width:36px;height:36px;stroke:currentColor;stroke-width:1.5;fill:none}
+.dropzone:hover svg{color:var(--g7)}
+.dropzone-label{font-weight:600;font-size:1rem;color:var(--ga);margin-bottom:4px}
+.dropzone-hint{font-size:.82rem;color:var(--mute)}
+
+/* Postcard grid (static community wall) */
+.wall-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:900px){.wall-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.wall-grid{grid-template-columns:1fr}}
+.postcard{
+  background:var(--g3);border-radius:12px;overflow:hidden;
+  border:1px solid var(--line);
+  transition:transform var(--ease),border-color var(--ease),box-shadow var(--ease);
+}
+.postcard:hover{transform:translateY(-4px);border-color:rgba(212,160,23,.3);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+.postcard-img{aspect-ratio:1;overflow:hidden;background:var(--g4)}
+.postcard-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s;filter:sepia(20%) saturate(80%)}
+.postcard:hover .postcard-img img{transform:scale(1.06)}
+.postcard-body{padding:18px 20px}
+.postcard-caption{font-size:.88rem;color:rgba(253,230,138,.65);line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.postcard-meta{display:flex;justify-content:space-between;font-size:.74rem;color:var(--mute);border-top:1px solid var(--line);padding-top:10px}
+.postcard-meta .author{color:var(--ga);font-weight:600}
+.wall-note{text-align:center;margin-top:32px;font-size:.82rem;color:var(--mute);font-style:italic}
+
+/* Upload slots (live gallery) */
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.1rem;margin-bottom:2.5rem}
+.photo-slot{
+  aspect-ratio:4/3;border-radius:10px;overflow:hidden;
+  background:var(--g3);border:1px dashed rgba(212,160,23,.25);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;position:relative;
+  transition:border-color var(--ease),transform var(--ease);
+}
+.photo-slot:hover{border-color:var(--g7);transform:translateY(-2px)}
+.photo-slot:focus-within{outline:2px solid var(--g7);outline-offset:2px}
+.photo-slot input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2}
+.s-icon{width:30px;height:30px;stroke:rgba(212,160,23,.3);stroke-width:1.5;fill:none;margin-bottom:.6rem;pointer-events:none}
+.s-lbl{font-size:.76rem;color:var(--mute);text-align:center;padding:0 1rem;pointer-events:none;line-height:1.5}
+.s-lbl em{font-style:normal;opacity:.6;font-size:.7rem;display:block;margin-top:2px}
+.s-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;filter:sepia(15%)}
+.s-cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(10,8,0,.9),transparent);color:var(--ga);font-size:.74rem;padding:1.2rem 1rem .5rem;opacity:0;transition:opacity var(--ease);pointer-events:none}
+.photo-slot:hover .s-cap{opacity:1}
+.photo-slot.loaded .s-icon,.photo-slot.loaded .s-lbl{display:none}
+.photo-slot.loaded .s-img{display:block}
+.g-note{margin-top:1.25rem;font-size:.78rem;color:var(--mute);background:var(--g3);border-left:2px solid var(--g6);border-radius:0 3px 3px 0;padding:.65rem 1rem;display:flex;align-items:flex-start;gap:.5rem;line-height:1.55}
+.g-note svg{flex-shrink:0;margin-top:2px;stroke:var(--g6);stroke-width:2;fill:none;width:13px;height:13px}
+
+/* Slot number badge */
+.slot-num{position:absolute;top:8px;right:10px;font-family:'Fraunces',serif;font-size:.68rem;font-weight:400;color:rgba(212,160,23,.22);line-height:1;pointer-events:none;transition:color var(--ease)}
+.photo-slot:hover .slot-num{color:rgba(212,160,23,.5)}
+.photo-slot.loaded .slot-num{color:rgba(212,160,23,.75)}
+
+/* Collapsed slots — hidden but DOM-present */
+.photo-slot.collapsed{display:none}
+.photo-slot.collapsed.expanded{display:flex;animation:slotReveal .32s ease both}
+@keyframes slotReveal{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
+
+/* Gallery counter bar */
+.gallery-bar{display:flex;align-items:center;gap:1.2rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.gallery-counter{font-size:.8rem;color:var(--mute);font-weight:600;letter-spacing:.04em;white-space:nowrap}
+.gallery-counter span{color:var(--g7);font-family:'Fraunces',serif;font-size:1.05rem}
+.gallery-progress-track{flex:1;min-width:100px;max-width:260px;height:3px;background:rgba(212,160,23,.1);border-radius:2px;overflow:hidden}
+.gallery-progress-fill{height:100%;width:0%;background:linear-gradient(to right,var(--g6),var(--g8));border-radius:2px;transition:width .5s ease}
+
+/* Toggle button */
+.gallery-toggle-wrap{display:flex;justify-content:center;margin-top:1.75rem;margin-bottom:.25rem}
+.gallery-toggle-btn{display:inline-flex;align-items:center;gap:10px;background:var(--g3);color:var(--g8);border:1px solid var(--line);border-radius:100px;padding:11px 26px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;letter-spacing:.05em;cursor:pointer;transition:all var(--ease)}
+.gallery-toggle-btn:hover{background:rgba(212,160,23,.1);border-color:rgba(212,160,23,.4)}
+.gallery-toggle-btn:focus-visible{outline:2px solid var(--g7);outline-offset:3px}
+.toggle-count{background:rgba(212,160,23,.15);color:var(--g7);font-size:.72rem;padding:2px 8px;border-radius:100px;font-weight:700}
+#toggle-chevron{transition:transform .3s ease;color:var(--mute)}
+#toggle-chevron.open{transform:rotate(180deg)}
+
+/* DSA theme button special glow */
+.dsa-theme-btn{
+  border-color: rgba(0,180,255,.25) !important;
+  background: linear-gradient(135deg, rgba(0,20,40,.8), rgba(0,30,50,.6)) !important;
+}
+.dsa-theme-btn:hover{
+  border-color: rgba(0,180,255,.6) !important;
+  background: linear-gradient(135deg, rgba(0,30,60,.9), rgba(0,50,80,.7)) !important;
+  box-shadow: 0 0 12px rgba(0,180,255,.15);
+}
+.dsa-theme-btn.active{
+  border-color: #00b4ff !important;
+  box-shadow: 0 0 16px rgba(0,180,255,.25);
+}
+
+/* Thynkwise theme button */
+.thynk-theme-btn {
+  border-color: rgba(123,47,255,.25) !important;
+  background: linear-gradient(135deg, rgba(90,0,212,.08), rgba(0,212,255,.05)) !important;
+}
+.thynk-theme-btn:hover {
+  border-color: rgba(123,47,255,.6) !important;
+  background: linear-gradient(135deg, rgba(90,0,212,.15), rgba(0,212,255,.1)) !important;
+  box-shadow: 0 0 12px rgba(123,47,255,.18);
+}
+.thynk-theme-btn.active {
+  border-color: #7b2fff !important;
+  box-shadow: 0 0 18px rgba(123,47,255,.28);
+}
+.original-theme-btn {
+  border-color: rgba(194,65,12,.25) !important;
+  background: linear-gradient(135deg, rgba(250,250,249,.15), rgba(253,232,204,.12)) !important;
+}
+.original-theme-btn:hover {
+  border-color: rgba(234,88,12,.55) !important;
+  background: linear-gradient(135deg, rgba(255,247,237,.2), rgba(253,220,170,.18)) !important;
+}
+.original-theme-btn.active {
+  border-color: #ea580c !important;
+  box-shadow: 0 0 12px rgba(234,88,12,.18);
+}
+
+/* ═══════════════════════════════════════════════
+   JOIN / CTA
+═══════════════════════════════════════════════ */
+.join-wrap{
+  position:relative;overflow:hidden;text-align:center;
+  padding:120px 2.5rem;
+}
+.join-wrap::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--g5) 0%,var(--g6) 50%,var(--g5) 100%);
+}
+.join-wrap::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 70% at 50% 50%,rgba(0,0,0,.25),transparent);
+}
+.join-inner{position:relative;z-index:1;max-width:560px;margin:0 auto}
+.join-inner h2{color:var(--ink);font-size:clamp(2rem,5vw,3.2rem)}
+.join-gratitude{font-size:1.1rem;color:rgba(0,0,0,.72);margin-bottom:.75rem;font-style:italic;font-family:'Fraunces',serif}
+.join-sub{font-size:.95rem;color:rgba(0,0,0,.6);margin-bottom:2.5rem;line-height:1.7}
+.join-form{max-width:460px;margin:0 auto;display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:560px){.join-form{flex-direction:column}}
+.join-input{
+  flex:1;min-width:180px;
+  padding:14px 20px;border-radius:100px;
+  background:rgba(0,0,0,.18);border:1px solid rgba(0,0,0,.25);
+  font-size:.9rem;color:var(--ink);outline:none;
+  transition:box-shadow var(--ease);
+}
+.join-input::placeholder{color:rgba(0,0,0,.4)}
+.join-input:focus{box-shadow:0 0 0 3px rgba(0,0,0,.15)}
+.join-input.err{border-color:#7c0000}
+.join-btn{
+  background:var(--ink);color:var(--g8);
+  padding:14px 28px;border-radius:100px;border:none;
+  font-weight:700;font-size:.9rem;cursor:pointer;letter-spacing:.04em;
+  transition:all var(--ease);white-space:nowrap;
+}
+.join-btn:hover{background:#1a1500;color:var(--g9);transform:translateY(-1px)}
+.join-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.join-err{font-size:.78rem;color:rgba(80,0,0,.8);margin-top:.5rem;display:none}
+.join-err.show{display:block}
+.join-success{
+  background:rgba(0,0,0,.15);border:1px solid rgba(0,0,0,.2);
+  border-radius:var(--r);padding:1rem 1.25rem;
+  color:var(--ink);font-size:.9rem;display:none;margin-top:.75rem;
+}
+.join-success.show{display:block}
+.join-fine{margin-top:1.25rem;font-size:.8rem;color:rgba(0,0,0,.5)}
+
+/* ═══════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════ */
+footer{background:var(--g0);border-top:1px solid var(--line);color:rgba(253,230,138,.45)}
+.footer-grid{
+  max-width:1080px;margin:0 auto;
+  display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:48px;
+  padding:80px 2.5rem 48px;border-bottom:1px solid var(--line);
+}
+@media(max-width:820px){.footer-grid{grid-template-columns:1fr;gap:40px;padding:60px 2.5rem 40px}}
+.footer-col h4{
+  font-family:'DM Sans',sans-serif;color:var(--g7);
+  font-size:.7rem;font-weight:700;margin-bottom:18px;
+  letter-spacing:.12em;text-transform:uppercase;
+}
+.footer-col p,.footer-col a{
+  font-size:.85rem;color:rgba(253,230,138,.45);
+  display:block;margin-bottom:10px;transition:color var(--ease);line-height:1.6;
+}
+.footer-col a:hover{color:var(--g8)}
+.footer-brand{
+  display:flex;align-items:center;gap:9px;
+  font-family:'Fraunces',serif;font-weight:500;font-size:1.05rem;
+  color:var(--g8);margin-bottom:14px;
+}
+.footer-brand svg{fill:var(--g7);width:17px;height:17px}
+
+/* Glenn card */
+.glenn-card{
+  display:block;background:rgba(212,160,23,.06);
+  border:1px solid rgba(212,160,23,.15);border-radius:10px;
+  padding:20px;margin-top:12px;transition:all var(--ease);
+}
+.glenn-card:hover{background:rgba(212,160,23,.12);border-color:rgba(212,160,23,.3);transform:translateY(-2px)}
+.glenn-card-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.glenn-avatar{
+  width:50px;height:50px;border-radius:50%;
+  background:linear-gradient(135deg,var(--g5) 0%,var(--g3) 100%);
+  border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-size:1.1rem;font-weight:500;
+  color:var(--g8);flex-shrink:0;
+}
+.glenn-card-name{font-family:'Fraunces',serif;font-size:1rem;color:var(--ga)!important;margin:0!important;font-weight:500}
+.glenn-card-title{font-size:.74rem!important;color:var(--g6)!important;margin:2px 0 0!important}
+.glenn-card-cta{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.78rem!important;color:var(--g8)!important;font-weight:600;
+  padding:7px 14px;background:rgba(212,160,23,.1);
+  border-radius:100px;border:1px solid var(--line);
+  margin:0!important;transition:all var(--ease);
+}
+.glenn-card:hover .glenn-card-cta{background:rgba(212,160,23,.18);border-color:rgba(212,160,23,.35)}
+
+/* Social row */
+.footer-socials{
+  max-width:1080px;margin:0 auto;padding:28px 2.5rem;
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;
+  border-bottom:1px solid rgba(212,160,23,.06);
+}
+.socials-label{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(212,160,23,.28);font-weight:700;margin-right:6px}
+.social-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(212,160,23,.06);color:rgba(253,230,138,.4);
+  border:1px solid rgba(212,160,23,.12);transition:all var(--ease);
+}
+.social-btn:hover{background:var(--g7);color:var(--ink);border-color:var(--g7);transform:translateY(-2px)}
+.social-btn[data-soon]{opacity:.3;cursor:not-allowed;pointer-events:none}
+.social-btn svg{fill:currentColor;width:16px;height:16px}
+.social-btn.stroke svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Footer bottom */
+.footer-bottom{max-width:1080px;margin:0 auto;padding:28px 2.5rem;text-align:center}
+.footer-bottom p{font-size:.76rem;color:rgba(212,160,23,.25);margin-bottom:6px}
+.footer-tagline{font-family:'Fraunces',serif;font-style:italic;font-size:1rem;color:var(--g6)!important}
+
+/* Back to top */
+#btt{
+  position:fixed;bottom:2rem;right:2rem;z-index:150;
+  width:40px;height:40px;background:var(--g6);color:var(--ink);
+  border:none;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity var(--ease),transform var(--ease);
+  box-shadow:0 4px 20px rgba(184,134,11,.4);
+}
+#btt.vis{opacity:1;pointer-events:auto}
+#btt:hover{background:var(--g7);transform:translateY(-2px)}
+#btt svg{width:17px;height:17px;stroke:currentColor;stroke-width:2.5;fill:none}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:.25}50%{opacity:.85}}
+
+/* FOCUS */
+:focus-visible{outline:2px solid var(--g7);outline-offset:3px}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-toggle{display:flex}
+  .hero-btns{flex-direction:column;align-items:flex-start}
+  .btn-outline{display:none}
+  .hero-tagline{display:none}
+  .photo-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){
+  .sec{padding:70px 1.5rem}
+  .photo-grid{grid-template-columns:1fr}
+  .footer-grid{padding:48px 1.5rem 32px}
+}
+@media print{
+  nav,.hero-scroll,#btt,.nav-toggle,.mob-menu{display:none!important}
+  .hero{min-height:auto;padding:2rem}
+  .sec{padding:2rem 0;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to main content</a>
+
+<!-- ══════════ NAV ══════════ -->
+<nav id="site-nav" role="navigation" aria-label="Main navigation">
+  <a href="#hero" class="nav-logo" aria-label="#2Meals2Lives homepage">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+    #2Meals2Lives
+  </a>
+  <div class="nav-links">
+    <a href="#story">The Why</a>
+    <a href="#how">How It Works</a>
+    <a href="#speakers">For Speakers</a>
+    <a href="#photos">The Wall</a>
+    <a href="#join">Join</a>
+    <a href="https://www.linkedin.com/in/glennfreezman/" target="_blank" rel="noopener" class="nav-li-btn" aria-label="Glenn on LinkedIn">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+    </a>
+  </div>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mob-menu">
+    <svg id="ic-menu" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+    <svg id="ic-close" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+</nav>
+
+<div class="mob-menu" id="mob-menu" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+  <a href="#story"    onclick="closeMob()">The Why</a>
+  <a href="#how"      onclick="closeMob()">How It Works</a>
+  <a href="#speakers" onclick="closeMob()">For Speakers</a>
+  <a href="#photos"   onclick="closeMob()">The Wall</a>
+  <a href="#join"     onclick="closeMob()">Join</a>
+  <a href="#join" class="mob-cta btn-gold" onclick="closeMob()">I'm In</a>
+</div>
+
+<main id="main">
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero" id="hero" aria-labelledby="h-head">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div class="kicker" aria-hidden="true">
+      <span class="kicker-dot"></span>
+      Born From a Single Question
+    </div>
+    <h1 id="h-head">Why does a room full of <em>untouched food</em> sit twenty feet from people who haven't eaten today?</h1>
+    <p class="hero-sub">That question, asked one morning in an Indian hotel breakfast room, became a global movement — turning wasted abundance into meals for the hungry, one conference, one event, one moment of kindness at a time.</p>
+    <div class="hero-btns">
+      <a href="#story" class="btn-gold">
+        Hear the Story
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a href="#join" class="btn-outline">Join the Movement</a>
+    </div>
+    <div class="hero-tagline" aria-hidden="true">
+      <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      #2Meals2Lives — a global movement born from a single act of noticing.
+    </div>
+  </div>
+  <div class="hero-scroll" aria-hidden="true"><div class="scroll-bar"></div><span>scroll</span></div>
+</section>
+
+<!-- ══════════ GRATITUDE BAND ══════════ -->
+<div class="gratitude" role="complementary" aria-label="A note from Glenn">
+  <p class="gratitude-quote">"If you've read this far, you're already part of it. Thank you for caring enough to keep reading."</p>
+  <p class="gratitude-sig">— Glenn</p>
+</div>
+
+<!-- ══════════ ORIGIN STORY ══════════ -->
+<section class="sec bg-black" id="story" aria-labelledby="s-head">
+  <div class="inn w">
+    <div class="story-grid">
+      <div>
+        <span class="lbl reveal">The Origin</span>
+        <hr class="g-line reveal" aria-hidden="true">
+        <h2 id="s-head" class="reveal">My wife walked out the front door four years ago.<br>And accidentally gave me my life back.</h2>
+        <div class="body-text">
+          <p class="reveal">That sentence sounds cruel until you understand the man saying it.</p>
+          <p class="reveal">I spent my entire life since 13 years old trying to help every single person who ever walked into my life live their best life. Every employee. Every friend. Every family member. Aid without asking. Without the expectation of a return. That became my operating system.</p>
+          <p class="reveal">Not because I'm special. Because when I was 13 years old, we lost everything. Not "things got tight." Not "times got hard." <strong>Gone.</strong> Homes in foreclosure. Cars on the impound lot. Six cases of tuna fish in the house and that was about it.</p>
+          <p class="story-pullquote reveal">"When a man named Mitch Esserig stepped in and helped my father stop the collapse, I made a promise to myself. If I ever had the chance to help people, I would. Not for applause. Not for attention. Because I knew exactly what it felt like to need it."</p>
+          <p class="reveal">Then death started showing up. My mother at 49. My sister at 34. My brother at 43. And thankfully many years later, my father at 93. Death and I became very familiar with each other. But here's the thing about me — I don't negotiate with death. I don't replay tape. I loved people hard while they were here.</p>
+          <p class="reveal">One Saturday morning I came downstairs for coffee and my wife told me I was getting divorced. Done. For three years I went through the stages of divorce while pretending I wasn't. And yes, during my marriage I became explosively angry. PTSD-level angry. More and more over the years, as I felt increasingly trapped trying to carry the emotional weight of everybody around me.</p>
+          <p class="story-pullquote reveal">"For the first time since I was 13 years old, I finally got permission to live mine."</p>
+          <p class="reveal">And somehow I had to travel halfway across the world to realize it.</p>
+        </div>
+      </div>
+      <div class="story-images reveal">
+        <div class="story-img-wrap">
+          <img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=1200&q=80&auto=format&fit=crop" alt="Morning breakfast buffet — where the movement began" loading="lazy">
+        </div>
+        <div class="story-img-wrap tall">
+          <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=1200&q=80&auto=format&fit=crop" alt="The containers — two hands, two meals" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ INDIA + VILLAGE NIGHT ══════════ -->
+<section class="sec bg-dark" id="india" aria-labelledby="i-head">
+  <div class="inn">
+    <span class="lbl reveal">India Changed Me</span>
+    <hr class="g-line reveal" aria-hidden="true">
+    <h2 id="i-head" class="reveal">Not because I found spirituality.<br><em>Because I found what I'd been trying to build my entire life.</em></h2>
+    <div class="body-text">
+      <p class="reveal">India changed me because I found a culture filled with warmth, humanity, gratitude, love, and connection in a way I had been trying to create my entire life. The world I was trying to invent in America already existed here.</p>
+      <p class="reveal">Now almost every morning I go to breakfast at the Radisson in Gift City. And intentionally near closing time, they hand me containers. I fill them with food and walk out looking for somebody who can use it. Not because I think I'm solving world hunger. I'm remembering six cases of tuna fish.</p>
+      <blockquote class="pull reveal">"One night I walked into a village carrying three meals. It was dark. The second I walked in, I felt an iron grip grab one of the meals right out of my bag. Complete chaos. People yelling. Movement everywhere. And honestly, for a split second, fear."</blockquote>
+      <p class="reveal">Not fear of getting hurt. Fear that I had accidentally walked into a situation where desperation was bigger than dignity. Eventually the meal was brought back. Then the food got shared. That moment changed me. Not because somebody "stole" from me. Because hunger is real. And underneath all of it, humanity was still there.</p>
+      <blockquote class="pull reveal">"People think when I hand somebody food in India that I'm the one giving something away. They're wrong. Because when somebody looks at me with gratitude and love and Namaste while tears are running down my face, they're giving me something too."</blockquote>
+      <p class="reveal" style="color:var(--ga);font-weight:500">I see myself in their face. That hungry 13-year-old kid never left. Neither did the promise he made.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ HOW IT WORKS ══════════ -->
+<section class="sec bg-mid" id="how" aria-labelledby="hw-head">
+  <div class="inn w">
+    <div class="how-head">
+      <span class="lbl reveal">The Movement</span>
+      <h2 id="hw-head" class="reveal">Simple steps. Profound impact.</h2>
+      <p class="reveal">Three moves. Anyone can do this. Today.</p>
+    </div>
+    <div class="how-grid">
+      <div class="step-card reveal">
+        <div class="step-num-bg" aria-hidden="true">01</div>
+        <div class="step-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11v3a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-3"/><path d="M12 19H4a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3.83"/><path d="m3 11 7.77-6.04a2 2 0 0 1 2.46 0L21 11H3Z"/><path d="M12.97 19.77 7 15h12.5l-3.75 4.5a2 2 0 0 1-2.78.27Z"/></svg>
+        </div>
+        <h3>Request Containers</h3>
+        <p>At conferences, corporate events, or hotel restaurants, ask for two takeaway containers near closing time.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num-bg" aria-hidden="true">02</div>
+        <div class="step-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+        <h3>Fill &amp; Save</h3>
+        <p>One in your left hand. One in your right. Fill them with untouched meals that would otherwise be thrown away.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num-bg" aria-hidden="true">03</div>
+        <div class="step-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Walk Out &amp; Feed Two Lives</h3>
+        <p>Hand those meals to someone who needs them. Share your story as #2Meals2Lives.</p>
+      </div>
+    </div>
+    <div class="how-note">
+      <div class="how-note-inner reveal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <strong>No forms to sign. No permissions to wait for.</strong>
+        <span>Just two hands, two containers, and the choice to care.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOR SPEAKERS ══════════ -->
+<section class="speakers-wrap" id="speakers" aria-labelledby="sp-head">
+  <div class="speakers-inner">
+    <span class="lbl reveal" style="color:var(--g8)">For the Speakers Reading This</span>
+    <hr class="g-line reveal" aria-hidden="true">
+    <h2 id="sp-head" class="reveal">What This Means For You</h2>
+    <div class="speakers-body">
+      <p class="reveal">Your stage is bigger than your booking. Every time you step up to speak, you have the chance to do something no keynote slide ever can — turn a room of wasted abundance into two meals that feed two lives.</p>
+      <p class="speakers-highlight reveal">"When you carry this message, your voice becomes more than a career. It becomes a legacy."</p>
+      <p class="reveal">Every conference. Every hotel breakfast. Every corporate lunch. Two hands. Two containers. Two lives changed. That's how movements scale — not through policy, but through people like you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ IMPACT STATS ══════════ -->
+<section class="sec bg-black" aria-labelledby="imp-head">
+  <div class="inn w">
+    <div class="how-head">
+      <span class="lbl reveal">The Movement's Growing Impact</span>
+      <h2 id="imp-head" class="reveal">Every number here is a human story.</h2>
+      <p class="reveal" style="font-style:italic;font-family:'Fraunces',serif">Every story started with someone who chose to care.</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat reveal"><div class="stat-num">1,000+</div><div class="stat-label">Speakers Reached</div></div>
+      <div class="stat reveal"><div class="stat-num">50+</div><div class="stat-label">Conference Venues</div></div>
+      <div class="stat reveal"><div class="stat-num">10,000+</div><div class="stat-label">Meals Saved</div></div>
+      <div class="stat reveal"><div class="stat-num">15</div><div class="stat-label">Countries</div></div>
+    </div>
+    <div class="global-banner reveal">
+      <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1800&q=80&auto=format&fit=crop" alt="Global reach of the movement" loading="lazy">
+      <div class="global-banner-overlay">
+        <div class="global-banner-content">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <h3>A Global Movement</h3>
+          <p>15 countries. Thousands of meals. One idea traveling stage to stage.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ PHOTO WALL ══════════ -->
+<section class="sec bg-dark" id="photos" aria-labelledby="ph-head">
+  <div class="inn w">
+    <span class="lbl reveal">The Journey Wall</span>
+    <hr class="g-line reveal" aria-hidden="true">
+    <div class="wall-head">
+      <h2 id="ph-head" class="reveal">Postcards from the Journey.</h2>
+      <p class="reveal">Every movement leaves footprints. Photographs from Glenn's 32 days in India — the mornings at the Radisson, the containers, the villages, the faces that changed everything. Click any slot to upload a photograph.</p>
+    </div>
+
+    <!-- Gallery counter bar -->
+    <div class="gallery-bar reveal" role="status" aria-live="polite">
+      <div class="gallery-counter">
+        <span id="loaded-count">0</span> of 50 photos uploaded
+      </div>
+      <div class="gallery-progress-track" aria-hidden="true">
+        <div class="gallery-progress-fill" id="gallery-progress"></div>
+      </div>
+    </div>
+
+    <!-- Live upload slots — 10 visible, 40 collapsed -->
+    <div class="photo-grid" id="photo-grid" role="list" aria-label="Photo upload slots — 50 positions">
+
+      <!-- ── VISIBLE SLOTS 1–10 ── -->
+      <div class="photo-slot reveal" id="slot-1" role="listitem" tabindex="0" aria-label="Upload slot 1: Morning at Radisson Gift City">
+        <input type="file" accept="image/*" aria-label="Upload — Morning at Radisson Gift City" onchange="loadPhoto(this,'slot-1','Morning at Radisson Gift City — where the movement began')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Morning at Radisson Gift City<em>Where it began</em></span>
+        <img class="s-img" alt="Morning at Radisson Gift City">
+        <div class="s-cap">Morning at Radisson Gift City — where the movement began</div>
+        <span class="slot-num" aria-hidden="true">01</span>
+      </div>
+
+      <div class="photo-slot reveal" id="slot-2" role="listitem" tabindex="0" aria-label="Upload slot 2: The containers">
+        <input type="file" accept="image/*" aria-label="Upload — The containers" onchange="loadPhoto(this,'slot-2','The containers — two hands, two meals, two lives')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The containers<em>Two hands, two meals</em></span>
+        <img class="s-img" alt="The containers — two hands, two meals">
+        <div class="s-cap">Two hands. Two meals. Two lives.</div>
+        <span class="slot-num" aria-hidden="true">02</span>
+      </div>
+
+      <div class="photo-slot reveal" id="slot-3" role="listitem" tabindex="0" aria-label="Upload slot 3: Walking out">
+        <input type="file" accept="image/*" aria-label="Upload — Walking out" onchange="loadPhoto(this,'slot-3','Walking out — finding the people who need it')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Walking out<em>Finding the people who need it</em></span>
+        <img class="s-img" alt="Walking out with purpose">
+        <div class="s-cap">Walking out with purpose</div>
+        <span class="slot-num" aria-hidden="true">03</span>
+      </div>
+
+      <div class="photo-slot reveal" id="slot-4" role="listitem" tabindex="0" aria-label="Upload slot 4: The village night">
+        <input type="file" accept="image/*" aria-label="Upload — The village night" onchange="loadPhoto(this,'slot-4','The village night — humanity was still there')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The village night<em>Humanity was still there</em></span>
+        <img class="s-img" alt="The village night that changed everything">
+        <div class="s-cap">The village night that changed everything</div>
+        <span class="slot-num" aria-hidden="true">04</span>
+      </div>
+
+      <div class="photo-slot reveal" id="slot-5" role="listitem" tabindex="0" aria-label="Upload slot 5: Namaste">
+        <input type="file" accept="image/*" aria-label="Upload — Namaste" onchange="loadPhoto(this,'slot-5','Namaste — giving and receiving')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Namaste<em>Giving and receiving</em></span>
+        <img class="s-img" alt="Namaste — giving and receiving">
+        <div class="s-cap">You think you're giving something. You're not.</div>
+        <span class="slot-num" aria-hidden="true">05</span>
+      </div>
+
+      <div class="photo-slot reveal" id="slot-6" role="listitem" tabindex="0" aria-label="Upload slot 6: The elder in the village">
+        <input type="file" accept="image/*" aria-label="Upload — The elder in the village" onchange="loadPhoto(this,'slot-6','The elder in the village — the moment calm returned')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The elder<em>The moment calm returned</em></span>
+        <img class="s-img" alt="The elder in the village">
+        <div class="s-cap">The elder in the village — the moment calm returned</div>
+        <span class="slot-num" aria-hidden="true">06</span>
+      </div>
+
+      <div class="photo-slot reveal" id="slot-7" role="listitem" tabindex="0" aria-label="Upload slot 7: The food being shared">
+        <input type="file" accept="image/*" aria-label="Upload — The food being shared" onchange="loadPhoto(this,'slot-7','The food being shared — community was still there')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The food being shared<em>Community was still there</em></span>
+        <img class="s-img" alt="The food being shared">
+        <div class="s-cap">Community was still there. Love was still there.</div>
+        <span class="slot-num" aria-hidden="true">07</span>
+      </div>
+
+      <div class="photo-slot reveal" id="slot-8" role="listitem" tabindex="0" aria-label="Upload slot 8: Gift City at dawn">
+        <input type="file" accept="image/*" aria-label="Upload — Gift City at dawn" onchange="loadPhoto(this,'slot-8','Gift City at dawn — before the breakfast room opens')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Gift City at dawn<em>Before the breakfast room opens</em></span>
+        <img class="s-img" alt="Gift City at dawn">
+        <div class="s-cap">Gift City at dawn — before the breakfast room opens</div>
+        <span class="slot-num" aria-hidden="true">08</span>
+      </div>
+
+      <div class="photo-slot reveal" id="slot-9" role="listitem" tabindex="0" aria-label="Upload slot 9: The promise made at 13">
+        <input type="file" accept="image/*" aria-label="Upload — The promise made at 13" onchange="loadPhoto(this,'slot-9','The promise — if I ever had the chance to help, I would')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The promise<em>Made at 13. Kept for life.</em></span>
+        <img class="s-img" alt="The promise made at 13">
+        <div class="s-cap">If I ever had the chance to help people, I would.</div>
+        <span class="slot-num" aria-hidden="true">09</span>
+      </div>
+
+      <div class="photo-slot reveal" id="slot-10" role="listitem" tabindex="0" aria-label="Upload slot 10: The movement spreads">
+        <input type="file" accept="image/*" aria-label="Upload — The movement spreads" onchange="loadPhoto(this,'slot-10','The movement spreads — your moment here')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The movement spreads<em>Your moment here</em></span>
+        <img class="s-img" alt="The movement spreads">
+        <div class="s-cap">Add your moment to the movement</div>
+        <span class="slot-num" aria-hidden="true">10</span>
+      </div>
+
+      <!-- ── COLLAPSED SLOTS 11–50 ── -->
+      <div class="photo-slot collapsed" id="slot-11" role="listitem" tabindex="0" aria-label="Upload slot 11: Two hands at the buffet table">
+        <input type="file" accept="image/*" aria-label="Upload slot 11" onchange="loadPhoto(this,'slot-11','Two hands at the buffet table')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Two hands at the buffet<em>Slot 11</em></span>
+        <img class="s-img" alt="Two hands at the buffet table">
+        <div class="s-cap">Two hands at the buffet table</div>
+        <span class="slot-num" aria-hidden="true">11</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-12" role="listitem" tabindex="0" aria-label="Upload slot 12: The walk to the door">
+        <input type="file" accept="image/*" aria-label="Upload slot 12" onchange="loadPhoto(this,'slot-12','The walk to the door — every step mattered')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The walk to the door<em>Slot 12</em></span>
+        <img class="s-img" alt="The walk to the door">
+        <div class="s-cap">The walk to the door — every step mattered</div>
+        <span class="slot-num" aria-hidden="true">12</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-13" role="listitem" tabindex="0" aria-label="Upload slot 13: Ahmedabad streets">
+        <input type="file" accept="image/*" aria-label="Upload slot 13" onchange="loadPhoto(this,'slot-13','Ahmedabad streets — the world outside the hotel')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Ahmedabad streets<em>Slot 13</em></span>
+        <img class="s-img" alt="Ahmedabad streets">
+        <div class="s-cap">Ahmedabad streets — the world outside the hotel</div>
+        <span class="slot-num" aria-hidden="true">13</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-14" role="listitem" tabindex="0" aria-label="Upload slot 14: Faces that changed everything">
+        <input type="file" accept="image/*" aria-label="Upload slot 14" onchange="loadPhoto(this,'slot-14','The faces that changed everything')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Faces that changed everything<em>Slot 14</em></span>
+        <img class="s-img" alt="Faces that changed everything">
+        <div class="s-cap">The faces that changed everything</div>
+        <span class="slot-num" aria-hidden="true">14</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-15" role="listitem" tabindex="0" aria-label="Upload slot 15: The Radisson breakfast room at closing">
+        <input type="file" accept="image/*" aria-label="Upload slot 15" onchange="loadPhoto(this,'slot-15','The Radisson breakfast room at closing time')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Radisson breakfast room<em>Slot 15 · Closing time</em></span>
+        <img class="s-img" alt="The Radisson breakfast room at closing">
+        <div class="s-cap">The Radisson breakfast room at closing time</div>
+        <span class="slot-num" aria-hidden="true">15</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-16" role="listitem" tabindex="0" aria-label="Upload slot 16: Six cases of tuna fish">
+        <input type="file" accept="image/*" aria-label="Upload slot 16" onchange="loadPhoto(this,'slot-16','Six cases of tuna fish — the memory that drives everything')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Six cases of tuna fish<em>Slot 16</em></span>
+        <img class="s-img" alt="Six cases of tuna fish">
+        <div class="s-cap">Six cases of tuna fish — the memory that drives everything</div>
+        <span class="slot-num" aria-hidden="true">16</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-17" role="listitem" tabindex="0" aria-label="Upload slot 17: India warmth">
+        <input type="file" accept="image/*" aria-label="Upload slot 17" onchange="loadPhoto(this,'slot-17','India warmth — the culture that already existed')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">India warmth<em>Slot 17</em></span>
+        <img class="s-img" alt="India warmth">
+        <div class="s-cap">India warmth — the culture that already existed</div>
+        <span class="slot-num" aria-hidden="true">17</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-18" role="listitem" tabindex="0" aria-label="Upload slot 18: Glenn walking the streets">
+        <input type="file" accept="image/*" aria-label="Upload slot 18" onchange="loadPhoto(this,'slot-18','Glenn walking the streets of Gift City')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Glenn walking Gift City<em>Slot 18</em></span>
+        <img class="s-img" alt="Glenn walking the streets of Gift City">
+        <div class="s-cap">Glenn walking the streets of Gift City</div>
+        <span class="slot-num" aria-hidden="true">18</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-19" role="listitem" tabindex="0" aria-label="Upload slot 19: The moment of giving">
+        <input type="file" accept="image/*" aria-label="Upload slot 19" onchange="loadPhoto(this,'slot-19','The moment of giving — and receiving')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The moment of giving<em>Slot 19 · And receiving</em></span>
+        <img class="s-img" alt="The moment of giving and receiving">
+        <div class="s-cap">The moment of giving — and receiving</div>
+        <span class="slot-num" aria-hidden="true">19</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-20" role="listitem" tabindex="0" aria-label="Upload slot 20: 32 days in India">
+        <input type="file" accept="image/*" aria-label="Upload slot 20" onchange="loadPhoto(this,'slot-20','32 days in India — a journey that changed everything')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">32 days in India<em>Slot 20</em></span>
+        <img class="s-img" alt="32 days in India">
+        <div class="s-cap">32 days in India — a journey that changed everything</div>
+        <span class="slot-num" aria-hidden="true">20</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-21" role="listitem" tabindex="0" aria-label="Upload slot 21: The container in hand">
+        <input type="file" accept="image/*" aria-label="Upload slot 21" onchange="loadPhoto(this,'slot-21','The container in hand — ready to walk out')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Container in hand<em>Slot 21</em></span>
+        <img class="s-img" alt="The container in hand">
+        <div class="s-cap">The container in hand — ready to walk out</div>
+        <span class="slot-num" aria-hidden="true">21</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-22" role="listitem" tabindex="0" aria-label="Upload slot 22: Tears and gratitude">
+        <input type="file" accept="image/*" aria-label="Upload slot 22" onchange="loadPhoto(this,'slot-22','Tears and gratitude — what it feels like to receive')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Tears and gratitude<em>Slot 22</em></span>
+        <img class="s-img" alt="Tears and gratitude">
+        <div class="s-cap">Tears and gratitude — what it feels like to receive</div>
+        <span class="slot-num" aria-hidden="true">22</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-23" role="listitem" tabindex="0" aria-label="Upload slot 23: The village at night">
+        <input type="file" accept="image/*" aria-label="Upload slot 23" onchange="loadPhoto(this,'slot-23','The village at night — dark and alive')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The village at night<em>Slot 23 · Dark and alive</em></span>
+        <img class="s-img" alt="The village at night">
+        <div class="s-cap">The village at night — dark and alive</div>
+        <span class="slot-num" aria-hidden="true">23</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-24" role="listitem" tabindex="0" aria-label="Upload slot 24: Hotel lobby at closing">
+        <input type="file" accept="image/*" aria-label="Upload slot 24" onchange="loadPhoto(this,'slot-24','Hotel lobby at closing — the last guests leaving')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Hotel lobby at closing<em>Slot 24</em></span>
+        <img class="s-img" alt="Hotel lobby at closing">
+        <div class="s-cap">Hotel lobby at closing — the last guests leaving</div>
+        <span class="slot-num" aria-hidden="true">24</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-25" role="listitem" tabindex="0" aria-label="Upload slot 25: Halfway mark — 25 of 50">
+        <input type="file" accept="image/*" aria-label="Upload slot 25" onchange="loadPhoto(this,'slot-25','Photo 25 — halfway through the journey')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Halfway through<em>Slot 25 · 25 of 50</em></span>
+        <img class="s-img" alt="Halfway through the journey">
+        <div class="s-cap">Photo 25 — halfway through the journey</div>
+        <span class="slot-num" aria-hidden="true">25</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-26" role="listitem" tabindex="0" aria-label="Upload slot 26: Food still warm">
+        <input type="file" accept="image/*" aria-label="Upload slot 26" onchange="loadPhoto(this,'slot-26','Food still warm — not a moment wasted')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Food still warm<em>Slot 26</em></span>
+        <img class="s-img" alt="Food still warm">
+        <div class="s-cap">Food still warm — not a moment wasted</div>
+        <span class="slot-num" aria-hidden="true">26</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-27" role="listitem" tabindex="0" aria-label="Upload slot 27: The backpack">
+        <input type="file" accept="image/*" aria-label="Upload slot 27" onchange="loadPhoto(this,'slot-27','The backpack — carrying the movement on his back')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The backpack<em>Slot 27</em></span>
+        <img class="s-img" alt="The backpack">
+        <div class="s-cap">The backpack — carrying the movement on his back</div>
+        <span class="slot-num" aria-hidden="true">27</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-28" role="listitem" tabindex="0" aria-label="Upload slot 28: Gujarat sunrise">
+        <input type="file" accept="image/*" aria-label="Upload slot 28" onchange="loadPhoto(this,'slot-28','Gujarat sunrise — a new day, a new chance')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Gujarat sunrise<em>Slot 28</em></span>
+        <img class="s-img" alt="Gujarat sunrise">
+        <div class="s-cap">Gujarat sunrise — a new day, a new chance</div>
+        <span class="slot-num" aria-hidden="true">28</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-29" role="listitem" tabindex="0" aria-label="Upload slot 29: Someone who needed it">
+        <input type="file" accept="image/*" aria-label="Upload slot 29" onchange="loadPhoto(this,'slot-29','Someone who needed it — you knew them when you saw them')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Someone who needed it<em>Slot 29</em></span>
+        <img class="s-img" alt="Someone who needed it">
+        <div class="s-cap">Someone who needed it — you knew them when you saw them</div>
+        <span class="slot-num" aria-hidden="true">29</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-30" role="listitem" tabindex="0" aria-label="Upload slot 30: The chain continuing">
+        <input type="file" accept="image/*" aria-label="Upload slot 30" onchange="loadPhoto(this,'slot-30','The chain continuing — someone saw and did it too')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The chain continuing<em>Slot 30</em></span>
+        <img class="s-img" alt="The chain continuing">
+        <div class="s-cap">The chain continuing — someone saw and did it too</div>
+        <span class="slot-num" aria-hidden="true">30</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-31" role="listitem" tabindex="0" aria-label="Upload slot 31: Conference catering surplus">
+        <input type="file" accept="image/*" aria-label="Upload slot 31" onchange="loadPhoto(this,'slot-31','Conference catering surplus — before it disappears')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Conference catering surplus<em>Slot 31</em></span>
+        <img class="s-img" alt="Conference catering surplus">
+        <div class="s-cap">Conference catering surplus — before it disappears</div>
+        <span class="slot-num" aria-hidden="true">31</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-32" role="listitem" tabindex="0" aria-label="Upload slot 32: The 32nd day">
+        <input type="file" accept="image/*" aria-label="Upload slot 32" onchange="loadPhoto(this,'slot-32','The 32nd day — the last morning in India')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The 32nd day<em>Slot 32 · Last morning</em></span>
+        <img class="s-img" alt="The 32nd day in India">
+        <div class="s-cap">The 32nd day — the last morning in India</div>
+        <span class="slot-num" aria-hidden="true">32</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-33" role="listitem" tabindex="0" aria-label="Upload slot 33: Mitch Esserig moment">
+        <input type="file" accept="image/*" aria-label="Upload slot 33" onchange="loadPhoto(this,'slot-33','Honoring Mitch Esserig — the man who showed up')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Honoring Mitch Esserig<em>Slot 33 · The man who showed up</em></span>
+        <img class="s-img" alt="Honoring Mitch Esserig">
+        <div class="s-cap">Honoring Mitch Esserig — the man who showed up</div>
+        <span class="slot-num" aria-hidden="true">33</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-34" role="listitem" tabindex="0" aria-label="Upload slot 34: TED 2026">
+        <input type="file" accept="image/*" aria-label="Upload slot 34" onchange="loadPhoto(this,'slot-34','TED 2026 — carrying the movement to the world stage')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">TED 2026<em>Slot 34 · The world stage</em></span>
+        <img class="s-img" alt="TED 2026">
+        <div class="s-cap">TED 2026 — carrying the movement to the world stage</div>
+        <span class="slot-num" aria-hidden="true">34</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-35" role="listitem" tabindex="0" aria-label="Upload slot 35: Speakers on stage">
+        <input type="file" accept="image/*" aria-label="Upload slot 35" onchange="loadPhoto(this,'slot-35','Speakers on stage — carrying the message forward')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Speakers on stage<em>Slot 35</em></span>
+        <img class="s-img" alt="Speakers on stage">
+        <div class="s-cap">Speakers on stage — carrying the message forward</div>
+        <span class="slot-num" aria-hidden="true">35</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-36" role="listitem" tabindex="0" aria-label="Upload slot 36: The movement in another city">
+        <input type="file" accept="image/*" aria-label="Upload slot 36" onchange="loadPhoto(this,'slot-36','The movement in another city — it keeps going')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Another city<em>Slot 36 · It keeps going</em></span>
+        <img class="s-img" alt="The movement in another city">
+        <div class="s-cap">The movement in another city — it keeps going</div>
+        <span class="slot-num" aria-hidden="true">36</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-37" role="listitem" tabindex="0" aria-label="Upload slot 37: Another country">
+        <input type="file" accept="image/*" aria-label="Upload slot 37" onchange="loadPhoto(this,'slot-37','Another country — no translation needed')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Another country<em>Slot 37 · No translation needed</em></span>
+        <img class="s-img" alt="Another country">
+        <div class="s-cap">Another country — no translation needed</div>
+        <span class="slot-num" aria-hidden="true">37</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-38" role="listitem" tabindex="0" aria-label="Upload slot 38: Corporate event surplus">
+        <input type="file" accept="image/*" aria-label="Upload slot 38" onchange="loadPhoto(this,'slot-38','Corporate event surplus — the quiet before it gets taken away')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Corporate event surplus<em>Slot 38</em></span>
+        <img class="s-img" alt="Corporate event surplus">
+        <div class="s-cap">Corporate event surplus — the quiet before it gets taken away</div>
+        <span class="slot-num" aria-hidden="true">38</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-39" role="listitem" tabindex="0" aria-label="Upload slot 39: The hotel staff who helped">
+        <input type="file" accept="image/*" aria-label="Upload slot 39" onchange="loadPhoto(this,'slot-39','The hotel staff who helped — without a second thought')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The hotel staff who helped<em>Slot 39</em></span>
+        <img class="s-img" alt="The hotel staff who helped">
+        <div class="s-cap">The hotel staff who helped — without a second thought</div>
+        <span class="slot-num" aria-hidden="true">39</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-40" role="listitem" tabindex="0" aria-label="Upload slot 40: No forms to sign">
+        <input type="file" accept="image/*" aria-label="Upload slot 40" onchange="loadPhoto(this,'slot-40','No forms to sign. No permissions to wait for.')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">No forms to sign<em>Slot 40</em></span>
+        <img class="s-img" alt="No forms to sign">
+        <div class="s-cap">No forms to sign. No permissions to wait for.</div>
+        <span class="slot-num" aria-hidden="true">40</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-41" role="listitem" tabindex="0" aria-label="Upload slot 41: The 10,000th meal">
+        <input type="file" accept="image/*" aria-label="Upload slot 41" onchange="loadPhoto(this,'slot-41','The 10,000th meal — and counting')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The 10,000th meal<em>Slot 41 · And counting</em></span>
+        <img class="s-img" alt="The 10,000th meal">
+        <div class="s-cap">The 10,000th meal — and counting</div>
+        <span class="slot-num" aria-hidden="true">41</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-42" role="listitem" tabindex="0" aria-label="Upload slot 42: 15 countries">
+        <input type="file" accept="image/*" aria-label="Upload slot 42" onchange="loadPhoto(this,'slot-42','15 countries — and still spreading')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">15 countries<em>Slot 42 · And still spreading</em></span>
+        <img class="s-img" alt="15 countries">
+        <div class="s-cap">15 countries — and still spreading</div>
+        <span class="slot-num" aria-hidden="true">42</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-43" role="listitem" tabindex="0" aria-label="Upload slot 43: Your city">
+        <input type="file" accept="image/*" aria-label="Upload slot 43" onchange="loadPhoto(this,'slot-43','Your city — add it to the map')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Your city<em>Slot 43 · Add it to the map</em></span>
+        <img class="s-img" alt="Your city">
+        <div class="s-cap">Your city — add it to the map</div>
+        <span class="slot-num" aria-hidden="true">43</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-44" role="listitem" tabindex="0" aria-label="Upload slot 44: Your keynote">
+        <input type="file" accept="image/*" aria-label="Upload slot 44" onchange="loadPhoto(this,'slot-44','Your keynote — where you carried the message')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Your keynote<em>Slot 44</em></span>
+        <img class="s-img" alt="Your keynote">
+        <div class="s-cap">Your keynote — where you carried the message</div>
+        <span class="slot-num" aria-hidden="true">44</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-45" role="listitem" tabindex="0" aria-label="Upload slot 45: Your containers">
+        <input type="file" accept="image/*" aria-label="Upload slot 45" onchange="loadPhoto(this,'slot-45','Your containers — your act, your story')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Your containers<em>Slot 45 · Your act, your story</em></span>
+        <img class="s-img" alt="Your containers">
+        <div class="s-cap">Your containers — your act, your story</div>
+        <span class="slot-num" aria-hidden="true">45</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-46" role="listitem" tabindex="0" aria-label="Upload slot 46: Your person">
+        <input type="file" accept="image/*" aria-label="Upload slot 46" onchange="loadPhoto(this,'slot-46','Your person — the one you saw and showed up for')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Your person<em>Slot 46 · You showed up for them</em></span>
+        <img class="s-img" alt="Your person">
+        <div class="s-cap">Your person — the one you saw and showed up for</div>
+        <span class="slot-num" aria-hidden="true">46</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-47" role="listitem" tabindex="0" aria-label="Upload slot 47: Your moment">
+        <input type="file" accept="image/*" aria-label="Upload slot 47" onchange="loadPhoto(this,'slot-47','Your moment — the one that changed you')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Your moment<em>Slot 47 · The one that changed you</em></span>
+        <img class="s-img" alt="Your moment">
+        <div class="s-cap">Your moment — the one that changed you</div>
+        <span class="slot-num" aria-hidden="true">47</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-48" role="listitem" tabindex="0" aria-label="Upload slot 48: Someone you inspired">
+        <input type="file" accept="image/*" aria-label="Upload slot 48" onchange="loadPhoto(this,'slot-48','Someone you inspired — the chain you started')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">Someone you inspired<em>Slot 48</em></span>
+        <img class="s-img" alt="Someone you inspired">
+        <div class="s-cap">Someone you inspired — the chain you started</div>
+        <span class="slot-num" aria-hidden="true">48</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-49" role="listitem" tabindex="0" aria-label="Upload slot 49: The movement lives here">
+        <input type="file" accept="image/*" aria-label="Upload slot 49" onchange="loadPhoto(this,'slot-49','The movement lives here — in every ordinary moment')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The movement lives here<em>Slot 49</em></span>
+        <img class="s-img" alt="The movement lives here">
+        <div class="s-cap">The movement lives here — in every ordinary moment</div>
+        <span class="slot-num" aria-hidden="true">49</span>
+      </div>
+
+      <div class="photo-slot collapsed" id="slot-50" role="listitem" tabindex="0" aria-label="Upload slot 50: The final frame">
+        <input type="file" accept="image/*" aria-label="Upload slot 50" onchange="loadPhoto(this,'slot-50','The final frame — 50 moments. One movement.')">
+        <svg class="s-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span class="s-lbl">The final frame<em>Slot 50 · 50 moments. One movement.</em></span>
+        <img class="s-img" alt="The final frame">
+        <div class="s-cap">The final frame — 50 moments. One movement.</div>
+        <span class="slot-num" aria-hidden="true">50</span>
+      </div>
+
+    </div><!-- /photo-grid -->
+
+    <!-- Load More / Collapse toggle -->
+    <div class="gallery-toggle-wrap reveal" id="gallery-toggle-wrap">
+      <button class="gallery-toggle-btn" id="gallery-toggle-btn" onclick="toggleGallery()" aria-expanded="false" aria-controls="photo-grid">
+        <span id="toggle-label">Show all 50 slots</span>
+        <span class="toggle-count" id="toggle-count">40 more</span>
+        <svg id="toggle-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+    </div>
+
+    <div class="g-note reveal" role="note">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <span><strong>Vipin:</strong> 50 slots total — 10 visible on load, 40 revealed on "Show all". Click any slot to upload Glenn's India photos. Captions editable in each <code>s-cap</code> div. Counter updates automatically on upload.</span>
+    </div>
+
+    <!-- Community wall — static placeholders -->
+    <div style="margin-top:3.5rem">
+      <span class="lbl reveal" style="margin-bottom:1.5rem">Community Wall</span>
+      <div class="wall-grid">
+        <article class="postcard reveal">
+          <div class="postcard-img"><img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=600&q=80&auto=format&fit=crop" alt="Sarah's moment — TEDx Austin" loading="lazy"></div>
+          <div class="postcard-body"><p class="postcard-caption">"Three containers handed to a family outside TEDx. They smiled like it was the first kind thing someone had done all day."</p><div class="postcard-meta"><span class="author">Sarah K. · Austin</span><span>Apr 12</span></div></div>
+        </article>
+        <article class="postcard reveal">
+          <div class="postcard-img"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80&auto=format&fit=crop" alt="David's moment — Sheraton Dubai" loading="lazy"></div>
+          <div class="postcard-body"><p class="postcard-caption">"After my keynote at the Sheraton brunch. The staff helped without a second thought."</p><div class="postcard-meta"><span class="author">David M. · Dubai</span><span>Apr 9</span></div></div>
+        </article>
+        <article class="postcard reveal">
+          <div class="postcard-img"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80&auto=format&fit=crop" alt="Priya's moment — Mumbai" loading="lazy"></div>
+          <div class="postcard-body"><p class="postcard-caption">"My first #2Meals2Lives moment. Changed how I see every hotel breakfast from now on."</p><div class="postcard-meta"><span class="author">Priya N. · Mumbai</span><span>Apr 7</span></div></div>
+        </article>
+        <article class="postcard reveal">
+          <div class="postcard-img"><img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600&q=80&auto=format&fit=crop" alt="Marcus's moment — London" loading="lazy"></div>
+          <div class="postcard-body"><p class="postcard-caption">"The conference staff got curious. By day two, they were setting aside containers for us."</p><div class="postcard-meta"><span class="author">Marcus L. · London</span><span>Apr 3</span></div></div>
+        </article>
+        <article class="postcard reveal">
+          <div class="postcard-img"><img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80&auto=format&fit=crop" alt="Ana's moment — São Paulo" loading="lazy"></div>
+          <div class="postcard-body"><p class="postcard-caption">"Four containers today. Four meals. I stopped counting mine — that's the point."</p><div class="postcard-meta"><span class="author">Ana R. · São Paulo</span><span>Mar 28</span></div></div>
+        </article>
+        <article class="postcard reveal">
+          <div class="postcard-img"><img src="https://images.unsplash.com/photo-1526470608268-f674ce90ebd4?w=600&q=80&auto=format&fit=crop" alt="James's moment — Singapore" loading="lazy"></div>
+          <div class="postcard-body"><p class="postcard-caption">"Mentioned it on stage in front of 800 people. Three came up after to say they'd start tomorrow."</p><div class="postcard-meta"><span class="author">James O. · Singapore</span><span>Mar 24</span></div></div>
+        </article>
+      </div>
+      <p class="wall-note reveal">Every postcard on this wall was submitted by someone from the movement and reviewed before publishing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ THE PROMISE ══════════ -->
+<section class="sec bg-black" id="promise" aria-labelledby="pr-head">
+  <div class="inn">
+    <span class="lbl reveal">Why This Works</span>
+    <hr class="g-line reveal" aria-hidden="true">
+    <h2 id="pr-head" class="reveal">This belongs to anyone who does it.</h2>
+    <div class="body-text">
+      <p class="reveal">It doesn't belong to one person. It doesn't belong to an organization. You can be anywhere in the world. You can speak any language. You can have nothing in common with the person in front of you. And it still works.</p>
+      <p class="reveal">Because it's not about words. It's about the moment. That's why this spreads. Because once someone feels it, they don't need to be convinced. They just do it again. And someone sees them do it. And it keeps going. No control. No ownership. Just people choosing to do something simple.</p>
+      <blockquote class="pull reveal">"Two hands. Two meals. Two lives. One movement. You think you're giving something. You're not. You're getting something back."</blockquote>
+      <p class="reveal">Every speaker who embraces this movement becomes an amplifier. When you share this story on stage, 500 people hear it. When those 500 people do it at their next event, the impact multiplies. This is how movements scale — not through policy, but through people.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ JOIN ══════════ -->
+<section class="join-wrap" id="join" aria-labelledby="j-head">
+  <div class="join-inner">
+    <span class="lbl reveal" style="color:rgba(0,0,0,.5)">Join the Movement</span>
+    <h2 id="j-head" class="reveal">Join the Movement</h2>
+    <p class="join-gratitude reveal">If you've read this far, you're already part of it. Thank you for caring enough to keep reading.</p>
+    <p class="join-sub reveal">Sign up to receive movement updates, participate in events, and connect with others making a difference.</p>
+    <form id="j-form" class="reveal" novalidate onsubmit="handleJoin(event)">
+      <div class="join-form">
+        <input type="email" id="j-email" class="join-input" placeholder="your@email.com" autocomplete="email" aria-required="true" aria-describedby="j-err j-ok">
+        <button type="submit" class="join-btn" id="j-btn">Get Involved</button>
+      </div>
+      <p class="join-err" id="j-err" role="alert" aria-live="polite"></p>
+      <div class="join-success" id="j-ok" role="status" aria-live="polite">You're in. Glenn will be in touch thoughtfully — never too often.</div>
+    </form>
+    <p class="join-fine reveal">Sign up to receive movement updates, participate in events, and connect with others making a difference. Glenn personally hates daily emails — you won't get them.</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer role="contentinfo">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="footer-brand">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        #2Meals2Lives
+      </div>
+      <p>A global movement turning simple questions into profound change, one meal at a time.</p>
+      <p style="margin-top:16px">An initiative of <a href="https://digitalspeakeragent.com" target="_blank" rel="noopener" style="color:var(--g8);font-weight:600;display:inline">Digital Speaker Agent™</a>.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Meet the Chief Evangelist</h4>
+      <a href="https://www.linkedin.com/in/glennfreezman/" target="_blank" rel="noopener" class="glenn-card" aria-label="Glenn Freezman on LinkedIn">
+        <div class="glenn-card-top">
+          <div class="glenn-avatar" aria-hidden="true">GF</div>
+          <div>
+            <p class="glenn-card-name">Glenn Freezman</p>
+            <p class="glenn-card-title">Chief Evangelist · TED Speaker 2026</p>
+          </div>
+        </div>
+        <span class="glenn-card-cta">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+          Connect on LinkedIn
+        </span>
+      </a>
+    </div>
+    <div class="footer-col">
+      <h4>Get in Touch</h4>
+      <a href="mailto:Glenn@DigitalSpeakerAgent.com">Glenn@DigitalSpeakerAgent.com</a>
+      <a href="https://digitalspeakeragent.com" target="_blank" rel="noopener">DigitalSpeakerAgent.com</a>
+      <a href="https://speakersbot.ai" target="_blank" rel="noopener">SpeakersBot.ai</a>
+      <p style="font-style:italic;color:rgba(253,230,138,.3);margin-top:14px;font-size:.8rem">"Entrepreneur connecting efficiency with humanity."</p>
+    </div>
+  </div>
+
+  <!-- Social row -->
+  <div class="footer-socials" role="list" aria-label="Follow the movement">
+    <span class="socials-label">Follow the Movement</span>
+    <a href="https://www.linkedin.com/in/glennfreezman/" target="_blank" rel="noopener" class="social-btn" aria-label="Glenn on LinkedIn" role="listitem">
+      <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+    </a>
+    <a href="https://digitalspeakeragent.com" target="_blank" rel="noopener" class="social-btn stroke" aria-label="Digital Speaker Agent website" role="listitem">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    </a>
+    <a href="mailto:Glenn@DigitalSpeakerAgent.com" class="social-btn stroke" aria-label="Email Glenn" role="listitem">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+    </a>
+    <a href="#" data-soon class="social-btn" aria-label="X / Twitter — launching soon" title="X / Twitter — launching soon" role="listitem">
+      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a href="#" data-soon class="social-btn stroke" aria-label="Instagram — launching soon" title="Instagram — launching soon" role="listitem">
+      <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+    </a>
+    <a href="#" data-soon class="social-btn" aria-label="YouTube — launching soon" title="YouTube — launching soon" role="listitem">
+      <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    </a>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 #2Meals2Lives. An initiative of Digital Speaker Agent™.</p>
+    <p class="footer-tagline">More Gigs. No Grind. More Meals. More Lives.</p>
+  </div>
+</footer>
+
+<!-- ══════════ THEME SWITCHER ══════════ -->
+<div class="theme-dock" id="theme-dock" role="complementary" aria-label="Theme switcher">
+  <div class="theme-panel" id="theme-panel" role="listbox" aria-label="Select color theme">
+    <div class="theme-panel-label">Choose a theme</div>
+
+    <button class="theme-btn active" role="option" aria-selected="true" data-theme="" onclick="setTheme('',this)"
+      style="--s1:#f0b800;--s2:#ffe033;--s3:#fff3a0">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#f0b800,#ffe033)"></span>
+      Electric Gold
+    </button>
+
+    <button class="theme-btn original-theme-btn" role="option" aria-selected="false" data-theme="original" onclick="setTheme('original',this)">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#fafaf9 0%,#fde8cc 50%,#ea580c 100%);border-color:rgba(194,65,12,.35)"></span>
+      <span style="display:flex;flex-direction:column;gap:1px">
+        Original Light
+        <span style="font-size:.66rem;opacity:.6;font-weight:400">Cream &amp; Ember</span>
+      </span>
+    </button>
+
+    <button class="theme-btn" role="option" aria-selected="false" data-theme="crimson" onclick="setTheme('crimson',this)">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#c0001a,#ff2040)"></span>
+      Crimson &amp; Black
+    </button>
+
+    <button class="theme-btn" role="option" aria-selected="false" data-theme="blue" onclick="setTheme('blue',this)">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#0070d4,#33b0ff)"></span>
+      Electric Blue
+    </button>
+
+    <button class="theme-btn" role="option" aria-selected="false" data-theme="green" onclick="setTheme('green',this)">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#00a000,#00ff44)"></span>
+      Neon Green
+    </button>
+
+    <button class="theme-btn" role="option" aria-selected="false" data-theme="purple" onclick="setTheme('purple',this)">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#9400d4,#d066ff)"></span>
+      Deep Purple
+    </button>
+
+    <button class="theme-btn" role="option" aria-selected="false" data-theme="orange" onclick="setTheme('orange',this)">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#c04800,#ff7a1a)"></span>
+      Molten Orange
+    </button>
+
+    <button class="theme-btn" role="option" aria-selected="false" data-theme="ice" onclick="setTheme('ice',this)">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#607080,#e0f0f8)"></span>
+      Ice White
+    </button>
+
+    <button class="theme-btn dsa-theme-btn" role="option" aria-selected="false" data-theme="dsa" onclick="setTheme('dsa',this)">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#000000 0%,#0085be 50%,#00b4ff 100%);border-color:rgba(0,180,255,.4)"></span>
+      <span style="display:flex;flex-direction:column;gap:1px">
+        DSA™ Brand
+        <span style="font-size:.66rem;opacity:.6;font-weight:400">DigitalSpeakerAgent.com</span>
+      </span>
+    </button>
+
+    <button class="theme-btn thynk-theme-btn" role="option" aria-selected="false" data-theme="thynkwise" onclick="setTheme('thynkwise',this)">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#5a00d4 0%,#7b2fff 55%,#00d4ff 100%);border-color:rgba(123,47,255,.4)"></span>
+      <span style="display:flex;flex-direction:column;gap:1px">
+        Thynkwise
+        <span style="font-size:.66rem;opacity:.6;font-weight:400">thynkwise.co.in</span>
+      </span>
+    </button>
+
+    <button class="theme-btn sunrise-theme-btn" role="option" aria-selected="false" data-theme="sunrise" onclick="setTheme('sunrise',this)">
+      <span class="theme-swatch" style="background:linear-gradient(135deg,#3a59a8 0%,#f6881f 60%,#ffebc7 100%);border-color:rgba(246,136,31,.45)"></span>
+      <span style="display:flex;flex-direction:column;gap:1px">
+        Sunrise
+        <span style="font-size:.66rem;opacity:.6;font-weight:400">Peach · Orange · Blue</span>
+      </span>
+    </button>
+  </div>
+
+  <button class="theme-dock-toggle" id="theme-toggle-btn"
+    onclick="toggleThemePanel()"
+    aria-expanded="false"
+    aria-controls="theme-panel"
+    aria-label="Open theme switcher">
+    <div class="palette-icon" aria-hidden="true">
+      <span style="background:#f0b800" id="swatch-a"></span>
+      <span style="background:#ff2040" id="swatch-b"></span>
+      <span style="background:#0096ff" id="swatch-c"></span>
+    </div>
+    <span id="theme-btn-label">Theme</span>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" id="theme-chevron"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
+</div>
+
+<button id="btt" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<!-- ══════════ JAVASCRIPT ══════════ -->
+<script>
+'use strict';
+
+/* Scroll reveal */
+const ro=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');ro.unobserve(x.target)}})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* Nav + back-to-top */
+const sn=document.getElementById('site-nav'),bt=document.getElementById('btt');
+window.addEventListener('scroll',()=>{const y=window.scrollY;sn.classList.toggle('scrolled',y>20);bt.classList.toggle('vis',y>500)},{passive:true});
+
+/* Active nav */
+const secs=document.querySelectorAll('section[id]'),nls=document.querySelectorAll('.nav-links a[href^="#"]');
+window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-100)c=s.id});nls.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c))},{passive:true});
+
+/* Mobile menu */
+const tog=document.getElementById('nav-toggle'),mm=document.getElementById('mob-menu'),icM=document.getElementById('ic-menu'),icC=document.getElementById('ic-close');
+let open=false;
+tog.addEventListener('click',()=>{open=!open;mm.classList.toggle('open',open);tog.setAttribute('aria-expanded',open);icM.style.display=open?'none':'';icC.style.display=open?'':'none';document.body.style.overflow=open?'hidden':''});
+function closeMob(){open=false;mm.classList.remove('open');tog.setAttribute('aria-expanded',false);icM.style.display='';icC.style.display='none';document.body.style.overflow=''}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&open)closeMob()});
+mm.addEventListener('click',e=>{if(e.target===mm)closeMob()});
+
+/* Photo upload — 50 slots */
+const TOTAL = 50;
+let loadedCount = 0;
+
+function updateCounter() {
+  document.getElementById('loaded-count').textContent = loadedCount;
+  const pct = (loadedCount / TOTAL) * 100;
+  document.getElementById('gallery-progress').style.width = pct + '%';
+}
+
+function loadPhoto(input, id, cap) {
+  const slot = document.getElementById(id), file = input.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { alert('Please upload an image file.'); return; }
+  const wasLoaded = slot.classList.contains('loaded');
+  const r = new FileReader();
+  r.onload = ev => {
+    const img = slot.querySelector('.s-img');
+    img.src = ev.target.result; img.alt = cap;
+    slot.classList.add('loaded');
+    const c = slot.querySelector('.s-cap'); if (c) c.textContent = cap;
+    slot.setAttribute('aria-label', 'Photo loaded: ' + cap);
+    if (!wasLoaded) { loadedCount++; updateCounter(); }
+  };
+  r.readAsDataURL(file);
+}
+
+/* Gallery toggle — show/hide slots 11–50 */
+let galleryExpanded = false;
+function toggleGallery() {
+  galleryExpanded = !galleryExpanded;
+  const collapsed = document.querySelectorAll('.photo-slot.collapsed');
+  const btn = document.getElementById('gallery-toggle-btn');
+  const label = document.getElementById('toggle-label');
+  const countBadge = document.getElementById('toggle-count');
+  const chevron = document.getElementById('toggle-chevron');
+
+  collapsed.forEach((slot, i) => {
+    if (galleryExpanded) {
+      slot.classList.add('expanded');
+      slot.style.animationDelay = (i * 18) + 'ms';
+    } else {
+      slot.classList.remove('expanded');
+      slot.style.animationDelay = '';
+    }
+  });
+
+  btn.setAttribute('aria-expanded', galleryExpanded);
+  label.textContent = galleryExpanded ? 'Show less' : 'Show all 50 slots';
+  countBadge.textContent = galleryExpanded ? '40 shown' : '40 more';
+  chevron.classList.toggle('open', galleryExpanded);
+
+  // Trigger reveal observer on newly shown slots
+  if (galleryExpanded) {
+    document.querySelectorAll('.photo-slot.collapsed.expanded').forEach(el => {
+      ro.observe(el);
+    });
+    // Smooth scroll to first newly revealed slot
+    const firstNew = document.getElementById('slot-11');
+    if (firstNew) setTimeout(() => firstNew.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+  }
+}
+
+/* Keyboard: Enter/Space activates file input on any slot */
+document.querySelectorAll('.photo-slot').forEach(s => {
+  s.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); s.querySelector('input[type=file]').click(); }
+  });
+});
+
+/* Theme switcher */
+const themeSwatchMap = {
+  '':           ['#f0b800','#ff2040','#0096ff'],
+  original:     ['#fafaf9','#ea580c','#fbbf24'],
+  crimson:      ['#e8001f','#ff6080','#c0001a'],
+  blue:         ['#0096ff','#33b0ff','#0070d4'],
+  green:        ['#00cc00','#00ff44','#007000'],
+  purple:       ['#b800ff','#d066ff','#9400d4'],
+  orange:       ['#e85c00','#ff7a1a','#c04800'],
+  ice:          ['#c0d8e8','#e0f0f8','#607080'],
+  dsa:          ['#000000','#00b4ff','#33c8ff'],
+  thynkwise:    ['#5a00d4','#7b2fff','#00d4ff'],
+  sunrise:      ['#ffebc7','#f6881f','#3a59a8'],
+};
+const themeNames = {
+  '': 'Electric Gold', original: 'Original Light', crimson: 'Crimson',
+  blue: 'Electric Blue', green: 'Neon Green', purple: 'Deep Purple',
+  orange: 'Molten Orange', ice: 'Ice White', dsa: 'DSA™ Brand',
+  thynkwise: 'Thynkwise', sunrise: 'Sunrise',
+};
+let panelOpen = false;
+
+function toggleThemePanel() {
+  panelOpen = !panelOpen;
+  const panel = document.getElementById('theme-panel');
+  const btn   = document.getElementById('theme-toggle-btn');
+  const chev  = document.getElementById('theme-chevron');
+  panel.classList.toggle('open', panelOpen);
+  btn.setAttribute('aria-expanded', panelOpen);
+  chev.style.transform = panelOpen ? 'rotate(180deg)' : '';
+}
+
+function setTheme(theme, el) {
+  document.documentElement.setAttribute('data-theme', theme);
+  // Update active button
+  document.querySelectorAll('.theme-btn').forEach(b => {
+    b.classList.toggle('active', b === el);
+    b.setAttribute('aria-selected', b === el ? 'true' : 'false');
+  });
+  // Update palette swatches on toggle button
+  const sw = themeSwatchMap[theme] || themeSwatchMap[''];
+  document.getElementById('swatch-a').style.background = sw[0];
+  document.getElementById('swatch-b').style.background = sw[1];
+  document.getElementById('swatch-c').style.background = sw[2];
+  document.getElementById('theme-btn-label').textContent = themeNames[theme] || 'Theme';
+  // Close panel
+  panelOpen = false;
+  document.getElementById('theme-panel').classList.remove('open');
+  document.getElementById('theme-toggle-btn').setAttribute('aria-expanded', false);
+  document.getElementById('theme-chevron').style.transform = '';
+  // Persist
+  try { localStorage.setItem('2h2m_theme', theme); } catch(e){}
+}
+
+// Restore saved theme on load
+try {
+  const saved = localStorage.getItem('2h2m_theme');
+  if (saved !== null) {
+    const el = document.querySelector(`.theme-btn[data-theme="${saved}"]`);
+    if (el) setTheme(saved, el);
+  }
+} catch(e){}
+
+// Close panel on outside click
+document.addEventListener('click', e => {
+  if (panelOpen && !document.getElementById('theme-dock').contains(e.target)) {
+    panelOpen = false;
+    document.getElementById('theme-panel').classList.remove('open');
+    document.getElementById('theme-toggle-btn').setAttribute('aria-expanded', false);
+    document.getElementById('theme-chevron').style.transform = '';
+  }
+});
+// Close on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && panelOpen) toggleThemePanel();
+});
+function handleJoin(e){
+  e.preventDefault();
+  const el=document.getElementById('j-email'),err=document.getElementById('j-err'),ok=document.getElementById('j-ok'),btn=document.getElementById('j-btn');
+  err.textContent='';err.classList.remove('show');el.classList.remove('err');ok.classList.remove('show');
+  const val=el.value.trim();
+  if(!val||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)){err.textContent='Please enter a valid email address.';err.classList.add('show');el.classList.add('err');el.focus();return}
+  btn.disabled=true;btn.textContent='Sending…';
+  setTimeout(()=>{
+    el.value='';btn.style.display='none';ok.classList.add('show');
+    setTimeout(()=>{btn.disabled=false;btn.textContent='Get Involved';btn.style.display='';ok.classList.remove('show')},9000);
+  },900);
+}
+</script>
+</body>
+</html>
