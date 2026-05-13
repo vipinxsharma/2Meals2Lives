@@ -3665,17 +3665,23 @@ function escapeHtml(s) {
 }
 
 function normalizeStrapiPost(row) {
+  // Works with BOTH Strapi v4 ({ id, attributes: { ... } }) and Strapi v5
+  // (flat: { id, documentId, title, ... }).
   var attrs = (row && row.attributes) || row || {};
+  var coverRaw = attrs.cover_url
+    || (attrs.cover && attrs.cover.data && attrs.cover.data.attributes && attrs.cover.data.attributes.url)
+    || (attrs.cover && attrs.cover.url)
+    || '';
   return {
     id: row.documentId || row.id || attrs.documentId || attrs.slug,
     title: attrs.title || '',
     excerpt: attrs.excerpt || '',
     body: attrs.body || '',
     date: (attrs.publishedAt || attrs.createdAt || '').slice(0, 10),
-    img: attrs.cover_url
-      || (attrs.cover && attrs.cover.data && attrs.cover.data.attributes && attrs.cover.data.attributes.url)
-      || (attrs.cover && attrs.cover.url)
-      || ''
+    // strapiMediaUrl prepends STRAPI_URL when Strapi returns a relative
+    // /uploads/* path (local-disk provider). When R2 is enabled the URL is
+    // already absolute (https://media...) and is passed through unchanged.
+    img: coverRaw ? strapiMediaUrl(coverRaw) : ''
   };
 }
 
