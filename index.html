@@ -615,7 +615,7 @@ nav.scrolled{background:rgba(10,8,0,.92);border-bottom-color:var(--line);backdro
    STORY EDITOR MODAL
 ═══════════════════════════════════════════ */
 #modal-story-editor{
-  display:none;position:fixed;inset:0;z-index:600;
+  display:none;position:fixed;inset:0;z-index:700;
   background:rgba(0,0,0,.85);backdrop-filter:blur(10px);
   align-items:center;justify-content:center;padding:2rem;
   overflow-y:auto;
@@ -1216,7 +1216,7 @@ footer{
 
 /* Responsive */
 @media(max-width:680px){
-  .stories-panel-wrap{min-height:240px;flex-wrap:nowrap;overflow-x:hidden}
+  .stories-panel-wrap{min-height:200px;flex-wrap:nowrap;overflow-x:hidden}
   .sp{min-height:240px}
   .stories-panel-wrap:not(.single) .sp{flex:.6}
   .stories-panel-wrap:not(.single) .sp:hover{flex:2.2}
@@ -1228,7 +1228,7 @@ footer{
 /* Story full reader */
 .story-reader{display:none;margin:1.5rem 0}
 .story-reader.open{display:block}
-.story-reader-back{
+.story-reader-back{margin-bottom:1.5rem;
   display:inline-flex;align-items:center;gap:6px;
   background:none;border:1px solid rgba(0,0,0,.12);border-radius:100px;
   padding:7px 16px;font-size:.75rem;font-weight:700;color:#78716c;
@@ -1301,6 +1301,15 @@ footer{
 .gate-eye:hover{color:rgba(255,255,255,.8)}
 .gate-eye svg{stroke:currentColor;fill:none;stroke-width:2;
   stroke-linecap:round;stroke-linejoin:round;width:18px;height:18px}
+
+
+/* Touch device story panel interaction */
+@media(hover:none){
+  .sp .sp-rest{opacity:1}
+  .sp .sp-hover{opacity:1;pointer-events:auto}
+  .stories-panel-wrap:not(.single) .sp{flex:1}
+  .stories-panel-wrap:not(.single) .sp:active{flex:2}
+}
 
 </style>
 <!-- QR: inline --><!-- QR: inline --><script id="qr-removed">
@@ -1478,7 +1487,7 @@ footer{
 
 <!-- NAV -->
 <nav id="site-nav" role="navigation" aria-label="Main navigation">
-  <a href="#" onclick="showPage('home');return false" class="nav-logo" aria-label="#2Meals2Lives home">
+  <a href="#" onclick="showPage('home');return false" class="nav-logo" aria-label="#2Hands2Meals2Lives1Movement home" title="#2Hands2Meals2Lives1Movement">
     <svg class="nav-logo-heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
     <span><span class="nav-hash">#</span>2Meals2Lives</span>
   </a>
@@ -1504,7 +1513,7 @@ footer{
   <button onclick="showPage('story');closeMob()">The Story</button>
   <button onclick="openSubmit();closeMob()">Share a Moment</button>
   <button onclick="showStoryTab('join');closeMob()">Join</button>
-  <button class="mob-cta" onclick="showPage('admin');closeMob()">Admin</button>
+  <button class="mob-cta" onclick="handleLockClick();closeMob()">Admin</button>
 </div>
 
 <main id="main">
@@ -1521,7 +1530,7 @@ footer{
       </div>
 
       <h1 id="hero-title" class="hero-title">
-        <span class="h">#</span><span class="n">2Hands</span><span class="a">2Meals</span><span class="n">2Lives</span><span class="h">1</span><span class="a">Movement</span>
+        <span class="h">#</span><span class="n">2Hands</span><span class="a">2Meals</span><br><span class="n">2Lives</span><span class="h">1</span><span class="a">Movement</span>
       </h1>
       <p class="hero-tagline">Two hands. Two meals. Two lives. One movement.</p>
 
