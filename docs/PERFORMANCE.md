@@ -18,10 +18,10 @@ what to fix next. Mobile-first.
 
 ## Low-risk wins already applied (this commit)
 
-- Preconnect added for `cms.2meals2lives.org` so the first Strapi fetch is
+- Preconnect added for `cms.2hands2meals2lives1movement.org` so the first Strapi fetch is
   ~80 ms faster.
 - Preconnect for `images.unsplash.com` to speed up hero image load.
-- DNS-prefetch for the future `media.2meals2lives.org` R2 host.
+- DNS-prefetch for the future `media.2hands2meals2lives1movement.org` R2 host.
 
 ## Cheap follow-ups (do not do here — would need design review)
 

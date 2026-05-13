@@ -1,4 +1,4 @@
-# Launch checklist — #2Meals2Lives
+# Launch checklist — #2Hands2Meals2Lives
 
 A founder-friendly, sequential checklist. Run it top to bottom. Each step
 takes 1–10 minutes. Don't skip ahead.
@@ -15,10 +15,10 @@ this codebase can't perform.
 
 | # | Check | How to verify | Pass criterion |
 |---|---|---|---|
-| A1 | DNS `cms.2meals2lives.org` exists | From any computer: `dig cms.2meals2lives.org +short` | Returns an IP or CNAME, not empty |
-| A2 | DNS `2meals2lives.org` points at Vercel | `dig 2meals2lives.org +short` | Returns Vercel's IPs (76.x.x.x / 76.76.21.x) |
-| A3 | TLS cert valid on CMS | Open `https://cms.2meals2lives.org/admin` in a browser | No browser warning; padlock shown |
-| A4 | TLS cert valid on frontend | Open `https://2meals2lives.org/` in a browser | Same |
+| A1 | DNS `cms.2hands2meals2lives1movement.org` exists | From any computer: `dig cms.2hands2meals2lives1movement.org +short` | Returns an IP or CNAME, not empty |
+| A2 | DNS `2hands2meals2lives1movement.org` points at Vercel | `dig 2hands2meals2lives1movement.org +short` | Returns Vercel's IPs (76.x.x.x / 76.76.21.x) |
+| A3 | TLS cert valid on CMS | Open `https://cms.2hands2meals2lives1movement.org/admin` in a browser | No browser warning; padlock shown |
+| A4 | TLS cert valid on frontend | Open `https://2hands2meals2lives1movement.org/` in a browser | Same |
 | A5 | Railway service is running | Railway dashboard → service → status | Status = "Active" / running |
 | A6 | Vercel deployment is live | Vercel dashboard → project → deployments | Latest deploy = "Ready" / Production |
 | A7 | Neon Postgres branch is healthy | Neon console → project → branch | Status = "Idle" or "Active", no error |
@@ -41,8 +41,8 @@ ADMIN_JWT_SECRET=                      (random)
 TRANSFER_TOKEN_SALT=                   (random)
 JWT_SECRET=                            (random)
 ENCRYPTION_KEY=                        (random)
-URL=https://cms.2meals2lives.org
-STRAPI_ADMIN_BACKEND_URL=https://cms.2meals2lives.org
+URL=https://cms.2hands2meals2lives1movement.org
+STRAPI_ADMIN_BACKEND_URL=https://cms.2hands2meals2lives1movement.org
 
 DATABASE_CLIENT=postgres
 DATABASE_URL=postgres://...?sslmode=require   (Neon connection string)
@@ -53,7 +53,7 @@ CLOUDFLARE_R2_ACCESS_KEY_ID=
 CLOUDFLARE_R2_SECRET_ACCESS_KEY=
 CLOUDFLARE_R2_BUCKET=
 CLOUDFLARE_R2_ENDPOINT=https://<account>.r2.cloudflarestorage.com
-CLOUDFLARE_R2_PUBLIC_URL=https://media.2meals2lives.org
+CLOUDFLARE_R2_PUBLIC_URL=https://media.2hands2meals2lives1movement.org
 ```
 
 Generate any missing `APP_KEYS` / secrets with `openssl rand -base64 32`.
@@ -87,7 +87,7 @@ the absence of the hardcoded password.
 
 | # | Check | How |
 |---|---|---|
-| D1 | Admin user created | Visit `https://cms.2meals2lives.org/admin`, complete the initial admin signup if shown |
+| D1 | Admin user created | Visit `https://cms.2hands2meals2lives1movement.org/admin`, complete the initial admin signup if shown |
 | D2 | Public role permissions are present | Settings → Users & Permissions → Public role |
 | D3 | `community-post` allows: find, findOne, create | Check 3 boxes if missing |
 | D4 | `subscriber` allows: create only | One box |
@@ -101,11 +101,11 @@ the boxes are actually checked. Strapi admin shows them under the Public role.)
 
 ## E. Submission flow test (owner: any human)
 
-E1. Open `https://2meals2lives.org/` in a normal browser tab.
+E1. Open `https://2hands2meals2lives1movement.org/` in a normal browser tab.
 E2. Click **Share a Moment** in the nav.
 E3. Upload a JPEG smaller than 8 MB. Fill name, location. Submit.
 E4. Confirm the success modal appears within 5 seconds.
-E5. Open `https://cms.2meals2lives.org/admin` → Content Manager → Community
+E5. Open `https://cms.2hands2meals2lives1movement.org/admin` → Content Manager → Community
     Post → confirm your submission is listed with `is_approved = false`.
 E6. Toggle `is_approved` to true, hit Save.
 E7. Go back to the website. Hard-reload the page. Scroll to the gallery.
@@ -153,7 +153,7 @@ If anything goes wrong, follow these steps in order. Each step takes < 5 min.
 
 ### I1. CMS broke
 
-Symptom: `https://cms.2meals2lives.org/_health` returns 500/timeouts.
+Symptom: `https://cms.2hands2meals2lives1movement.org/_health` returns 500/timeouts.
 
 1. Railway dashboard → CMS service → Deployments tab.
 2. Find the previous green deployment → click **Redeploy**.

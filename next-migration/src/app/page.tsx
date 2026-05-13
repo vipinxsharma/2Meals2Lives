@@ -10,7 +10,7 @@ export default async function Home() {
 
   return (
     <main style={{ fontFamily: 'system-ui, sans-serif', padding: 24 }}>
-      <h1>#2Meals2Lives — Next.js migration scaffold</h1>
+      <h1>#2Hands2Meals2Lives — Next.js migration scaffold</h1>
       <p>
         This page is the migration foundation only. The production site is still
         served from the root <code>index.html</code> on Vercel; this app is not

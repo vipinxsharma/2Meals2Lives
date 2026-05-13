@@ -2,7 +2,7 @@
 // token in the browser bundle. All public reads use the public role's
 // permissions configured via the CMS bootstrap script.
 
-const RAW_BASE = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cms.2meals2lives.org';
+const RAW_BASE = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cms.2hands2meals2lives1movement.org';
 export const STRAPI_URL = RAW_BASE.replace(/\/$/, '');
 
 type Json = Record<string, unknown>;

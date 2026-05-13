@@ -28,12 +28,12 @@ Env vars on the new project:
 
 | Variable                 | Value                              |
 |--------------------------|------------------------------------|
-| `NEXT_PUBLIC_STRAPI_URL` | `https://cms.2meals2lives.org`     |
-| `NEXT_PUBLIC_SITE_URL`   | `https://2meals2lives.org`         |
+| `NEXT_PUBLIC_STRAPI_URL` | `https://cms.2hands2meals2lives1movement.org`     |
+| `NEXT_PUBLIC_SITE_URL`   | `https://2hands2meals2lives1movement.org`         |
 | `RESEND_API_KEY`         | (only when wiring welcome email)   |
 
 Initially, attach the new project to a preview domain like
-`next.2meals2lives.org`. Only point the apex `2meals2lives.org` at it
+`next.2hands2meals2lives1movement.org`. Only point the apex `2hands2meals2lives1movement.org` at it
 **after** the full migration is verified.
 
 ## Section-by-section migration plan
@@ -74,8 +74,8 @@ domain first, then merges to `main` only after a smoke test passes.
 - Modal reader uses a client component for keyboard / focus handling.
 
 ### Stage 5 — cut over
-- Point apex `2meals2lives.org` at the new Vercel project.
-- Keep the old static deployment live on `legacy.2meals2lives.org` for at
+- Point apex `2hands2meals2lives1movement.org` at the new Vercel project.
+- Keep the old static deployment live on `legacy.2hands2meals2lives1movement.org` for at
   least two weeks as an instant rollback target.
 
 ## Hard non-goals (for this migration)

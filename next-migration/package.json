@@ -2,7 +2,7 @@
   "name": "2meals2lives-next",
   "version": "0.1.0",
   "private": true,
-  "description": "Next.js 14 migration foundation for 2meals2lives.org. NOT YET DEPLOYED.",
+  "description": "Next.js 14 migration foundation for 2hands2meals2lives1movement.org. NOT YET DEPLOYED.",
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
