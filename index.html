@@ -499,6 +499,11 @@ nav.scrolled{background:rgba(10,8,0,.92);border-bottom-color:var(--line);backdro
 .blog-card-meta{font-size:.68rem;color:#a8a29e;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
 .blog-card-title{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:400;color:#1c1a14;margin-bottom:.35rem;line-height:1.3}
 .blog-card-exc{font-size:.8rem;color:#78716c;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:520px){
+  .blog-card{flex-direction:column}
+  .blog-card-img{width:100%;height:160px;flex-shrink:0}
+  .blog-card-body{padding:1rem 1.1rem}
+}
 .blog-empty{font-size:.88rem;color:#78716c;font-style:italic;text-align:center;padding:2rem;background:#f5f1ea;border-radius:8px}
 @media(max-width:480px){
   .blog-card-img{width:90px}
@@ -2127,7 +2132,52 @@ function downloadQR(){
         </div>
       </div>
       <div class="blog-grid" id="blog-grid">
-        <div class="blog-empty">No posts yet. Check back soon.</div>
+        <!-- Static fallback cards. Visible if Strapi is unreachable or returns
+             no posts. renderBlogGrid() replaces these with live data when the
+             API call succeeds. openBlogPost(id) reads the data-* attributes
+             below for the modal when an id isn't in the in-memory cache. -->
+        <div class="blog-card" data-id="post_ahmedabad_001"
+             data-title="Day 1. Ahmedabad. It started with a question."
+             data-date="March 2024"
+             data-excerpt="I asked the waiter what happens to all the food at the end of breakfast. He looked at the floor."
+             data-body="I asked the waiter what happens to all the food at the end of breakfast. He looked at the floor."
+             tabindex="0" role="button" aria-label="Read: Day 1. Ahmedabad."
+             onclick="openBlogPost('post_ahmedabad_001')">
+          <div class="blog-card-img"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80&auto=format&fit=crop" alt="" loading="lazy"></div>
+          <div class="blog-card-body">
+            <div class="blog-card-meta">March 2024</div>
+            <div class="blog-card-title">Day 1. Ahmedabad. It started with a question.</div>
+            <div class="blog-card-exc">I asked the waiter what happens to all the food at the end of breakfast. He looked at the floor.</div>
+          </div>
+        </div>
+        <div class="blog-card" data-id="post_two_containers_002"
+             data-title="Two containers. No bag. Just your hands."
+             data-date="April 2024"
+             data-excerpt="I changed the name at 35,000 feet over the Atlantic. Three became two for one simple reason."
+             data-body="I changed the name at 35,000 feet over the Atlantic. Three became two for one simple reason."
+             tabindex="0" role="button" aria-label="Read: Two containers. No bag."
+             onclick="openBlogPost('post_two_containers_002')">
+          <div class="blog-card-img"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=80&auto=format&fit=crop" alt="" loading="lazy"></div>
+          <div class="blog-card-body">
+            <div class="blog-card-meta">April 2024</div>
+            <div class="blog-card-title">Two containers. No bag. Just your hands.</div>
+            <div class="blog-card-exc">I changed the name at 35,000 feet over the Atlantic. Three became two for one simple reason.</div>
+          </div>
+        </div>
+        <div class="blog-card" data-id="post_speakers_003"
+             data-title="180,000 stages. One idea. The math is staggering."
+             data-date="April 2024"
+             data-excerpt="One speaker. 250 people. If each of them does it once — 500 meals. Now multiply."
+             data-body="One speaker. 250 people. If each of them does it once — 500 meals. Now multiply."
+             tabindex="0" role="button" aria-label="Read: 180,000 stages."
+             onclick="openBlogPost('post_speakers_003')">
+          <div class="blog-card-img"><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=80&auto=format&fit=crop" alt="" loading="lazy"></div>
+          <div class="blog-card-body">
+            <div class="blog-card-meta">April 2024</div>
+            <div class="blog-card-title">180,000 stages. One idea. The math is staggering.</div>
+            <div class="blog-card-exc">One speaker. 250 people. If each of them does it once — 500 meals. Now multiply.</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -3631,14 +3681,13 @@ function normalizeStrapiPost(row) {
 
 function renderBlogCards(posts) {
   var grid = document.getElementById('blog-grid');
-  if (!grid) return;
-  if (!posts.length) {
-    grid.innerHTML = '<div class="blog-empty">No posts yet. Check back soon.</div>';
-    return;
-  }
+  // Empty result: leave whatever's already in the grid (static fallback cards).
+  if (!grid || !posts.length) return;
   grid.innerHTML = posts.map(function(p) {
-    var imgHtml = p.cover
-      ? '<div class="blog-card-img"><img src="' + escapeHtml(p.cover) + '" alt="' + escapeHtml(p.title) + '" loading="lazy"></div>'
+    // normalizeStrapiPost stores the URL on p.img; legacy data may set p.cover.
+    var cover = p.img || p.cover;
+    var imgHtml = cover
+      ? '<div class="blog-card-img"><img src="' + escapeHtml(cover) + '" alt="' + escapeHtml(p.title) + '" loading="lazy"></div>'
       : '<div class="blog-card-img" style="background:linear-gradient(135deg,#fef3c7,#fde68a);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="1.5" width="28" height="28"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>';
     return '<div class="blog-card" data-id="' + escapeHtml(p.id) + '" tabindex="0" role="button" aria-label="Read: ' + escapeHtml(p.title) + '">'
       + imgHtml
@@ -3646,14 +3695,17 @@ function renderBlogCards(posts) {
       +   '<div class="blog-card-meta">' + escapeHtml(p.date) + '</div>'
       +   '<div class="blog-card-title">' + escapeHtml(p.title) + '</div>'
       +   '<div class="blog-card-exc">' + escapeHtml(p.excerpt) + '</div>'
-      + '</div></div>';
+      + '</div>'
+      + '</div>';
   }).join('');
 }
 
 function renderBlogGrid() {
   var grid = document.getElementById('blog-grid');
   if (!grid) return;
-  grid.innerHTML = '<div class="blog-empty">Loading…</div>';
+  // NOTE: do not clear grid.innerHTML before the fetch. The static fallback
+  // cards in the markup stay visible until live posts arrive, so the section
+  // is never empty during Strapi outages or DNS hiccups.
 
   fetch(STRAPI_URL + '/api/journal-posts?filters[is_published][$eq]=true&sort=publishedAt:desc&pagination[pageSize]=24&populate=cover')
     .then(function (r) {
@@ -3663,12 +3715,13 @@ function renderBlogGrid() {
     .then(function (body) {
       var rows = (body && body.data) || [];
       var posts = rows.map(normalizeStrapiPost);
+      if (!posts.length) return; // keep the static fallback visible
       _journalCache = {};
       posts.forEach(function (p) { _journalCache[p.id] = p; });
       renderBlogCards(posts);
     })
     .catch(function () {
-      grid.innerHTML = '<div class="blog-empty">Posts unavailable right now. Please refresh in a moment.</div>';
+      // Strapi unreachable — leave the static fallback in place.
     });
 }
 renderBlogGrid();
@@ -3704,8 +3757,24 @@ function fillBlogModal(p) {
 }
 
 function openBlogPost(id) {
+  // 1. Live posts cached from /api/journal-posts.
   if (_journalCache[id]) return fillBlogModal(_journalCache[id]);
-  // Fetch the single post from Strapi if it wasn't in the list cache.
+  // 2. Static fallback cards in the markup (used when Strapi is unreachable
+  //    or empty). Read content from data-* attributes.
+  var dom = document.querySelector('[data-id="' + (id || '').replace(/"/g, '\\"') + '"]');
+  if (dom && dom.classList && dom.classList.contains('blog-card')) {
+    var coverImg = dom.querySelector('.blog-card-img img');
+    fillBlogModal({
+      id: id,
+      title: dom.getAttribute('data-title') || '',
+      date: dom.getAttribute('data-date') || '',
+      excerpt: dom.getAttribute('data-excerpt') || '',
+      body: dom.getAttribute('data-body') || '',
+      img: (coverImg && coverImg.src) || '',
+    });
+    return;
+  }
+  // 3. Last resort: hit the API directly for that id.
   fetch(STRAPI_URL + '/api/journal-posts/' + encodeURIComponent(id) + '?populate=cover')
     .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
     .then(function (body) {
@@ -3887,23 +3956,8 @@ document.addEventListener('click',function(e){
 });
 
 
-/* ── Show/hide password ── */
-function toggleGatePw(){
-  var inp=document.getElementById('gate-pw');
-  var icon=document.getElementById('gate-eye-icon');
-  var btn=document.getElementById('gate-eye-btn');
-  if(!inp) return;
-  if(inp.type==='password'){
-    inp.type='text';
-    if(btn){btn.setAttribute('aria-label','Hide password');btn.setAttribute('title','Hide password');}
-    if(icon) icon.innerHTML='<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1=\"1\" y1=\"1\" x2=\"23\" y2=\"23\"/>';
-  } else {
-    inp.type='password';
-    if(btn){btn.setAttribute('aria-label','Show password');btn.setAttribute('title','Show password');}
-    if(icon) icon.innerHTML='<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>';
-  }
-  inp.focus();
-}
+/* toggleGatePw removed along with the rest of the client-side admin gate.
+   Admin lives at https://cms.2hands2meals2lives1movement.org/admin. */
 
 
 /* Admin section switching */
