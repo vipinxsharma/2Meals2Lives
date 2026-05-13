@@ -2547,6 +2547,55 @@ function loadAdminSections(){
     return 'https://cms.2meals2lives.org';
   })();
 
+  /* ═══════════════════════════════════════
+     TELEMETRY (optional Sentry + always-on inline capture)
+     Set <meta name="sentry-dsn" content="..."> in <head> (or
+     window.SENTRY_DSN before this script) to enable Sentry.
+  ═══════════════════════════════════════ */
+  (function () {
+    var dsn = window.SENTRY_DSN
+      || ((document.querySelector('meta[name="sentry-dsn"]') || {}).content || '');
+    var env = (document.querySelector('meta[name="sentry-env"]') || {}).content || 'production';
+
+    // Always-on lightweight capture, queryable as window.__2m2lFailures.
+    var failures = [];
+    function record(item) {
+      failures.push(Object.assign({ when: Date.now() }, item));
+      if (failures.length > 50) failures.shift();
+    }
+    window.addEventListener('error', function (e) {
+      record({ type: 'error', msg: e.message || '', src: e.filename || '', line: e.lineno || 0 });
+    });
+    window.addEventListener('unhandledrejection', function (e) {
+      record({ type: 'rejection', msg: String(e.reason || '') });
+    });
+    window.__2m2lFailures = failures;
+    window.__2m2lTrack = function (event, props) {
+      record({ type: 'event', event: event || 'unknown', props: props || {} });
+      if (window.Sentry && window.Sentry.captureMessage) {
+        try { window.Sentry.captureMessage(event, { extra: props || {} }); } catch (e) {}
+      }
+    };
+
+    // Lazy-load Sentry only when a DSN is configured.
+    if (!dsn) return;
+    var s = document.createElement('script');
+    s.src = 'https://browser.sentry-cdn.com/8.42.0/bundle.min.js';
+    s.crossOrigin = 'anonymous';
+    s.async = true;
+    s.onload = function () {
+      if (window.Sentry && window.Sentry.init) {
+        window.Sentry.init({
+          dsn: dsn,
+          environment: env,
+          sampleRate: 1.0,
+          tracesSampleRate: 0
+        });
+      }
+    };
+    document.head.appendChild(s);
+  })();
+
   function drawQR(canvasEl, dark, light){
     try{
       var qr=QR.encode(URL);
@@ -3408,6 +3457,7 @@ function submitPhoto() {
   fetch(STRAPI_URL + '/api/community-posts', { method: 'POST', body: fd })
     .then(function (r) {
       if (!r.ok) throw new Error('create status ' + r.status);
+      if (window.__2m2lTrack) window.__2m2lTrack('community_post_submitted', { ok: true });
       finish(true);
     })
     .catch(function (err) {
@@ -3415,6 +3465,10 @@ function submitPhoto() {
       // the user's submission is preserved on this device. Show a clear note
       // rather than failing silently.
       var cached = saveSubmissionToLocalCache(localCacheCopy);
+      if (window.__2m2lTrack) window.__2m2lTrack('community_post_failed', {
+        error: String(err && err.message || err),
+        fellBackToLocal: cached
+      });
       showSubError(cached
         ? 'Saved on this device. We will publish it when the backend reconnects.'
         : 'Could not save submission right now. Please try again later.');
@@ -3543,9 +3597,13 @@ function handleJoin() {
     .then(function (r) {
       // Strapi returns 200 (idempotent duplicate) or 201 (new) — both fine.
       if (!r.ok) throw new Error('subscriber status ' + r.status);
+      if (window.__2m2lTrack) window.__2m2lTrack('subscriber_signup', { ok: true });
       done();
     })
-    .catch(function () {
+    .catch(function (err) {
+      if (window.__2m2lTrack) window.__2m2lTrack('subscriber_signup_failed', {
+        error: String(err && err.message || err)
+      });
       // Backend unavailable — keep the email locally so the user gets a
       // confirmation and we can backfill later.
       try {
