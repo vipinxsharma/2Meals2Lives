@@ -2738,6 +2738,45 @@ function saveStories(arr) {
   try { localStorage.setItem('2m2l_stories', JSON.stringify(arr)); } catch(e){}
 }
 
+// Hydrate stories from Strapi after first paint, then re-render the panel grid.
+function hydrateStoriesFromApi() {
+  if (typeof STRAPI_URL === 'undefined') return;
+  fetch(STRAPI_URL + '/api/stories?filters[is_published][$eq]=true&sort=createdAt:desc&pagination[pageSize]=12&populate=cover')
+    .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+    .then(function (body) {
+      var rows = (body && body.data) || [];
+      var apiStories = rows.map(function (row) {
+        var a = row.attributes || row;
+        var cover = a.cover_url
+          || (a.cover && a.cover.data && a.cover.data.attributes && a.cover.data.attributes.url)
+          || (a.cover && a.cover.url) || '';
+        return {
+          id: 'api_' + (row.documentId || row.id || a.slug),
+          title: a.title || '',
+          label: a.label || '',
+          excerpt: a.excerpt || '',
+          body: a.body || '',
+          date: a.date_label || (a.createdAt || '').slice(0, 10),
+          cover: cover ? (cover.startsWith('http') ? cover : STRAPI_URL + cover) : '',
+          photos: []
+        };
+      });
+      if (!apiStories.length) return;
+      // Merge with anything already in localStorage so admin-authored drafts
+      // remain accessible while we transition.
+      var local = loadStories();
+      var seen = {};
+      var merged = apiStories.concat(local).filter(function (s) {
+        if (!s.id || seen[s.id]) return false;
+        seen[s.id] = true;
+        return true;
+      });
+      saveStories(merged);
+      renderStoriesIndex();
+    })
+    .catch(function () { /* leave existing UI in place */ });
+}
+
 function renderStoriesIndex() {
   var wrap = document.getElementById('stories-panels');
   if (!wrap) return;
@@ -2807,6 +2846,7 @@ function renderStoriesIndex() {
   });
 }
 renderStoriesIndex();
+hydrateStoriesFromApi();
 
 function openStoryReader(id) {
   // First try localStorage, then fall back to DOM data attributes (seeded stories)
@@ -3380,40 +3420,90 @@ function submitPhoto() {
 
 /* ═══════════════════════════════════════
    GALLERY — photo wall (tab-wall)
+   Reads approved community posts from Strapi. Falls back to any
+   approved entries still in localStorage so offline-cached submissions
+   stay visible on this device until the backend reconnects.
 ═══════════════════════════════════════ */
-function buildGallery() {
+function renderGalleryItems(items) {
   var grid = document.getElementById('gallery-grid');
   if (!grid) return;
   grid.innerHTML = '';
-  var subs = [];
-  try { subs = JSON.parse(localStorage.getItem('2m2l_subs') || '[]'); } catch(e) {}
-  var approved = subs.filter(function(s) { return s.approved; });
-  /* ── Vipin: replace localStorage fetch with:
-     fetch(STRAPI_URL + '/api/community-posts?filters[is_approved][$eq]=true&populate=*')
-       .then(r=>r.json()).then(data=>{ approved = data.data; buildGalleryFromData(approved); })
-  ── */
-  var total = Math.max(12, approved.length + 3);
+  var total = Math.max(12, items.length + 3);
   for (var i = 0; i < total; i++) {
     var slot = document.createElement('div');
     slot.className = 'gallery-slot';
-    if (approved[i]) {
+    var it = items[i];
+    if (it && it.img) {
       var img = document.createElement('img');
-      img.src = approved[i].img || '';
-      img.alt = approved[i].name + ' — ' + approved[i].location;
+      img.src = it.img;
+      img.loading = 'lazy';
+      img.alt = (it.name || '') + ' — ' + (it.location || '');
       img.className = 'loaded';
-      img.title = approved[i].name + ' · ' + approved[i].location
-                + (approved[i].caption ? ' — ' + approved[i].caption : '');
+      img.title = (it.name || '') + ' · ' + (it.location || '')
+                + (it.caption ? ' — ' + it.caption : '');
       slot.appendChild(img);
-      // Caption overlay
       var cap = document.createElement('div');
       cap.className = 'gallery-slot-cap';
-      cap.textContent = approved[i].name + ' · ' + approved[i].location;
+      cap.textContent = (it.name || '') + ' · ' + (it.location || '');
       slot.appendChild(cap);
     } else {
       slot.innerHTML = '<div class="gallery-slot-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Your moment</span></div>';
     }
     grid.appendChild(slot);
   }
+}
+
+function loadLocalGallery() {
+  try {
+    var subs = JSON.parse(localStorage.getItem('2m2l_subs') || '[]');
+    return subs.filter(function (s) { return s.approved; });
+  } catch (e) { return []; }
+}
+
+function strapiMediaUrl(rel) {
+  if (!rel) return '';
+  if (/^https?:\/\//i.test(rel)) return rel;
+  return STRAPI_URL + rel;
+}
+
+function buildGallery() {
+  var grid = document.getElementById('gallery-grid');
+  if (!grid) return;
+  // Render local cache immediately so the page never appears empty.
+  renderGalleryItems(loadLocalGallery());
+
+  fetch(STRAPI_URL + '/api/community-posts?filters[is_approved][$eq]=true&sort=createdAt:desc&pagination[pageSize]=24&populate=image')
+    .then(function (r) {
+      if (!r.ok) throw new Error('status ' + r.status);
+      return r.json();
+    })
+    .then(function (body) {
+      var rows = (body && body.data) || [];
+      var items = rows.map(function (row) {
+        var attrs = row.attributes || row;
+        var imageUrl = attrs.image_url
+          || (attrs.image && attrs.image.data && attrs.image.data.attributes && attrs.image.data.attributes.url)
+          || (attrs.image && attrs.image.url);
+        return {
+          img: strapiMediaUrl(imageUrl),
+          name: attrs.name || '',
+          location: attrs.location || '',
+          caption: attrs.caption || '',
+        };
+      }).filter(function (it) { return it.img; });
+      // Merge in any locally-cached approved entries that haven't synced yet.
+      var local = loadLocalGallery();
+      var seen = {};
+      var merged = items.concat(local).filter(function (it) {
+        if (!it.img || seen[it.img]) return false;
+        seen[it.img] = true;
+        return true;
+      });
+      renderGalleryItems(merged);
+    })
+    .catch(function () {
+      // Keep showing local cache; nothing else to do.
+    });
 }
 buildGallery();
 
@@ -3479,26 +3569,79 @@ function savePosts(posts) {
   try { localStorage.setItem('2m2l_posts', JSON.stringify(posts)); } catch(e) {}
 }
 
-function renderBlogGrid() {
+// Cache of Strapi journal posts by their documentId for the post modal.
+var _journalCache = {};
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function normalizeStrapiPost(row) {
+  var attrs = (row && row.attributes) || row || {};
+  return {
+    id: row.documentId || row.id || attrs.documentId || attrs.slug,
+    title: attrs.title || '',
+    excerpt: attrs.excerpt || '',
+    body: attrs.body || '',
+    date: (attrs.publishedAt || attrs.createdAt || '').slice(0, 10),
+    img: attrs.cover_url
+      || (attrs.cover && attrs.cover.data && attrs.cover.data.attributes && attrs.cover.data.attributes.url)
+      || (attrs.cover && attrs.cover.url)
+      || ''
+  };
+}
+
+function renderBlogCards(posts) {
   var grid = document.getElementById('blog-grid');
   if (!grid) return;
-  var posts = loadPosts();
   if (!posts.length) {
     grid.innerHTML = '<div class="blog-empty">No posts yet. Check back soon.</div>';
     return;
   }
   grid.innerHTML = posts.map(function(p) {
     var imgHtml = p.cover
-      ? '<div class="blog-card-img"><img src="'+p.cover+'" alt="'+p.title+'" loading="lazy"></div>'
+      ? '<div class="blog-card-img"><img src="' + escapeHtml(p.cover) + '" alt="' + escapeHtml(p.title) + '" loading="lazy"></div>'
       : '<div class="blog-card-img" style="background:linear-gradient(135deg,#fef3c7,#fde68a);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="1.5" width="28" height="28"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>';
-    return '<div class="blog-card" data-id="'+p.id+'" tabindex="0" role="button" aria-label="Read: '+p.title+'">'
+    return '<div class="blog-card" data-id="' + escapeHtml(p.id) + '" tabindex="0" role="button" aria-label="Read: ' + escapeHtml(p.title) + '">'
       + imgHtml
       + '<div class="blog-card-body">'
-      + '<div class="blog-card-meta">'+p.date+'</div>'
-      + '<div class="blog-card-title">'+p.title+'</div>'
-      + '<div class="blog-card-exc">'+(p.excerpt||'')+'</div>'
+      +   '<div class="blog-card-meta">' + escapeHtml(p.date) + '</div>'
+      +   '<div class="blog-card-title">' + escapeHtml(p.title) + '</div>'
+      +   '<div class="blog-card-exc">' + escapeHtml(p.excerpt) + '</div>'
       + '</div></div>';
   }).join('');
+}
+
+function renderBlogGrid() {
+  var grid = document.getElementById('blog-grid');
+  if (!grid) return;
+  // Show local cache immediately so the section is never visually empty.
+  var local = loadPosts();
+  if (local.length) renderBlogCards(local);
+  else grid.innerHTML = '<div class="blog-empty">Loading…</div>';
+
+  fetch(STRAPI_URL + '/api/journal-posts?filters[is_published][$eq]=true&sort=publishedAt:desc&pagination[pageSize]=24&populate=cover')
+    .then(function (r) {
+      if (!r.ok) throw new Error('status ' + r.status);
+      return r.json();
+    })
+    .then(function (body) {
+      var rows = (body && body.data) || [];
+      var posts = rows.map(normalizeStrapiPost);
+      _journalCache = {};
+      posts.forEach(function (p) { _journalCache[p.id] = p; });
+      if (posts.length) renderBlogCards(posts);
+      else if (!local.length) renderBlogCards([]);
+    })
+    .catch(function () {
+      // Keep whatever we rendered from cache.
+      if (!local.length) renderBlogCards([]);
+    });
 }
 renderBlogGrid();
 
@@ -3514,17 +3657,40 @@ document.getElementById('blog-grid').addEventListener('keydown', function(e) {
   }
 });
 
-function openBlogPost(id) {
-  var posts = loadPosts();
-  var p = posts.filter(function(x) { return x.id === id; })[0];
-  if (!p) return;
-  document.getElementById('blog-modal-date').textContent = p.date;
-  document.getElementById('blog-modal-title').textContent = p.title;
-  document.getElementById('blog-modal-content').innerHTML = p.body.split('\n').join('<br>');
+function fillBlogModal(p) {
+  document.getElementById('blog-modal-date').textContent = p.date || '';
+  document.getElementById('blog-modal-title').textContent = p.title || '';
+  // Body is treated as plain text with line breaks. textContent prevents
+  // any author-supplied HTML from being interpreted.
+  var content = document.getElementById('blog-modal-content');
+  content.textContent = '';
+  String(p.body || '').split('\n').forEach(function (line, i, arr) {
+    content.appendChild(document.createTextNode(line));
+    if (i < arr.length - 1) content.appendChild(document.createElement('br'));
+  });
   var img = document.getElementById('blog-modal-img');
-  if (p.img) { img.src = p.img; img.classList.add('show'); } else { img.classList.remove('show'); }
+  if (p.img) { img.src = strapiMediaUrl(p.img); img.classList.add('show'); }
+  else { img.classList.remove('show'); img.removeAttribute('src'); }
   document.getElementById('modal-blog').classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+
+function openBlogPost(id) {
+  if (_journalCache[id]) return fillBlogModal(_journalCache[id]);
+  // Fall back to local cache for legacy posts authored before migration.
+  var local = loadPosts().filter(function (x) { return x.id === id; })[0];
+  if (local) return fillBlogModal(local);
+  // Last resort: hit the API directly for that ID.
+  fetch(STRAPI_URL + '/api/journal-posts/' + encodeURIComponent(id) + '?populate=cover')
+    .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+    .then(function (body) {
+      var row = body && body.data;
+      if (!row) return;
+      var p = normalizeStrapiPost(row);
+      _journalCache[id] = p;
+      fillBlogModal(p);
+    })
+    .catch(function () { /* silently no-op */ });
 }
 function closeBlogModal() {
   document.getElementById('modal-blog').classList.remove('open');
