@@ -1349,307 +1349,7 @@ footer{
 .a-section-editor.active{display:block}
 
 </style>
-<!-- QR: inline --><!-- QR: inline --><script id="qr-removed">
-/* ═══════════════════════════════════════
-   QR CODE
-═══════════════════════════════════════ */
-
-    function gfMul(a,b){return a&&b?EXP[LOG[a]+LOG[b]]:0}
-    function gfPoly(gen,n){
-      var p=[1];
-      for(var i=0;i<n;i++){
-        var t=[1,EXP[i]];
-        var r=[];
-        for(var j=0;j<p.length+1;j++){
-          var u=j<p.length?p[j]:0;
-          var v=j>0?p[j-1]:0;
-          r.push(u^gfMul(t[1],v));
-        }
-        p=r;
-      }
-      return p;
-    }
-    function gfRem(data,gen){
-      var r=data.slice();
-      for(var i=0;i<data.length;i++){
-        var c=r[i];
-        if(c){for(var j=1;j<gen.length;j++) r[i+j]^=gfMul(gen[j],c);}
-      }
-      return r.slice(data.length);
-    }
-
-    // Character count + encoding
-    var ALPHAN='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:';
-
-    function encode(str){
-      // Determine mode
-      var mode=4; // byte
-      var bits=[];
-      function addBits(val,len){
-        for(var i=len-1;i>=0;i--) bits.push((val>>i)&1);
-      }
-
-      // Version & EC level — pick smallest version that fits
-      // We'll use version 4-M for most URLs
-      var ver=4,ecl=1; // M=1
-      // Data codewords capacities [version][ecl 0=L,1=M,2=Q,3=H]
-      var CAP=[[],[41,25,16,10],[77,48,36,16],[127,77,56,26],[187,111,84,36],[255,144,120,46]];
-      var byteLen=str.length;
-      for(var v=1;v<=5;v++){if(CAP[v]&&CAP[v][1]>=byteLen){ver=v;break;}}
-
-      // Mode indicator: byte = 0100
-      addBits(4,4);
-      // Character count
-      var ccBits=ver<=9?8:16;
-      addBits(byteLen,ccBits);
-      // Data
-      for(var i=0;i<str.length;i++) addBits(str.charCodeAt(i),8);
-      // Terminator
-      for(var i=0;i<4&&bits.length%8!==0;i++) bits.push(0);
-      while(bits.length%8!==0) bits.push(0);
-      // Pad codewords
-      var PADS=[236,17];
-      var totalDC=[,[19,16,13,9],[34,28,22,16],[55,44,34,26],[80,64,48,36],[108,86,64,46]];
-      var dcCount=totalDC[ver][ecl];
-      var pi=0;
-      while(bits.length<dcCount*8){
-        addBits(PADS[pi%2],8);pi++;
-      }
-
-      // Convert to bytes
-      var dc=[];
-      for(var i=0;i<bits.length;i+=8){
-        var b=0;
-        for(var j=0;j<8;j++) b=(b<<1)|bits[i+j];
-        dc.push(b);
-      }
-
-      // EC codewords
-      var EC_COUNT=[[],[7,10,13,17],[10,16,22,28],[15,26,18,22],[20,18,26,16],[26,24,18,22]];
-      var ecCount=EC_COUNT[ver][ecl];
-      var gen=gfPoly(1,ecCount);
-      var ec=gfRem(dc.concat(new Array(ecCount).fill(0)),gen);
-
-      // All codewords
-      var all=dc.concat(ec);
-
-      // Build matrix
-      var size=ver*4+17;
-      var mat=[];
-      for(var i=0;i<size;i++){mat.push(new Array(size).fill(-1));}
-
-      function setFn(r,c,v){if(r>=0&&r<size&&c>=0&&c<size)mat[r][c]=v;}
-
-      // Finder patterns
-      function finder(r,c){
-        for(var dr=-1;dr<=7;dr++) for(var dc=-1;dc<=7;dc++){
-          if(dr<0||dr>6||dc<0||dc>6) continue;
-          var v=!(dr===1&&dc>=1&&dc<=5)&&!(dr===5&&dc>=1&&dc<=5)&&!(dc===1&&dr>=1&&dr<=5)&&!(dc===5&&dr>=1&&dr<=5);
-          setFn(r+dr,c+dc,v?1:0);
-        }
-      }
-      finder(0,0);finder(0,size-7);finder(size-7,0);
-
-      // Separators (already 0 from finder border)
-      // Timing patterns
-      for(var i=8;i<size-8;i++){
-        setFn(6,i,(i%2===0)?1:0);
-        setFn(i,6,(i%2===0)?1:0);
-      }
-
-      // Dark module
-      setFn(size-8,8,1);
-
-      // Format info (mask 2: checkerboard (r+c)%3==0 → for ver 4-M)
-      // Precomputed format string for M, mask 2: 101000100100101
-      var fmt=[1,0,1,0,0,0,1,0,0,1,0,0,1,0,1];
-      var fmtPos=[[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,7],[8,8],[7,8],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8]];
-      var fmtPos2=[[size-1,8],[size-2,8],[size-3,8],[size-4,8],[size-5,8],[size-6,8],[size-7,8],[8,size-8],[8,size-7],[8,size-6],[8,size-5],[8,size-4],[8,size-3],[8,size-2],[8,size-1]];
-      for(var i=0;i<15;i++){
-        setFn(fmtPos[i][0],fmtPos[i][1],fmt[i]);
-        setFn(fmtPos2[i][0],fmtPos2[i][1],fmt[i]);
-      }
-
-      // Alignment patterns (ver 4 has one at row/col 26)
-      if(ver>=2){
-        var ap=[[],[],[6,18],[6,22],[6,26],[6,30]];
-        var pts=ap[ver];
-        for(var ai=0;ai<pts.length;ai++) for(var bi=0;bi<pts.length;bi++){
-          var ar=pts[ai],ac=pts[bi];
-          if(mat[ar][ac]===-1){
-            for(var dr=-2;dr<=2;dr++) for(var dc=-2;dc<=2;dc++){
-              var v=Math.abs(dr)===2||Math.abs(dc)===2||(dr===0&&dc===0)?1:0;
-              setFn(ar+dr,ac+dc,v);
-            }
-          }
-        }
-      }
-
-      // Place data
-      var col=size-1,row=0,dir=-1,bit=0;
-      while(col>0){
-        if(col===6) col--;
-        for(var i=0;i<size;i++){
-          var r=dir===-1?size-1-i:i;
-          for(var side=0;side<2;side++){
-            var c=col-side;
-            if(mat[r][c]===-1&&bit<all.length*8){
-              var byteIdx=Math.floor(bit/8);
-              var bitIdx=7-(bit%8);
-              var val=(all[byteIdx]>>bitIdx)&1;
-              // Apply mask 2: (r+c)%3===0
-              if((r+c)%3===0) val^=1;
-              mat[r][c]=val;
-              bit++;
-            }
-          }
-        }
-        col-=2;
-        dir=-dir;
-      }
-
-      // Fill remaining -1 with 0
-      for(var r=0;r<size;r++) for(var c=0;c<size;c++) if(mat[r][c]===-1) mat[r][c]=0;
-
-      return {matrix:mat,size:size};
-    }
-    return {encode:encode};
-
-
-
-
-/* Admin section switching */
-function showAdminSection(name, btn){
-  document.querySelectorAll('.a-section-editor').forEach(function(el){el.classList.remove('active');});
-  document.querySelectorAll('.a-section-btn').forEach(function(el){el.classList.remove('active');});
-  var sec=document.getElementById('asec-'+name);
-  if(sec) sec.classList.add('active');
-  if(btn) btn.classList.add('active');
-}
-
-function saveAdminSection(name){
-  var data={};
-  switch(name){
-    case 'why':
-      data.h2=document.getElementById('asec-why-h2').value;
-      data.quote=document.getElementById('asec-why-quote').value;
-      break;
-    case 'india':
-      data.h2=document.getElementById('asec-india-h2').value;
-      data.quote=document.getElementById('asec-india-quote').value;
-      break;
-    case 'how':
-      data.h2=document.getElementById('asec-how-h2').value;
-      data.stat=document.getElementById('asec-how-stat').value;
-      break;
-    case 'speakers':
-      data.calendly=document.getElementById('asec-speakers-calendly').value;
-      data.h2=document.getElementById('asec-speakers-h2').value;
-      // Update live calendly link
-      var calLink=document.querySelector('a[href*="calendly"]');
-      if(calLink&&data.calendly){calLink.href=data.calendly;}
-      break;
-    case 'join':
-      data.h2=document.getElementById('asec-join-h2').value;
-      data.quote=document.getElementById('asec-join-quote').value;
-      break;
-    case 'hero':
-      data.tagline=document.getElementById('asec-hero-tagline').value;
-      data.cta=document.getElementById('asec-hero-cta').value;
-      // Update live hero tagline
-      var tl=document.querySelector('.hero-tagline');
-      if(tl&&data.tagline) tl.textContent=data.tagline;
-      break;
-  }
-  try{localStorage.setItem('2m2l_sec_'+name,JSON.stringify(data));}catch(e){}
-  // Visual feedback
-  var btn=event.target;
-  var orig=btn.textContent;
-  btn.textContent='✓ Saved';
-  btn.style.background='rgba(34,197,94,.2)';
-  setTimeout(function(){btn.textContent=orig;btn.style.background='';},1800);
-}
-
-/* Load saved section data into admin fields on admin open */
-function loadAdminSections(){
-  ['why','india','how','speakers','join','hero'].forEach(function(name){
-    try{
-      var d=JSON.parse(localStorage.getItem('2m2l_sec_'+name)||'{}');
-      switch(name){
-        case 'why':
-          if(d.h2)document.getElementById('asec-why-h2').value=d.h2;
-          if(d.quote)document.getElementById('asec-why-quote').value=d.quote;
-          break;
-        case 'india':
-          if(d.h2)document.getElementById('asec-india-h2').value=d.h2;
-          if(d.quote)document.getElementById('asec-india-quote').value=d.quote;
-          break;
-        case 'how':
-          if(d.h2)document.getElementById('asec-how-h2').value=d.h2;
-          if(d.stat)document.getElementById('asec-how-stat').value=d.stat;
-          break;
-        case 'speakers':
-          if(d.calendly)document.getElementById('asec-speakers-calendly').value=d.calendly;
-          if(d.h2)document.getElementById('asec-speakers-h2').value=d.h2;
-          break;
-        case 'join':
-          if(d.h2)document.getElementById('asec-join-h2').value=d.h2;
-          if(d.quote)document.getElementById('asec-join-quote').value=d.quote;
-          break;
-        case 'hero':
-          if(d.tagline)document.getElementById('asec-hero-tagline').value=d.tagline;
-          if(d.cta)document.getElementById('asec-hero-cta').value=d.cta;
-          break;
-      }
-    }catch(e){}
-  });
-}
-
-
-/* ── QR Download ── */
-function downloadQR(){
-  var svgEl=document.querySelector('#qr-canvas svg');
-  if(!svgEl) return;
-  var print=document.createElement('canvas');
-  print.width=1000;print.height=1200;
-  var ctx=print.getContext('2d');
-  ctx.fillStyle='#fffff8';ctx.fillRect(0,0,1000,1200);
-  ctx.strokeStyle='#d4a017';ctx.lineWidth=6;
-  ctx.beginPath();
-  if(ctx.roundRect) ctx.roundRect(16,16,968,1168,24);
-  else ctx.rect(16,16,968,1168);
-  ctx.stroke();
-  var svgData=new XMLSerializer().serializeToString(svgEl);
-  svgData=svgData.replace(/style="[^"]*"/,'width="800" height="800"');
-  var blob=new Blob([svgData],{type:'image/svg+xml'});
-  var url=URL.createObjectURL(blob);
-  var img=new Image();
-  img.onload=function(){
-    ctx.drawImage(img,100,60,800,800);
-    URL.revokeObjectURL(url);
-    ctx.fillStyle='#d4a017';ctx.font='bold 52px Georgia,serif';ctx.textAlign='center';
-    ctx.fillText('#2Hands2Meals2Lives1Movement',500,955);
-    ctx.fillStyle='#6b5c30';ctx.font='34px Georgia,serif';
-    ctx.fillText('2hands2meals2lives1movement.org',500,1010);
-    ctx.fillStyle='#9a8030';ctx.font='italic 24px Georgia,serif';
-    ctx.fillText('Two hands. Two meals. Two lives. One movement.',500,1065);
-    ctx.fillStyle='#b8a060';ctx.font='20px Georgia,serif';
-    ctx.fillText('Scan to join the movement',500,1115);
-    var a=document.createElement('a');
-    a.download='2hands2meals2lives1movement-qr.png';
-    a.href=print.toDataURL('image/png');
-    a.click();
-  };
-  img.onerror=function(){
-    var a=document.createElement('a');
-    a.download='qr-code.svg';
-    a.href='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svgData);
-    a.click();
-  };
-  img.src=url;
-}
-
-</script>
+<!-- QR encoder block removed: pre-rendered static SVG in #qr-canvas is what renders, and downloadQR() at block 3 handles the share-image export. Removing this block fixes the top-level "return" SyntaxError that aborted script parsing. -->
 </head>
 <body>
 <a href="#main" class="skip">Skip to main content</a>
@@ -2626,38 +2326,12 @@ function loadAdminSections(){
     document.head.appendChild(s);
   })();
 
-  function drawQR(canvasEl, dark, light){
-    try{
-      var qr=QR.encode(URL);
-      var size=qr.size;
-      var mat=qr.matrix;
-      var canvasSize=canvasEl.width||280;
-      var cell=Math.floor(canvasSize/size);
-      var offset=Math.floor((canvasSize-cell*size)/2);
-      var ctx=canvasEl.getContext('2d');
-      ctx.fillStyle=light;
-      ctx.fillRect(0,0,canvasSize,canvasSize);
-      for(var r=0;r<size;r++){
-        for(var c=0;c<size;c++){
-          ctx.fillStyle=mat[r][c]?dark:light;
-          ctx.fillRect(offset+c*cell,offset+r*cell,cell,cell);
-        }
-      }
-    }catch(e){
-      console.error('QR draw error',e);
-      // Fallback: show URL as text
-      var ctx=canvasEl.getContext('2d');
-      ctx.fillStyle=light;ctx.fillRect(0,0,canvasEl.width,canvasEl.height);
-      ctx.fillStyle=dark;ctx.font='11px monospace';ctx.textAlign='center';
-      ctx.fillText('2hands2meals2lives1movement.org',canvasEl.width/2,canvasEl.height/2);
-    }
-  }
-
-  // Draw on page load
-  window.addEventListener('DOMContentLoaded',function(){
-    var c=document.getElementById('qr-canvas');
-    if(c) drawQR(c,DARK,LITE);
-  });
+  // drawQR + the QR on-load listener used to live here. They depended on the
+  // dead QR encoder IIFE (now removed for SyntaxError reasons), the undefined
+  // globals DARK/LITE, and treated #qr-canvas as a <canvas> — but it's now a
+  // <div> wrapping a pre-rendered static <svg>. Removed entirely. The
+  // share-image exporter at the bottom of this script (downloadQR) is the
+  // only working QR path that remains.
 
   // Download function
   window.downloadQR = function() {
@@ -2802,9 +2476,22 @@ function closeLightbox() {
   document.getElementById('photo-lightbox').classList.remove('open');
   document.body.style.overflow = '';
 }
-document.getElementById('photo-lightbox').addEventListener('click', function(e){
-  if (e.target === e.currentTarget || e.target === document.getElementById('lightbox-img')) closeLightbox();
-});
+// #photo-lightbox is rendered late in the body (after this script ends), so
+// guard the lookup. Attach when the DOM is ready instead of synchronously.
+(function () {
+  function bindLightbox() {
+    var el = document.getElementById('photo-lightbox');
+    if (!el) return;
+    el.addEventListener('click', function (e) {
+      if (e.target === e.currentTarget || e.target === document.getElementById('lightbox-img')) closeLightbox();
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindLightbox);
+  } else {
+    bindLightbox();
+  }
+})();
 
 /* ═══════════════════════════════════════
    STORIES CRUD
@@ -3240,8 +2927,21 @@ function showPage(name) {
 ═══════════════════════════════════════ */
 function showStoryTab(name) {
   showPage('story');
-  var tab = document.querySelector('[]');
+  // Find the s-tab button whose data-tab matches the requested name. The
+  // previous version used the invalid selector "[]" which threw a DOMException
+  // in every browser. safeQuerySelector defends against undefined names and
+  // any other malformed selectors that might creep in via callers.
+  var tab = safeQuerySelector('.s-tab[data-tab="' + String(name || '').replace(/"/g, '\\"') + '"]');
   if (tab) showStoryTabBtn(tab, name);
+}
+
+// Defensive querySelector wrapper. Returns null instead of throwing on
+// invalid selectors, empty strings, or any other malformed inputs. Used
+// wherever a selector is built from variable data.
+function safeQuerySelector(selector) {
+  if (!selector || selector === '[]') return null;
+  try { return document.querySelector(selector); }
+  catch (e) { console.warn('Invalid selector skipped:', selector); return null; }
 }
 
 function showStoryTabBtn(btn, name) {
@@ -3313,9 +3013,12 @@ function closeSubmit() {
   document.getElementById('sub-photo-preview').classList.remove('show');
   subImgData = null;
 }
-document.getElementById('modal-submit').addEventListener('click', function(e) {
-  if (e.target === e.currentTarget) closeSubmit();
-});
+(function () {
+  var el = document.getElementById('modal-submit');
+  if (el) el.addEventListener('click', function (e) {
+    if (e.target === e.currentTarget) closeSubmit();
+  });
+})();
 /* ── Image validation constants ──
    Allowed:  JPEG, PNG, WEBP
    Max size: 8MB raw
@@ -3733,16 +3436,20 @@ function renderBlogGrid() {
 renderBlogGrid();
 
 // Event delegation for blog cards
-document.getElementById('blog-grid').addEventListener('click', function(e) {
-  var card = e.target.closest('[data-id]');
-  if (card) openBlogPost(card.getAttribute('data-id'));
-});
-document.getElementById('blog-grid').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' || e.key === ' ') {
+(function () {
+  var grid = document.getElementById('blog-grid');
+  if (!grid) return;
+  grid.addEventListener('click', function (e) {
     var card = e.target.closest('[data-id]');
-    if (card) { e.preventDefault(); openBlogPost(card.getAttribute('data-id')); }
-  }
-});
+    if (card) openBlogPost(card.getAttribute('data-id'));
+  });
+  grid.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      var card = e.target.closest('[data-id]');
+      if (card) { e.preventDefault(); openBlogPost(card.getAttribute('data-id')); }
+    }
+  });
+})();
 
 function fillBlogModal(p) {
   document.getElementById('blog-modal-date').textContent = p.date || '';
@@ -3763,42 +3470,60 @@ function fillBlogModal(p) {
 }
 
 function openBlogPost(id) {
-  // 1. Live posts cached from /api/journal-posts.
-  if (_journalCache[id]) return fillBlogModal(_journalCache[id]);
-  // 2. Static fallback cards in the markup (used when Strapi is unreachable
-  //    or empty). Read content from data-* attributes.
-  var dom = document.querySelector('[data-id="' + (id || '').replace(/"/g, '\\"') + '"]');
-  if (dom && dom.classList && dom.classList.contains('blog-card')) {
-    var coverImg = dom.querySelector('.blog-card-img img');
-    fillBlogModal({
-      id: id,
-      title: dom.getAttribute('data-title') || '',
-      date: dom.getAttribute('data-date') || '',
-      excerpt: dom.getAttribute('data-excerpt') || '',
-      body: dom.getAttribute('data-body') || '',
-      img: (coverImg && coverImg.src) || '',
-    });
-    return;
+  if (!id) { console.warn('openBlogPost called with empty id'); return; }
+  try {
+    // 1. Live posts cached from /api/journal-posts.
+    if (_journalCache && _journalCache[id]) return fillBlogModal(_journalCache[id]);
+    // 2. Optional global override. If a deployed bundle defines
+    //    window.BLOG_POSTS as a map of id -> post, prefer it. Guarded so
+    //    that an undefined or non-object BLOG_POSTS can never throw
+    //    "Cannot read properties of undefined".
+    if (typeof window !== 'undefined' && window.BLOG_POSTS && typeof window.BLOG_POSTS === 'object') {
+      var fromGlobal = window.BLOG_POSTS[id];
+      if (fromGlobal) return fillBlogModal(fromGlobal);
+    }
+    // 3. Static fallback cards in the markup (used when Strapi is unreachable
+    //    or empty). Read content from data-* attributes via safeQuerySelector.
+    var dom = safeQuerySelector('[data-id="' + String(id).replace(/"/g, '\\"') + '"]');
+    if (dom && dom.classList && dom.classList.contains('blog-card')) {
+      var coverImg = dom.querySelector('.blog-card-img img');
+      fillBlogModal({
+        id: id,
+        title: dom.getAttribute('data-title') || '',
+        date: dom.getAttribute('data-date') || '',
+        excerpt: dom.getAttribute('data-excerpt') || '',
+        body: dom.getAttribute('data-body') || '',
+        img: (coverImg && coverImg.src) || '',
+      });
+      return;
+    }
+    // 4. Last resort: hit the API directly for that id.
+    fetch(STRAPI_URL + '/api/journal-posts/' + encodeURIComponent(id) + '?populate=cover')
+      .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+      .then(function (body) {
+        var row = body && body.data;
+        if (!row) { console.warn('Post not found for id:', id); return; }
+        var p = normalizeStrapiPost(row);
+        if (_journalCache) _journalCache[id] = p;
+        fillBlogModal(p);
+      })
+      .catch(function (err) {
+        console.warn('openBlogPost API fallback failed for', id, err);
+      });
+  } catch (e) {
+    console.warn('openBlogPost failed for', id, e);
   }
-  // 3. Last resort: hit the API directly for that id.
-  fetch(STRAPI_URL + '/api/journal-posts/' + encodeURIComponent(id) + '?populate=cover')
-    .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
-    .then(function (body) {
-      var row = body && body.data;
-      if (!row) return;
-      var p = normalizeStrapiPost(row);
-      _journalCache[id] = p;
-      fillBlogModal(p);
-    })
-    .catch(function () { /* silently no-op */ });
 }
 function closeBlogModal() {
   document.getElementById('modal-blog').classList.remove('open');
   document.body.style.overflow = '';
 }
-document.getElementById('modal-blog').addEventListener('click', function(e) {
-  if (e.target === e.currentTarget) closeBlogModal();
-});
+(function () {
+  var el = document.getElementById('modal-blog');
+  if (el) el.addEventListener('click', function (e) {
+    if (e.target === e.currentTarget) closeBlogModal();
+  });
+})();
 
 /* Journal editor + admin-blog stubs removed.
    Posts are now managed exclusively in Strapi admin at
