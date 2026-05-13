@@ -2532,7 +2532,20 @@ function loadAdminSections(){
 
 </script>
 
-<script>  function drawQR(canvasEl, dark, light){
+<script>
+  /* ═══════════════════════════════════════
+     STRAPI API CONFIG
+     Override at runtime by setting window.STRAPI_URL before this script runs,
+     or by adding a <meta name="strapi-url" content="..."> tag in <head>.
+  ═══════════════════════════════════════ */
+  var STRAPI_URL = (function(){
+    if (window.STRAPI_URL) return window.STRAPI_URL.replace(/\/$/, '');
+    var m = document.querySelector('meta[name="strapi-url"]');
+    if (m && m.content) return m.content.replace(/\/$/, '');
+    return 'https://cms.2meals2lives.org';
+  })();
+
+  function drawQR(canvasEl, dark, light){
     try{
       var qr=QR.encode(URL);
       var size=qr.size;
@@ -3282,9 +3295,32 @@ function clearSubError() {
   var el = document.getElementById('sub-photo-err');
   if (el) el.textContent = '';
 }
+// Convert a base64 dataURL to a Blob for upload via FormData.
+function dataUrlToBlob(dataUrl) {
+  var parts = dataUrl.split(',');
+  var mimeMatch = /^data:([^;]+);base64$/.exec(parts[0]);
+  var mime = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+  var bin = atob(parts[1]);
+  var bytes = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new Blob([bytes], { type: mime });
+}
+
+function saveSubmissionToLocalCache(payload) {
+  try {
+    var subs = JSON.parse(localStorage.getItem('2m2l_subs') || '[]');
+    if (JSON.stringify(subs).length + (payload.img || '').length > 4 * 1024 * 1024) return false;
+    subs.push(payload);
+    localStorage.setItem('2m2l_subs', JSON.stringify(subs));
+    return true;
+  } catch (e) { return false; }
+}
+
 function submitPhoto() {
   var name = document.getElementById('sub-name').value.trim();
   var loc  = document.getElementById('sub-location').value.trim();
+  var caption = document.getElementById('sub-caption').value.trim();
+  var email = document.getElementById('sub-email').value.trim();
   clearSubError();
   if (!subImgData) { showSubError('Please add a photo first.'); return; }
   if (!name) { document.getElementById('sub-name').focus(); return; }
@@ -3293,52 +3329,53 @@ function submitPhoto() {
   var btn = document.getElementById('sub-btn');
   btn.disabled = true; btn.textContent = 'Submitting…';
 
-  /* ── Vipin: replace this localStorage block with:
-     fetch('/api/community-posts', {
-       method: 'POST',
-       headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify({
-         data: { name, location: loc, caption, email,
-                 image_url: <upload to R2 first>,
-                 is_approved: false,
-                 meta: subImgMeta }
-       })
-     })
-  ── */
-  try {
-    var subs = JSON.parse(localStorage.getItem('2m2l_subs') || '[]');
-    // Guard: if localStorage is near full, warn and bail
-    var testSize = JSON.stringify(subs).length + subImgData.length;
-    if (testSize > 4 * 1024 * 1024) {  // 4MB safety threshold
-      btn.disabled = false; btn.textContent = 'Submit to the wall';
-      alert('Storage limit reached on this device. This will be resolved once the Strapi backend is connected.');
-      return;
+  var finish = function(ok) {
+    if (ok) {
+      document.getElementById('sub-form').style.display = 'none';
+      document.getElementById('sub-success').classList.add('show');
     }
-    subs.push({
-      id: 'sub_' + Date.now(),
-      name: name,
-      location: loc,
-      caption: document.getElementById('sub-caption').value.trim(),
-      email: document.getElementById('sub-email').value.trim(),
-      img: subImgData,
-      meta: subImgMeta || {},
-      approved: false,
-      ts: new Date().toISOString()
-    });
-    localStorage.setItem('2m2l_subs', JSON.stringify(subs));
-  } catch(e) {
     btn.disabled = false; btn.textContent = 'Submit to the wall';
-    alert('Could not save submission. Please try a smaller image or connect the Strapi backend.');
-    return;
-  }
+    if (typeof updateAdminBadge === 'function') updateAdminBadge();
+  };
 
-  setTimeout(function() {
-    document.getElementById('sub-form').style.display = 'none';
-    document.getElementById('sub-success').classList.add('show');
-    btn.disabled = false; btn.textContent = 'Submit to the wall';
-    // Update admin badge live
-    updateAdminBadge();
-  }, 700);
+  var localCacheCopy = {
+    id: 'sub_' + Date.now(),
+    name: name, location: loc, caption: caption, email: email,
+    img: subImgData, meta: subImgMeta || {}, approved: false,
+    ts: new Date().toISOString()
+  };
+
+  // Single multipart POST to /api/community-posts. Strapi's core controller
+  // uploads files.image to the configured provider (R2 in prod) and links it
+  // to the new record. We don't grant public access to /api/upload — this
+  // keeps the upload endpoint locked down.
+  var blob = dataUrlToBlob(subImgData);
+  var fd = new FormData();
+  fd.append('data', JSON.stringify({
+    name: name,
+    location: loc,
+    caption: caption,
+    email: email,
+    meta: subImgMeta || {},
+    submitted_at: new Date().toISOString()
+  }));
+  fd.append('files.image', blob, 'submission-' + Date.now() + '.jpg');
+
+  fetch(STRAPI_URL + '/api/community-posts', { method: 'POST', body: fd })
+    .then(function (r) {
+      if (!r.ok) throw new Error('create status ' + r.status);
+      finish(true);
+    })
+    .catch(function (err) {
+      // Backend unavailable / CORS / network — fall back to localStorage so
+      // the user's submission is preserved on this device. Show a clear note
+      // rather than failing silently.
+      var cached = saveSubmissionToLocalCache(localCacheCopy);
+      showSubError(cached
+        ? 'Saved on this device. We will publish it when the backend reconnects.'
+        : 'Could not save submission right now. Please try again later.');
+      finish(cached);
+    });
 }
 
 /* ═══════════════════════════════════════
@@ -3384,19 +3421,47 @@ buildGallery();
    JOIN FORM
 ═══════════════════════════════════════ */
 function handleJoin() {
-  var email = document.getElementById('join-email').value.trim();
-  if (!email || !/^[^s@]+@[^s@]+.[^s@]+$/.test(email)) {
-    document.getElementById('join-email').focus();
+  var input = document.getElementById('join-email');
+  var btn = document.querySelector('.join-submit');
+  var email = input.value.trim();
+  // Previous regex used [^s@] which rejected any email containing the letter
+  // 's'. The intent was [^\s@] (no whitespace).
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    input.focus();
     return;
   }
-  try {
-    var subs = JSON.parse(localStorage.getItem('2m2l_email_subs') || '[]');
-    if (!subs.includes(email)) { subs.push(email); localStorage.setItem('2m2l_email_subs', JSON.stringify(subs)); }
-  } catch(e) {}
-  document.getElementById('join-email').value = '';
-  var ok = document.getElementById('join-ok');
-  ok.style.display = 'block';
-  setTimeout(function() { ok.style.display = 'none'; }, 8000);
+  if (btn) { btn.disabled = true; btn.textContent = 'Joining…'; }
+
+  var done = function () {
+    if (btn) { btn.disabled = false; btn.textContent = 'Count me in'; }
+    input.value = '';
+    var ok = document.getElementById('join-ok');
+    ok.style.display = 'block';
+    setTimeout(function () { ok.style.display = 'none'; }, 8000);
+  };
+
+  fetch(STRAPI_URL + '/api/subscribers', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data: { email: email, source: 'join-tab' } })
+  })
+    .then(function (r) {
+      // Strapi returns 200 (idempotent duplicate) or 201 (new) — both fine.
+      if (!r.ok) throw new Error('subscriber status ' + r.status);
+      done();
+    })
+    .catch(function () {
+      // Backend unavailable — keep the email locally so the user gets a
+      // confirmation and we can backfill later.
+      try {
+        var subs = JSON.parse(localStorage.getItem('2m2l_email_subs') || '[]');
+        if (!subs.includes(email)) {
+          subs.push(email);
+          localStorage.setItem('2m2l_email_subs', JSON.stringify(subs));
+        }
+      } catch (e) {}
+      done();
+    });
 }
 
 /* ═══════════════════════════════════════
