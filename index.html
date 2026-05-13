@@ -1659,7 +1659,7 @@ function downloadQR(){
     <button class="nav-btn" onclick="showPage('story')">The Story</button>
     <button class="nav-btn" onclick="openSubmit()">Share a Moment</button>
     <button class="nav-cta" onclick="showStoryTab('join')">Join</button>
-    <a class="nav-lock" id="nav-lock-btn" href="https://cms.2meals2lives.org/admin" target="_blank" rel="noopener" data-tip="Admin (Strapi)" aria-label="Admin (Strapi)">
+    <a class="nav-lock" id="nav-lock-btn" href="https://cms.2meals2lives.org/admin" target="_blank" rel="noopener" data-admin-link data-tip="Admin (Strapi)" aria-label="Admin (Strapi)">
       <svg id="nav-lock-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
     </a>
     <a href="https://www.linkedin.com/in/glennfreezman/" target="_blank" rel="noopener" class="nav-btn" aria-label="Glenn on LinkedIn">
@@ -1677,7 +1677,7 @@ function downloadQR(){
   <button onclick="showPage('story');closeMob()">The Story</button>
   <button onclick="openSubmit();closeMob()">Share a Moment</button>
   <button onclick="showStoryTab('join');closeMob()">Join</button>
-  <a class="mob-cta" href="https://cms.2meals2lives.org/admin" target="_blank" rel="noopener" onclick="closeMob()">Admin</a>
+  <a class="mob-cta" href="https://cms.2meals2lives.org/admin" target="_blank" rel="noopener" data-admin-link onclick="closeMob()">Admin</a>
 </div>
 
 <main id="main">
@@ -2549,6 +2549,14 @@ function loadAdminSections(){
     if (m && m.content) return m.content.replace(/\/$/, '');
     return 'https://cms.2meals2lives.org';
   })();
+
+  // Retarget any admin links to whatever STRAPI_URL resolved to. Lets a single
+  // override (window.STRAPI_URL or <meta name="strapi-url">) move the Admin
+  // button to a staging/Railway preview/etc. URL without editing the HTML.
+  Array.prototype.forEach.call(
+    document.querySelectorAll('[data-admin-link]'),
+    function (a) { a.href = STRAPI_URL + '/admin'; }
+  );
 
   /* ═══════════════════════════════════════
      TELEMETRY (optional Sentry + always-on inline capture)
