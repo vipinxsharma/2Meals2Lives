@@ -482,14 +482,25 @@ nav.scrolled{background:rgba(10,8,0,.92);border-bottom-color:var(--line);backdro
 /* Blog in story */
 .blog-grid{display:flex;flex-direction:column;gap:12px;margin:1.5rem 0}
 .blog-card{
-  background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:10px;
-  padding:1.25rem;cursor:pointer;transition:border-color .2s,box-shadow .2s;
+  background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:12px;
+  overflow:hidden;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .2s;
+  display:flex;align-items:stretch;
 }
-.blog-card:hover{border-color:#d4a017;box-shadow:0 4px 16px rgba(0,0,0,.06)}
-.blog-card-meta{font-size:.7rem;color:#78716c;margin-bottom:.4rem}
-.blog-card-title{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:400;color:#1c1a14;margin-bottom:.3rem}
-.blog-card-exc{font-size:.82rem;color:#78716c;line-height:1.55}
+.blog-card:hover{border-color:#d4a017;box-shadow:0 6px 24px rgba(0,0,0,.08);transform:translateY(-1px)}
+.blog-card-img{
+  width:120px;flex-shrink:0;background:#f5f1ea;overflow:hidden;
+}
+.blog-card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.blog-card:hover .blog-card-img img{transform:scale(1.06)}
+.blog-card-body{padding:1.1rem 1.25rem;flex:1;display:flex;flex-direction:column;justify-content:center}
+.blog-card-meta{font-size:.68rem;color:#a8a29e;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.blog-card-title{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:400;color:#1c1a14;margin-bottom:.35rem;line-height:1.3}
+.blog-card-exc{font-size:.8rem;color:#78716c;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .blog-empty{font-size:.88rem;color:#78716c;font-style:italic;text-align:center;padding:2rem;background:#f5f1ea;border-radius:8px}
+@media(max-width:480px){
+  .blog-card-img{width:90px}
+  .blog-card-body{padding:.9rem 1rem}
+}
 
 /* Join form */
 .join-form{
@@ -3149,6 +3160,7 @@ function showStoryTabBtn(btn, name) {
   });
   // Re-render stories when that tab is activated
   if (name === 'stories') renderStoriesIndex();
+  if (name === 'journal') renderBlogGrid();
   // Scroll tab into view (mobile)
   if (btn) btn.scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
 }
@@ -3447,11 +3459,16 @@ function renderBlogGrid() {
     return;
   }
   grid.innerHTML = posts.map(function(p) {
+    var imgHtml = p.cover
+      ? '<div class="blog-card-img"><img src="'+p.cover+'" alt="'+p.title+'" loading="lazy"></div>'
+      : '<div class="blog-card-img" style="background:linear-gradient(135deg,#fef3c7,#fde68a);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="1.5" width="28" height="28"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>';
     return '<div class="blog-card" data-id="'+p.id+'" tabindex="0" role="button" aria-label="Read: '+p.title+'">'
-      + '<div class="blog-card-meta">' + p.date + '</div>'
-      + '<div class="blog-card-title">' + p.title + '</div>'
-      + '<div class="blog-card-exc">' + (p.excerpt || '') + '</div>'
-      + '</div>';
+      + imgHtml
+      + '<div class="blog-card-body">'
+      + '<div class="blog-card-meta">'+p.date+'</div>'
+      + '<div class="blog-card-title">'+p.title+'</div>'
+      + '<div class="blog-card-exc">'+(p.excerpt||'')+'</div>'
+      + '</div></div>';
   }).join('');
 }
 renderBlogGrid();
