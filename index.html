@@ -2144,6 +2144,7 @@ function downloadQR(){
         <p>Get updates on the movement, event moments, and how to carry this from any stage.</p>
         <div class="join-row">
           <input type="email" id="join-email" class="join-input" placeholder="your@email.com" autocomplete="email">
+          <input type="text" id="join-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;opacity:0">
           <button class="join-submit" onclick="handleJoin()">Count me in</button>
         </div>
         <div class="join-ok" id="join-ok">You're in. Watch for the first dispatch.</div>
@@ -2345,6 +2346,7 @@ function downloadQR(){
       <div class="field"><label for="sub-location">City / Country</label><input type="text" id="sub-location" placeholder="e.g. Austin TX · Dubai · Mumbai" maxlength="80"></div>
       <div class="field"><label for="sub-caption">Your moment (optional)</label><textarea id="sub-caption" placeholder="What happened? Where were you?" maxlength="280"></textarea></div>
       <div class="field"><label for="sub-email">Email <small style="font-weight:400;text-transform:none;letter-spacing:0">(for notification when approved)</small></label><input type="email" id="sub-email" placeholder="your@email.com"></div>
+      <input type="text" id="sub-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;opacity:0">
       <div class="modal-note"><strong>Moderation note:</strong> Every photo is reviewed before appearing. Usually within 24 hours.</div>
       <button class="modal-submit-btn" id="sub-btn" onclick="submitPhoto()">Submit to the wall</button>
     </div>
@@ -3391,11 +3393,13 @@ function submitPhoto() {
   // keeps the upload endpoint locked down.
   var blob = dataUrlToBlob(subImgData);
   var fd = new FormData();
+  var honeypot = (document.getElementById('sub-website') || {}).value || '';
   fd.append('data', JSON.stringify({
     name: name,
     location: loc,
     caption: caption,
     email: email,
+    website: honeypot,
     meta: subImgMeta || {},
     submitted_at: new Date().toISOString()
   }));
@@ -3530,10 +3534,11 @@ function handleJoin() {
     setTimeout(function () { ok.style.display = 'none'; }, 8000);
   };
 
+  var honeypot = (document.getElementById('join-website') || {}).value || '';
   fetch(STRAPI_URL + '/api/subscribers', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ data: { email: email, source: 'join-tab' } })
+    body: JSON.stringify({ data: { email: email, source: 'join-tab', website: honeypot } })
   })
     .then(function (r) {
       // Strapi returns 200 (idempotent duplicate) or 201 (new) — both fine.
