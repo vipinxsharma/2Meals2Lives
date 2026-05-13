@@ -1,0 +1,12 @@
+# The repo's production frontend is the static index.html at the root.
+# next-migration/ is a parallel Next.js scaffold that is NOT deployed by the
+# root Vercel project — it's intended for a separate Vercel project with
+# Root Directory = next-migration. Ignore it from the root deploy so Vercel's
+# framework auto-detection never tries to crawl into it.
+next-migration/
+
+# Standard ignores
+node_modules
+.git
+docs/
+scripts/
