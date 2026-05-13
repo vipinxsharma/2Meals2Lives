@@ -2125,9 +2125,6 @@ function downloadQR(){
           <span class="lbl">From the movement</span>
           <h2 style="margin-bottom:0">Dispatches from the road.</h2>
         </div>
-        <button id="journal-write-btn" onclick="openEditor(null)" style="display:none;background:#d4a017;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:.03em">
-          + Write a post
-        </button>
       </div>
       <div class="blog-grid" id="blog-grid">
         <div class="blog-empty">No posts yet. Check back soon.</div>
@@ -2199,15 +2196,11 @@ function downloadQR(){
 
     <!-- Blog panel -->
     <div class="a-panel active" id="apanel-blog">
-      <div class="a-toolbar">
-        <button class="a-new-btn" onclick="openEditor(null)">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          New Post
-        </button>
-      </div>
-      <div class="a-blog-list" id="admin-blog-list">
-        <div class="a-empty">No posts yet. Click "New Post" to write the first entry.</div>
-      </div>
+      <p class="a-note">Journal posts are managed in Strapi admin at
+        <a href="https://cms.2hands2meals2lives1movement.org/admin"
+           target="_blank" rel="noopener">cms.2hands2meals2lives1movement.org/admin</a>.
+        Create, edit, publish, or unpublish from there. The site reads
+        published posts via the Strapi API automatically.</p>
     </div>
 
 
@@ -2377,32 +2370,8 @@ function downloadQR(){
   </div>
 </div>
 
-<!-- BLOG EDITOR MODAL -->
-<div id="modal-editor" role="dialog" aria-modal="true" aria-labelledby="editor-heading">
-  <div class="editor-box">
-    <div class="editor-head">
-      <div class="editor-heading" id="editor-heading">New Post</div>
-      <button class="editor-close" onclick="closeEditor()" aria-label="Close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <div class="editor-body">
-      <div class="editor-field"><label for="ed-title">Title</label><input type="text" id="ed-title" placeholder="Post title"></div>
-      <div class="editor-field"><label for="ed-excerpt">Excerpt (shown on card)</label><input type="text" id="ed-excerpt" placeholder="One-sentence summary" maxlength="200"></div>
-      <div class="editor-field">
-        <label>Cover image (optional)</label>
-        <div class="editor-img-zone">
-          <input type="file" id="ed-img-input" accept="image/*" onchange="previewEditorImg(this)">
-          <img id="ed-img-preview" alt="">
-          <div class="editor-img-zone-label">Upload cover image</div>
-        </div>
-      </div>
-      <div class="editor-field"><label for="ed-body">Post content</label><textarea id="ed-body" placeholder="Write the post here..." style="min-height:180px"></textarea></div>
-    </div>
-    <div class="editor-actions">
-      <button class="editor-del-btn" id="ed-del" onclick="deletePost()">Delete</button>
-      <button class="editor-save-btn" onclick="savePost()">Publish</button>
-    </div>
-  </div>
-</div>
+<!-- Blog editor modal removed. Post management lives in Strapi admin at
+     https://cms.2hands2meals2lives1movement.org/admin -->
 
 <!-- Admin access is provided by Strapi at https://cms.2hands2meals2lives1movement.org/admin -->
 
@@ -3169,7 +3138,6 @@ switchAdminTab = function(tab) {
     if(pnl){pnl.classList.toggle('active',t===tab);}
   });
   if(tab==='stories')  refreshAdminStories();
-  if(tab==='blog')     refreshAdminBlog();
   if(tab==='photos')   refreshAdminPhotos();
   if(tab==='stats')    refreshAdminStats();
   if(tab==='sections') loadAdminSections();
@@ -3265,7 +3233,6 @@ document.addEventListener('keydown', function(e) {
     closeMob();
     closeSubmit();
     closeBlogModal();
-    closeEditor();
   }
 });
 window.addEventListener('scroll', function() {
@@ -3634,14 +3601,6 @@ function handleJoin() {
 // Admin moved to Strapi (cms.2hands2meals2lives1movement.org/admin). The flag below remains
 // only so legacy DOM hooks for the orphaned in-page admin UI stay hidden.
 var adminUnlocked = false;
-var editingId = null;
-
-function loadPosts() {
-  try { return JSON.parse(localStorage.getItem('2m2l_posts') || '[]'); } catch(e) { return []; }
-}
-function savePosts(posts) {
-  try { localStorage.setItem('2m2l_posts', JSON.stringify(posts)); } catch(e) {}
-}
 
 // Cache of Strapi journal posts by their documentId for the post modal.
 var _journalCache = {};
@@ -3694,10 +3653,7 @@ function renderBlogCards(posts) {
 function renderBlogGrid() {
   var grid = document.getElementById('blog-grid');
   if (!grid) return;
-  // Show local cache immediately so the section is never visually empty.
-  var local = loadPosts();
-  if (local.length) renderBlogCards(local);
-  else grid.innerHTML = '<div class="blog-empty">Loading…</div>';
+  grid.innerHTML = '<div class="blog-empty">Loading…</div>';
 
   fetch(STRAPI_URL + '/api/journal-posts?filters[is_published][$eq]=true&sort=publishedAt:desc&pagination[pageSize]=24&populate=cover')
     .then(function (r) {
@@ -3709,12 +3665,10 @@ function renderBlogGrid() {
       var posts = rows.map(normalizeStrapiPost);
       _journalCache = {};
       posts.forEach(function (p) { _journalCache[p.id] = p; });
-      if (posts.length) renderBlogCards(posts);
-      else if (!local.length) renderBlogCards([]);
+      renderBlogCards(posts);
     })
     .catch(function () {
-      // Keep whatever we rendered from cache.
-      if (!local.length) renderBlogCards([]);
+      grid.innerHTML = '<div class="blog-empty">Posts unavailable right now. Please refresh in a moment.</div>';
     });
 }
 renderBlogGrid();
@@ -3751,10 +3705,7 @@ function fillBlogModal(p) {
 
 function openBlogPost(id) {
   if (_journalCache[id]) return fillBlogModal(_journalCache[id]);
-  // Fall back to local cache for legacy posts authored before migration.
-  var local = loadPosts().filter(function (x) { return x.id === id; })[0];
-  if (local) return fillBlogModal(local);
-  // Last resort: hit the API directly for that ID.
+  // Fetch the single post from Strapi if it wasn't in the list cache.
   fetch(STRAPI_URL + '/api/journal-posts/' + encodeURIComponent(id) + '?populate=cover')
     .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
     .then(function (body) {
@@ -3774,88 +3725,16 @@ document.getElementById('modal-blog').addEventListener('click', function(e) {
   if (e.target === e.currentTarget) closeBlogModal();
 });
 
-/* ═══════════════════════════════════════
-   BLOG EDITOR
-═══════════════════════════════════════ */
-function openEditor(id) {
-  editingId = id;
-  var heading = document.getElementById('editor-heading');
-  var del = document.getElementById('ed-del');
-  if (id) {
-    var p = loadPosts().filter(function(x) { return x.id === id; })[0];
-    if (!p) return;
-    document.getElementById('ed-title').value = p.title || '';
-    document.getElementById('ed-excerpt').value = p.excerpt || '';
-    document.getElementById('ed-body').value = p.body || '';
-    var prev = document.getElementById('ed-img-preview');
-    if (p.img) { prev.src = p.img; prev.classList.add('show'); } else { prev.classList.remove('show'); }
-    heading.textContent = 'Edit Post';
-    del.classList.add('show');
-  } else {
-    document.getElementById('ed-title').value = '';
-    document.getElementById('ed-excerpt').value = '';
-    document.getElementById('ed-body').value = '';
-    document.getElementById('ed-img-preview').classList.remove('show');
-    heading.textContent = 'New Post';
-    del.classList.remove('show');
-  }
-  document.getElementById('modal-editor').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeEditor() {
-  document.getElementById('modal-editor').classList.remove('open');
-  document.body.style.overflow = '';
-  editingId = null;
-}
-function previewEditorImg(input) {
-  var file = input.files[0];
-  if (!file) return;
-  var r = new FileReader();
-  r.onload = function(ev) {
-    var p = document.getElementById('ed-img-preview');
-    p.src = ev.target.result; p.classList.add('show');
-  };
-  r.readAsDataURL(file);
-}
-function savePost() {
-  var title = document.getElementById('ed-title').value.trim();
-  var body  = document.getElementById('ed-body').value.trim();
-  if (!title || !body) { alert('Title and content are required.'); return; }
-  var posts = loadPosts();
-  var now = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
-  var imgPrev = document.getElementById('ed-img-preview');
-  var img = imgPrev.classList.contains('show') ? imgPrev.src : '';
-  if (editingId) {
-    posts = posts.map(function(p) {
-      if (p.id !== editingId) return p;
-      return { id: p.id, date: p.date, updated: now, title: title,
-               excerpt: document.getElementById('ed-excerpt').value.trim(),
-               body: body, img: img };
-    });
-  } else {
-    posts.unshift({ id: 'post_' + Date.now(), date: now, title: title,
-                    excerpt: document.getElementById('ed-excerpt').value.trim(),
-                    body: body, img: img });
-  }
-  savePosts(posts);
-  renderBlogGrid();
-  refreshAdminBlog();
-  refreshAdminStats();
-  closeEditor();
-}
-function deletePost() {
-  if (!editingId || !confirm('Delete this post?')) return;
-  savePosts(loadPosts().filter(function(p) { return p.id !== editingId; }));
-  renderBlogGrid();
-  refreshAdminBlog();
-  refreshAdminStats();
-  closeEditor();
-}
+/* Journal editor + admin-blog stubs removed.
+   Posts are now managed exclusively in Strapi admin at
+   https://cms.2hands2meals2lives1movement.org/admin.
+   The frontend is read-only: renderBlogGrid() fetches published
+   posts from /api/journal-posts and openBlogPost() fetches a
+   single post by id. No client-side write paths remain. */
 
 /* Admin auth removed from client. Admin lives at https://cms.2hands2meals2lives1movement.org/admin */
 
 function refreshAdmin() {
-  refreshAdminBlog();
   refreshAdminPhotos();
   refreshAdminStats();
 }
@@ -3866,32 +3745,6 @@ function switchAdminTab(tab) {
     document.getElementById('atab-' + t).setAttribute('aria-selected', t === tab ? 'true' : 'false');
     document.getElementById('apanel-' + t).classList.toggle('active', t === tab);
   });
-}
-
-function refreshAdminBlog() {
-  var list = document.getElementById('admin-blog-list');
-  if (!list) return;
-  var posts = loadPosts();
-  if (!posts.length) { list.innerHTML = '<div class="a-empty">No posts yet.</div>'; return; }
-  list.innerHTML = posts.map(function(p) {
-    return '<div class="a-blog-row">'
-      + '<div><div class="a-blog-title">' + p.title + '</div>'
-      + '<div class="a-blog-date">' + (p.updated ? 'Updated ' + p.updated : p.date) + '</div></div>'
-      + '<div class="a-blog-btns">'
-      + '<button class="a-edit" data-edit-id="'+p.id+'" class="a-edit">Edit</button>'
-      + '<button class="a-del" data-del="'+p.id+'">Delete</button>'
-      + '</div></div>';
-  }).join('');
-  list.querySelectorAll('.a-del').forEach(function(b){b.onclick=function(){adminDeletePost(b.getAttribute('data-del'));}});
-  list.querySelectorAll('.a-edit').forEach(function(b){b.onclick=function(){openEditor(b.getAttribute('data-edit'));}});
-}
-
-function adminDeletePost(id) {
-  if (!confirm('Delete this post?')) return;
-  savePosts(loadPosts().filter(function(p) { return p.id !== id; }));
-  renderBlogGrid();
-  refreshAdminBlog();
-  refreshAdminStats();
 }
 
 function refreshAdminPhotos() {
@@ -3944,9 +3797,11 @@ function rejectPhoto(id) {
 }
 
 function refreshAdminStats() {
-  var posts = loadPosts();
+  // Journal posts are no longer counted locally — they live in Strapi.
+  // The astat-posts counter is left empty until/unless this is rewired to
+  // fetch /api/journal-posts. The orphan admin panel itself has no entry.
   var el;
-  el = document.getElementById('astat-posts'); if (el) el.textContent = posts.length;
+  el = document.getElementById('astat-posts'); if (el) el.textContent = '—';
   var subs = [];
   try { subs = JSON.parse(localStorage.getItem('2m2l_subs') || '[]'); } catch(e) {}
   el = document.getElementById('astat-pending');  if (el) el.textContent = subs.filter(function(s){return !s.approved;}).length;
