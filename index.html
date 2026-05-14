@@ -1418,7 +1418,7 @@ footer{
   <!-- 4-PANEL PICTORIAL — full bleed, numbers + hover context -->
   <div class="pictorial" role="region" aria-label="The movement in four moments">
 
-    <div class="pic-panel" tabindex="0" role="img" aria-label="2 Hands — any two hands, anywhere in the world">
+    <div class="pic-panel" data-pic-slot="hands" tabindex="0" role="img" aria-label="2 Hands — any two hands, anywhere in the world">
       <img src="https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=1200&q=90&auto=format&fit=crop" alt="Two hands reaching toward each other — the act of giving" loading="eager">
       <div class="pic-grad"></div>
       <div class="pic-num" aria-hidden="true">2</div>
@@ -1433,7 +1433,7 @@ footer{
 
     <div class="pic-divider" aria-hidden="true"></div>
 
-    <div class="pic-panel" tabindex="0" role="img" aria-label="2 Meals — saved from the buffet, not thrown away">
+    <div class="pic-panel" data-pic-slot="meals" tabindex="0" role="img" aria-label="2 Meals — saved from the buffet, not thrown away">
       <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=90&auto=format&fit=crop" alt="Warm food — saved from the buffet, not thrown away" loading="eager">
       <div class="pic-grad"></div>
       <div class="pic-num" aria-hidden="true">2</div>
@@ -1448,7 +1448,7 @@ footer{
 
     <div class="pic-divider" aria-hidden="true"></div>
 
-    <div class="pic-panel" tabindex="0" role="img" aria-label="2 Lives — fed, seen, changed by one simple act">
+    <div class="pic-panel" data-pic-slot="lives" tabindex="0" role="img" aria-label="2 Lives — fed, seen, changed by one simple act">
       <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1200&q=90&auto=format&fit=crop" alt="Two people — one giving, one receiving — a genuine human moment" loading="eager">
       <div class="pic-grad"></div>
       <div class="pic-num" aria-hidden="true">2</div>
@@ -1463,7 +1463,7 @@ footer{
 
     <div class="pic-divider" aria-hidden="true"></div>
 
-    <div class="pic-panel pic-panel-final" tabindex="0" role="img" aria-label="1 Movement — no rules, no ownership, just people">
+    <div class="pic-panel pic-panel-final" data-pic-slot="movement" tabindex="0" role="img" aria-label="1 Movement — no rules, no ownership, just people">
       <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&q=90&auto=format&fit=crop" alt="A global community — one movement spreading across the world" loading="eager">
       <div class="pic-grad"></div>
       <div class="pic-num" aria-hidden="true">1</div>
@@ -3352,6 +3352,46 @@ function buildGallery() {
     });
 }
 buildGallery();
+
+/* ═══════════════════════════════════════
+   LANDING HERO GRID (2 Hands / 2 Meals / 2 Lives / 1 Movement panels)
+   Admin uploads/replaces each panel image in Strapi admin
+   (Content Manager → Landing Hero Grid). On empty CMS / fetch failure,
+   the hard-coded Unsplash <img src> values in the markup stay visible.
+═══════════════════════════════════════ */
+function applyPicSlot(slot, url) {
+  if (!url) return;
+  var panel = document.querySelector('.pic-panel[data-pic-slot="' + slot + '"]');
+  if (!panel) return;
+  var img = panel.querySelector('img');
+  if (img) img.src = strapiMediaUrl(url);
+}
+function buildLandingGrid() {
+  if (!document.querySelector('.pic-panel[data-pic-slot]')) return;
+  fetch(STRAPI_URL + '/api/landing-hero-grid?populate[hands_image]=true&populate[meals_image]=true&populate[lives_image]=true&populate[movement_image]=true')
+    .then(function (r) {
+      if (!r.ok) throw new Error('status ' + r.status);
+      return r.json();
+    })
+    .then(function (body) {
+      var attrs = (body && body.data && (body.data.attributes || body.data)) || null;
+      if (!attrs) return;
+      // Per slot: prefer the free-text *_image_url string if set, else
+      // the uploaded media's url. Empty/missing → leave hard-coded fallback.
+      ['hands', 'meals', 'lives', 'movement'].forEach(function (slot) {
+        var urlField = attrs[slot + '_image_url'];
+        var mediaField = attrs[slot + '_image'];
+        var mediaUrl = (mediaField && mediaField.data && mediaField.data.attributes && mediaField.data.attributes.url)
+          || (mediaField && mediaField.url)
+          || '';
+        applyPicSlot(slot, urlField || mediaUrl);
+      });
+    })
+    .catch(function () {
+      // CMS unreachable → fallback images stay.
+    });
+}
+buildLandingGrid();
 
 /* ═══════════════════════════════════════
    JOIN FORM
