@@ -1687,6 +1687,17 @@ footer{
       <blockquote class="pull">"Every speaker who uses Digital Speaker Agent is a potential carrier of this movement. Every stage DSA books is a potential meal. Every audience is 100 people who could walk out of a room today with two meals in their hands. The movement feeds the platform. The platform feeds the movement."</blockquote>
       <p>Want to talk about bringing this to your stage, your association, or your next event? Glenn's calendar is open.</p>
       <p><a href="https://calendly.com/glenn-digitalspeakeragent/60min" target="_blank" rel="noopener" style="color:#d4a017;font-weight:700;text-decoration:underline;text-underline-offset:3px">Schedule a conversation → calendly.com/glenn-digitalspeakeragent/60min</a></p>
+
+      <div class="speaker-interest" style="margin-top:1.25rem;padding:1rem;background:rgba(212,160,23,0.06);border:1px solid rgba(212,160,23,0.2);border-radius:6px">
+        <p style="margin:0 0 .6rem 0;font-size:.88rem;color:#44403c"><strong>Not ready to book?</strong> Drop your email and we'll send speaker-side resources — talking points, audience-math worksheets, branded container suppliers — when they're ready.</p>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
+          <input type="email" id="speaker-email" placeholder="you@speaking.com" autocomplete="email" aria-label="Speaker resources email" style="flex:1;min-width:200px;padding:.55rem .75rem;border:1px solid #d4d4d8;border-radius:4px;font-size:.9rem;background:#fff">
+          <input type="text" id="speaker-website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+          <button class="btn-gold speaker-submit" onclick="handleSpeakerInterest()" style="padding:.55rem 1rem;font-size:.85rem;white-space:nowrap">Notify me</button>
+        </div>
+        <div id="speaker-ok" style="display:none;margin-top:.55rem;color:#16a34a;font-size:.82rem" role="status" aria-live="polite"></div>
+        <div id="speaker-err" style="display:none;margin-top:.55rem;color:#dc2626;font-size:.82rem" role="alert" aria-live="assertive"></div>
+      </div>
     </div>
 
     <!-- PHOTO WALL -->
@@ -3443,7 +3454,7 @@ function handleJoin() {
     body: JSON.stringify({
       data: {
         email: email,
-        source: 'website',
+        source: 'count-me-in',
         // Honeypot: real users never see this field. CMS controller
         // silently absorbs the request if non-empty.
         website: honeypot
@@ -3508,6 +3519,69 @@ function handleJoin() {
           localStorage.setItem('2m2l_email_subs', JSON.stringify(subs));
         }
       } catch (e) {}
+      resetBtn();
+    });
+}
+
+/* ═══════════════════════════════════════
+   SPEAKER-INTEREST signup (For Speakers tab mini-form)
+   Same /api/subscribers endpoint as Count me in; tagged source=
+   'speaker-signup' so admins can filter the Subscriber list for
+   speakers not ready to book a Calendly call yet. Calendly remains
+   the primary CTA.
+═══════════════════════════════════════ */
+function handleSpeakerInterest() {
+  var input = document.getElementById('speaker-email');
+  var btn   = document.querySelector('.speaker-submit');
+  var ok    = document.getElementById('speaker-ok');
+  var err   = document.getElementById('speaker-err');
+  function show(el, msg) { if (el) { el.textContent = msg; el.style.display = ''; } }
+  function hide(el)      { if (el) { el.style.display = 'none'; el.textContent = ''; } }
+  hide(ok); hide(err);
+
+  var email = ((input && input.value) || '').trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    show(err, 'Please enter a valid email.');
+    return;
+  }
+  if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
+  function resetBtn() { if (btn) { btn.disabled = false; btn.textContent = 'Notify me'; } }
+
+  var honeypot = (document.getElementById('speaker-website') || {}).value || '';
+  fetch(STRAPI_URL + '/api/subscribers', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      data: { email: email, source: 'speaker-signup', website: honeypot }
+    })
+  })
+    .then(function (r) {
+      if (r.ok) {
+        if (window.__2m2lTrackSignupSuccess) {
+          window.__2m2lTrackSignupSuccess({ status: r.status, source: 'speaker-signup' });
+        }
+        if (input) input.value = '';
+        show(ok, "You're on the speaker list. We'll send resources soon.");
+        resetBtn();
+        return;
+      }
+      if (r.status === 400) {
+        show(err, 'We could not accept that email. Please double-check and try again.');
+      } else if (r.status === 429) {
+        show(err, 'Too many sign-ups from this device. Please wait a minute and try again.');
+      } else {
+        show(err, 'Could not save right now. Please try again in a moment.');
+      }
+      if (window.__2m2lCaptureSignupError) {
+        window.__2m2lCaptureSignupError(new Error('speaker_http_' + r.status), { status: r.status, source: 'speaker-signup', code: 'cms_error' });
+      }
+      resetBtn();
+    })
+    .catch(function (e) {
+      if (window.__2m2lCaptureSignupError) {
+        window.__2m2lCaptureSignupError(e || new Error('speaker_network'), { source: 'speaker-signup', code: 'network' });
+      }
+      show(err, 'Network error. Please try again in a moment.');
       resetBtn();
     });
 }
