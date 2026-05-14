@@ -534,6 +534,7 @@ nav.scrolled{background:rgba(10,8,0,.92);border-bottom-color:var(--line);backdro
 }
 .join-submit:hover{background:#fef3c7;transform:translateY(-1px)}
 .join-ok{display:none;color:#fff;font-size:.88rem;margin-top:.5rem}
+.join-err{display:none;color:#ffb4b4;font-size:.88rem;margin-top:.5rem}
 
 /* ═══════════════════════════════════════════
    SUBMISSION MODAL
@@ -1897,7 +1898,8 @@ footer{
           <input type="text" id="join-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;opacity:0">
           <button class="join-submit" onclick="handleJoin()">Count me in</button>
         </div>
-        <div class="join-ok" id="join-ok">You're in. Watch for the first dispatch.</div>
+        <div class="join-ok"  id="join-ok"  role="status">You're in. Watch for the first dispatch.</div>
+        <div class="join-err" id="join-err" role="alert" aria-live="polite"></div>
       </div>
     </div>
 
@@ -3302,41 +3304,80 @@ buildGallery();
 function handleJoin() {
   var input = document.getElementById('join-email');
   var btn = document.querySelector('.join-submit');
+  var okEl = document.getElementById('join-ok');
+  var errEl = document.getElementById('join-err');
+
+  function showOk() {
+    if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
+    if (okEl) {
+      okEl.style.display = 'block';
+      setTimeout(function () { okEl.style.display = 'none'; }, 8000);
+    }
+  }
+  function showErr(msg) {
+    if (okEl) okEl.style.display = 'none';
+    if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+  }
+  function resetBtn() {
+    if (btn) { btn.disabled = false; btn.textContent = 'Count me in'; }
+  }
+
+  // Clear any previous state.
+  if (okEl) okEl.style.display = 'none';
+  if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
+
   var email = input.value.trim();
-  // Previous regex used [^s@] which rejected any email containing the letter
-  // 's'. The intent was [^\s@] (no whitespace).
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  // [^\s@] rejects whitespace and @ only — letters like 's' are valid.
+  if (!email) {
+    showErr('Please enter your email.');
     input.focus();
     return;
   }
-  if (btn) { btn.disabled = true; btn.textContent = 'Joining…'; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showErr('Please enter a valid email address.');
+    input.focus();
+    return;
+  }
 
-  var done = function () {
-    if (btn) { btn.disabled = false; btn.textContent = 'Count me in'; }
-    input.value = '';
-    var ok = document.getElementById('join-ok');
-    ok.style.display = 'block';
-    setTimeout(function () { ok.style.display = 'none'; }, 8000);
-  };
+  if (btn) { btn.disabled = true; btn.textContent = 'Joining…'; }
 
   var honeypot = (document.getElementById('join-website') || {}).value || '';
   fetch(STRAPI_URL + '/api/subscribers', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ data: { email: email, source: 'join-tab', website: honeypot } })
+    body: JSON.stringify({
+      data: {
+        email: email,
+        source: 'website',
+        // Honeypot: real users never see this field. CMS controller
+        // silently absorbs the request if non-empty.
+        website: honeypot
+      }
+    })
   })
     .then(function (r) {
-      // Strapi returns 200 (idempotent duplicate) or 201 (new) — both fine.
-      if (!r.ok) throw new Error('subscriber status ' + r.status);
-      if (window.__2m2lTrack) window.__2m2lTrack('subscriber_signup', { ok: true });
-      done();
-    })
-    .catch(function (err) {
+      // Strapi returns 201 for new and 200 for idempotent duplicates
+      // (subscriber controller dedupes). Both are user-visible "you're in".
+      if (r.ok) {
+        if (window.__2m2lTrack) window.__2m2lTrack('subscriber_signup', { ok: true, status: r.status });
+        input.value = '';
+        showOk();
+        resetBtn();
+        return;
+      }
+      // Distinct messaging for known status codes from the CMS.
+      if (r.status === 400) {
+        showErr('We could not accept that email. Please double-check and try again.');
+      } else if (r.status === 429) {
+        showErr('Too many sign-ups from this device. Please wait a minute and try again.');
+      } else {
+        showErr('Could not sign you up right now. Please try again in a moment.');
+      }
       if (window.__2m2lTrack) window.__2m2lTrack('subscriber_signup_failed', {
-        error: String(err && err.message || err)
+        status: r.status
       });
-      // Backend unavailable — keep the email locally so the user gets a
-      // confirmation and we can backfill later.
+      // Save locally as a backstop so the email isn't lost; we still surface
+      // the error to the user above so they know it didn't go through.
       try {
         var subs = JSON.parse(localStorage.getItem('2m2l_email_subs') || '[]');
         if (!subs.includes(email)) {
@@ -3344,7 +3385,23 @@ function handleJoin() {
           localStorage.setItem('2m2l_email_subs', JSON.stringify(subs));
         }
       } catch (e) {}
-      done();
+      resetBtn();
+    })
+    .catch(function (err) {
+      // Network failure (offline, DNS, CORS rejection, etc.). Surface a clear
+      // message rather than silently faking success.
+      if (window.__2m2lTrack) window.__2m2lTrack('subscriber_signup_failed', {
+        error: String(err && err.message || err)
+      });
+      showErr('We could not reach the server. Please check your connection and try again.');
+      try {
+        var subs = JSON.parse(localStorage.getItem('2m2l_email_subs') || '[]');
+        if (!subs.includes(email)) {
+          subs.push(email);
+          localStorage.setItem('2m2l_email_subs', JSON.stringify(subs));
+        }
+      } catch (e) {}
+      resetBtn();
     });
 }
 
