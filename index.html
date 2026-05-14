@@ -2309,6 +2309,61 @@ function loadAdminSections(){
       }
     };
 
+    // --- Observability hooks (analytics + error capture) ---
+    // These never auto-load any analytics script. They fan out to globals
+    // ONLY if a host page has already added gtag / plausible / Sentry.
+    // No raw email or PII is ever included in the payloads — callers must
+    // pass coarse, non-identifying props ({ ok, status, code }).
+
+    function safeAnalyticsProps(props) {
+      // Belt-and-braces: drop anything that looks like PII before
+      // forwarding to third-party analytics destinations.
+      var clean = {};
+      Object.keys(props || {}).forEach(function (k) {
+        if (/email|address|user|name|phone|token|password/i.test(k)) return;
+        var v = props[k];
+        if (typeof v === 'string' && v.indexOf('@') !== -1) return;
+        clean[k] = v;
+      });
+      return clean;
+    }
+
+    // Fired on a successful signup. Caller must NOT pass the email.
+    window.__2m2lTrackSignupSuccess = function (props) {
+      var safe = safeAnalyticsProps(props);
+      record({ type: 'event', event: 'signup_success', props: safe });
+      // Google Analytics 4 / gtag.js
+      if (typeof window.gtag === 'function') {
+        try { window.gtag('event', 'signup_success', safe); } catch (e) {}
+      }
+      // Plausible
+      if (typeof window.plausible === 'function') {
+        try { window.plausible('Signup Success', { props: safe }); } catch (e) {}
+      }
+      // Sentry breadcrumb (no message; just leaves a trail before any later error)
+      if (window.Sentry && typeof window.Sentry.addBreadcrumb === 'function') {
+        try { window.Sentry.addBreadcrumb({ category: 'signup', level: 'info', message: 'signup_success', data: safe }); } catch (e) {}
+      }
+    };
+
+    // Fired when a signup hits an unexpected error. Caller passes the Error
+    // object and a small context map (status, error.message). NEVER the email.
+    window.__2m2lCaptureSignupError = function (err, ctx) {
+      var safe = safeAnalyticsProps(ctx);
+      record({ type: 'error', event: 'signup_error', props: safe, msg: (err && err.message) || '' });
+      if (window.Sentry && typeof window.Sentry.captureException === 'function') {
+        try { window.Sentry.captureException(err || new Error('signup_error'), { extra: safe }); } catch (e) {}
+        return;
+      }
+      // Dev-safe fallback: only warn off the production host so end-users
+      // never see noise in their console.
+      var host = (typeof window !== 'undefined' && window.location && window.location.hostname) || '';
+      var isProdHost = /2hands2meals2lives1movement\.org$/.test(host);
+      if (!isProdHost) {
+        try { console.warn('[signup] error', err && err.message, safe); } catch (e) {}
+      }
+    };
+
     // Lazy-load Sentry only when a DSN is configured.
     if (!dsn) return;
     var s = document.createElement('script');
@@ -3359,7 +3414,10 @@ function handleJoin() {
       // Strapi returns 201 for new and 200 for idempotent duplicates
       // (subscriber controller dedupes). Both are user-visible "you're in".
       if (r.ok) {
+        // Existing in-page telemetry (Sentry breadcrumb-style event)
         if (window.__2m2lTrack) window.__2m2lTrack('subscriber_signup', { ok: true, status: r.status });
+        // Analytics fan-out (gtag / plausible if loaded). No email is passed.
+        if (window.__2m2lTrackSignupSuccess) window.__2m2lTrackSignupSuccess({ status: r.status });
         input.value = '';
         showOk();
         resetBtn();
@@ -3376,6 +3434,11 @@ function handleJoin() {
       if (window.__2m2lTrack) window.__2m2lTrack('subscriber_signup_failed', {
         status: r.status
       });
+      // Unexpected server-side rejection (anything 5xx-ish). 400/429 are
+      // user-actionable, not Sentry-worthy — only escalate the rest.
+      if (r.status >= 500 && window.__2m2lCaptureSignupError) {
+        window.__2m2lCaptureSignupError(new Error('signup_http_' + r.status), { status: r.status, code: 'cms_error' });
+      }
       // Save locally as a backstop so the email isn't lost; we still surface
       // the error to the user above so they know it didn't go through.
       try {
@@ -3393,6 +3456,10 @@ function handleJoin() {
       if (window.__2m2lTrack) window.__2m2lTrack('subscriber_signup_failed', {
         error: String(err && err.message || err)
       });
+      // Network/CORS/DNS path. Capture to Sentry if loaded (no email).
+      if (window.__2m2lCaptureSignupError) {
+        window.__2m2lCaptureSignupError(err || new Error('signup_network'), { code: 'network' });
+      }
       showErr('We could not reach the server. Please check your connection and try again.');
       try {
         var subs = JSON.parse(localStorage.getItem('2m2l_email_subs') || '[]');
