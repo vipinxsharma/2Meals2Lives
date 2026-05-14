@@ -3405,6 +3405,78 @@ function buildLandingGrid() {
 buildLandingGrid();
 
 /* ═══════════════════════════════════════
+   FILMSTRIP ("Live from the movement")
+   Pulls approved community photos from the CMS and rewrites
+   #filmstrip-track. On empty result or fetch failure, the hard-coded
+   Unsplash fallback set in the markup stays visible — no regression.
+   PII rule: render name + location only. Never email.
+═══════════════════════════════════════ */
+function filmFrameHtml(p) {
+  var label = (p.name || '') + (p.location ? ' ' + p.location : '');
+  return '<div class="film-frame" tabindex="0" role="img" aria-label="' + escapeHtml(label) + '">'
+    + '<img src="' + escapeHtml(p.img) + '" alt="' + escapeHtml(p.name + (p.location ? ' — ' + p.location : '')) + '" loading="lazy">'
+    + '<div class="film-frame-info">'
+    +   '<div class="film-frame-name">' + escapeHtml(p.name) + '</div>'
+    +   (p.location
+        ? '<div class="film-frame-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' + escapeHtml(p.location) + '</div>'
+        : '')
+    + '</div>'
+    + '</div>';
+}
+function filmFrameDupeHtml(p) {
+  return '<div class="film-frame" aria-hidden="true">'
+    + '<img src="' + escapeHtml(p.img) + '" alt="" loading="lazy">'
+    + '</div>';
+}
+function filmEmptyFrameHtml(text) {
+  return '<div class="film-frame film-empty" aria-hidden="true">'
+    + '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>'
+    + '<span>' + escapeHtml(text) + '</span>'
+    + '</div>';
+}
+function renderFilmstripFrames(photos) {
+  var setA = photos.map(filmFrameHtml).join('');
+  var setB = photos.map(filmFrameDupeHtml).join('');
+  // Always include the two "Your moment here" prompts; they cue submissions.
+  var prompts = filmEmptyFrameHtml('Your moment here') + filmEmptyFrameHtml('Be part of the wall');
+  return setA + prompts + setB + prompts;
+}
+function buildFilmstrip() {
+  var track = document.getElementById('filmstrip-track');
+  if (!track) return;
+  // Same endpoint as buildGallery so admins approving in Strapi update
+  // both surfaces at once. pageSize 14 keeps the loop wide enough that the
+  // CSS animation doesn't snap on short lists.
+  fetch(STRAPI_URL + '/api/community-posts?filters[is_approved][$eq]=true&sort=createdAt:desc&pagination[pageSize]=14&populate=image')
+    .then(function (r) {
+      if (!r.ok) throw new Error('status ' + r.status);
+      return r.json();
+    })
+    .then(function (body) {
+      var rows = (body && body.data) || [];
+      var photos = rows.map(function (row) {
+        var attrs = row.attributes || row;
+        var imageUrl = attrs.image_url
+          || (attrs.image && attrs.image.data && attrs.image.data.attributes && attrs.image.data.attributes.url)
+          || (attrs.image && attrs.image.url);
+        if (!imageUrl) return null;
+        return {
+          img: strapiMediaUrl(imageUrl),
+          name: attrs.name || '',
+          location: attrs.location || ''
+        };
+      }).filter(Boolean);
+      // Empty result → leave the hard-coded Unsplash fallback strip alone.
+      if (!photos.length) return;
+      track.innerHTML = renderFilmstripFrames(photos);
+    })
+    .catch(function () {
+      // Strapi unreachable → fallback strip stays visible.
+    });
+}
+buildFilmstrip();
+
+/* ═══════════════════════════════════════
    JOIN FORM
 ═══════════════════════════════════════ */
 function handleJoin() {
