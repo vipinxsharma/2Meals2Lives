@@ -1025,6 +1025,14 @@ footer{
 @media(max-width:600px){.qr-section{flex-direction:column;align-items:center;text-align:center}.qr-text ul{text-align:left}}
 
 
+/* ── CMS-driven story tab content (PR-C) ──
+   When a tab has CMS prose, .cms-active hides the static fallback
+   narrative but preserves interactive widgets (photo zones, speaker
+   form). The .tab-cms container holds the hydrated copy. */
+.tab-cms{display:none}
+.story-section.cms-active > .tab-cms{display:block}
+.story-section.cms-active > :not(.tab-cms):not(.story-photo-zone):not(.speaker-interest){display:none}
+
 /* ── Story section photo zones ── */
 .story-photo-zone{
   margin:1.75rem 0;
@@ -1355,6 +1363,13 @@ footer{
 <body>
 <a href="#main" class="skip">Skip to main content</a>
 
+<!-- ANNOUNCEMENT BAR — hydrated from Strapi Global.announcementBar; hidden until active -->
+<div id="announce-bar" role="region" aria-label="Site announcement" style="display:none;background:#0a0800;color:#fffff8;text-align:center;font-size:.85rem;padding:.5rem 2.5rem;position:relative;line-height:1.4">
+  <span id="announce-text"></span>
+  <a id="announce-link" href="#" target="_blank" rel="noopener" style="color:#d4a017;font-weight:700;text-decoration:underline;text-underline-offset:2px;margin-left:.4rem;display:none"></a>
+  <button id="announce-dismiss" aria-label="Dismiss announcement" onclick="dismissAnnounce()" style="display:none;position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:none;color:#fffff8;font-size:1.1rem;line-height:1;cursor:pointer;padding:.2rem .4rem">&times;</button>
+</div>
+
 <!-- NAV -->
 <nav id="site-nav" role="navigation" aria-label="Main navigation">
   <a href="#" onclick="showPage('home');return false" class="nav-logo" aria-label="#2Hands2Meals2Lives1Movement home" title="#2Hands2Meals2Lives1Movement">
@@ -1362,9 +1377,9 @@ footer{
     <span><span class="nav-hash">#</span>2Meals2Lives</span>
   </a>
   <div class="nav-links">
-    <button class="nav-btn" onclick="showPage('story')">The Story</button>
-    <button class="nav-btn" onclick="openSubmit()">Share a Moment</button>
-    <button class="nav-cta" onclick="showStoryTab('join')">Join</button>
+    <button class="nav-btn" data-nav="story" onclick="showPage('story')">The Story</button>
+    <button class="nav-btn" data-nav="shareMoment" onclick="openSubmit()">Share a Moment</button>
+    <button class="nav-cta" data-nav="join" onclick="showStoryTab('join')">Join</button>
     <a class="nav-lock" id="nav-lock-btn" href="https://cms.2hands2meals2lives1movement.org/admin" target="_blank" rel="noopener" data-admin-link data-tip="Admin (Strapi)" aria-label="Admin (Strapi)">
       <svg id="nav-lock-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
     </a>
@@ -1380,9 +1395,9 @@ footer{
 <!-- MOBILE MENU -->
 <div class="mob-menu" id="mob-menu" role="dialog" aria-modal="true" aria-label="Navigation">
   <button class="mob-close" onclick="closeMob()" aria-label="Close menu"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-  <button onclick="showPage('story');closeMob()">The Story</button>
-  <button onclick="openSubmit();closeMob()">Share a Moment</button>
-  <button onclick="showStoryTab('join');closeMob()">Join</button>
+  <button data-nav="story" onclick="showPage('story');closeMob()">The Story</button>
+  <button data-nav="shareMoment" onclick="openSubmit();closeMob()">Share a Moment</button>
+  <button data-nav="join" onclick="showStoryTab('join');closeMob()">Join</button>
   <a class="mob-cta" href="https://cms.2hands2meals2lives1movement.org/admin" target="_blank" rel="noopener" data-admin-link onclick="closeMob()">Admin</a>
 </div>
 
@@ -1402,14 +1417,14 @@ footer{
       <h1 id="hero-title" class="hero-title">
         <span class="h">#</span><span class="n">2Hands</span><span class="a">2Meals</span><br><span class="n">2Lives</span><span class="h">1</span><span class="a">Movement</span>
       </h1>
-      <p class="hero-tagline">Two hands. Two meals. Two lives. One movement.</p>
+      <p class="hero-tagline" id="hero-tagline">Two hands. Two meals. Two lives. One movement.</p>
 
       <div class="hero-btns">
         <button class="btn-gold" onclick="showPage('story')">
-          The Story
+          <span id="hero-cta-primary">The Story</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
-        <button class="btn-ghost" onclick="openSubmit()">Share your moment</button>
+        <button class="btn-ghost" id="hero-cta-secondary" onclick="openSubmit()">Share your moment</button>
       </div>
 
     </div>
@@ -1530,9 +1545,9 @@ footer{
         </button>
       </div>
       <div class="qr-text">
-        <h3>Carry the movement in your pocket.</h3>
-        <p>Print this QR code and bring it to your next conference. One scan tells the whole story — what the movement is, how it works, and how to join it.</p>
-        <ul>
+        <h3 id="qr-heading">Carry the movement in your pocket.</h3>
+        <p id="qr-body">Print this QR code and bring it to your next conference. One scan tells the whole story — what the movement is, how it works, and how to join it.</p>
+        <ul id="qr-bullets">
           <li>Add it to your slide deck's final frame</li>
           <li>Print on table cards at your next event</li>
           <li>Include in your speaker bio handout</li>
@@ -1542,15 +1557,15 @@ footer{
     </div>
 
     <div class="footer-logo"><span>#</span>2Meals2Lives</div>
-    <div class="footer-tagline">More Gigs. No Grind.</div>
-    <div class="footer-links">
+    <div class="footer-tagline" id="footer-tagline">More Gigs. No Grind.</div>
+    <div class="footer-links" id="footer-legal-links">
       <a onclick="showPage('story');return false" href="#">The Story</a>
       <a onclick="showStoryTab('how');return false" href="#">How It Works</a>
       <a onclick="showStoryTab('join');return false" href="#">Join</a>
       <a href="https://digitalspeakeragent.com" target="_blank" rel="noopener">Digital Speaker Agent™</a>
       <a href="https://www.linkedin.com/in/glennfreezman/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
-    <div class="footer-copy">An initiative of Glenn Freezman, Chief Evangelist — Digital Speaker Agent™</div>
+    <div class="footer-copy" id="footer-copy">An initiative of Glenn Freezman, Chief Evangelist — Digital Speaker Agent™</div>
   </footer>
 
 </div><!-- /page-home -->
@@ -1578,6 +1593,7 @@ footer{
 
     <!-- THE WHY -->
     <div id="tab-why" class="story-section active" role="tabpanel">
+      <div class="tab-cms" data-cms-tab="why" hidden></div>
       <span class="lbl">The Why — and how it started</span>
       <h2>This is not about food. This is about a moment.</h2>
       <p>A real one. Not planned. Not scripted. Not organized. Just a simple act that turns into something you don't expect.</p>
@@ -1606,6 +1622,7 @@ footer{
 
     <!-- INDIA -->
     <div id="tab-india" class="story-section" role="tabpanel">
+      <div class="tab-cms" data-cms-tab="india" hidden></div>
       <span class="lbl">Ahmedabad · India · Holi Night · 32 Days</span>
       <h2>It was the night of Holi. I had spent the day covered in color.</h2>
       <p>Newark to New Delhi. Then another flight to Ahmedabad. I came to India to build Digital Speaker Agent with Lucent Innovation. I did not come to India to start a movement. But that is what happened.</p>
@@ -1636,6 +1653,7 @@ footer{
 
     <!-- HOW IT WORKS -->
     <div id="tab-how" class="story-section" role="tabpanel">
+      <div class="tab-cms" data-cms-tab="how" hidden></div>
       <span class="lbl">Three steps. No infrastructure.</span>
       <h2>No forms to sign. No permissions to wait for. Just two hands and the choice to care.</h2>
       <div class="step-grid">
@@ -1674,6 +1692,7 @@ footer{
 
     <!-- FOR SPEAKERS -->
     <div id="tab-speakers" class="story-section" role="tabpanel">
+      <div class="tab-cms" data-cms-tab="speakers" hidden></div>
       <span class="lbl">For the speaking community</span>
       <h2>Every stage is a trigger point. Every event is an opportunity.</h2>
       <p>The movement runs through speakers. Through associations. Through conference organizers. Through the thousands of people who stand on stages every day in front of audiences who have just spent three hours sitting at a table covered in food.</p>
@@ -2506,12 +2525,12 @@ function renderStoryPhotoZone(section) {
   if (!zone) return;
   var stored = [];
   try { stored = JSON.parse(localStorage.getItem('2m2l_sp_'+section)||'[]'); } catch(e) {}
-  // Remove existing photo slots (keep the add button)
-  Array.from(zone.querySelectorAll('.story-photo-slot')).forEach(function(el){ el.remove(); });
+  // Remove existing LOCAL photo slots only (keep CMS slots + add button)
+  Array.from(zone.querySelectorAll('.story-photo-slot.local-photo')).forEach(function(el){ el.remove(); });
   var addBtn = zone.querySelector('.sp-add-btn');
   stored.forEach(function(p) {
     var slot = document.createElement('div');
-    slot.className = 'story-photo-slot';
+    slot.className = 'story-photo-slot local-photo';
     slot.innerHTML =
       '<img src="'+p.src+'" alt="Story photo" onclick="openLightbox(this.src)">'
       + '<div class="sp-overlay"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span>View</span></div>'
@@ -2528,9 +2547,68 @@ function removeStoryPhoto(section, id) {
   renderStoryPhotoZone(section);
 }
 
-// Render on load
+// Render on load (localStorage admin-preview photos)
 renderStoryPhotoZone('why');
 renderStoryPhotoZone('india');
+
+/* ═══════════════════════════════════════
+   STORY PHOTOS FROM CMS (PR-D)
+   Replaces the localStorage-only galleries with approved photos from
+   the story-photo collection. Only is_approved=true rows are served
+   publicly (filtered). CMS slots render alongside any local admin
+   preview slots; an unreachable CMS leaves the existing behavior intact.
+═══════════════════════════════════════ */
+function hydrateStoryPhotos(tab) {
+  if (typeof STRAPI_URL === 'undefined') return;
+  var zone = document.getElementById('spz-' + tab);
+  if (!zone) return;
+  var url = STRAPI_URL + '/api/story-photos'
+    + '?filters[tab][$eq]=' + encodeURIComponent(tab)
+    + '&filters[is_approved][$eq]=true'
+    + '&sort=order:asc&pagination[pageSize]=50&populate=image';
+  fetch(url)
+    .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+    .then(function (body) {
+      var rows = (body && body.data) || [];
+      if (!rows.length) return;
+      var addBtn = zone.querySelector('.sp-add-btn');
+      // Clear any prior CMS slots so re-runs don't duplicate.
+      Array.from(zone.querySelectorAll('.story-photo-slot.cms-photo')).forEach(function (el) { el.remove(); });
+      rows.forEach(function (row) {
+        var a = (row && row.attributes) ? row.attributes : row;
+        if (!a) return;
+        var mediaField = a.image;
+        var mediaUrl = (mediaField && mediaField.data && mediaField.data.attributes && mediaField.data.attributes.url)
+          || (mediaField && mediaField.url) || '';
+        var src = a.image_url || mediaUrl;
+        if (!src) return;
+        src = strapiMediaUrl(src);
+        var slot = document.createElement('div');
+        slot.className = 'story-photo-slot cms-photo';
+        var img = document.createElement('img');
+        img.src = src;
+        img.alt = a.caption || 'Story photo';
+        img.loading = 'lazy';
+        img.addEventListener('click', function () { openLightbox(src); });
+        slot.appendChild(img);
+        var ov = document.createElement('div');
+        ov.className = 'sp-overlay';
+        ov.innerHTML = '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span>View</span>';
+        slot.appendChild(ov);
+        if (a.caption) {
+          var cap = document.createElement('div');
+          cap.className = 'sp-caption';
+          cap.textContent = a.caption;
+          slot.appendChild(cap);
+        }
+        if (addBtn) zone.insertBefore(slot, addBtn);
+        else zone.appendChild(slot);
+      });
+    })
+    .catch(function () { /* CMS unreachable → local/static photos stay */ });
+}
+hydrateStoryPhotos('why');
+hydrateStoryPhotos('india');
 
 /* ═══════════════════════════════════════
    LIGHTBOX
@@ -3377,9 +3455,24 @@ function applyPicSlot(slot, url) {
   var img = panel.querySelector('img');
   if (img) img.src = strapiMediaUrl(url);
 }
+function applyPanelCopy(slot, copy) {
+  if (!copy) return;
+  var panel = document.querySelector('.pic-panel[data-pic-slot="' + slot + '"]');
+  if (!panel) return;
+  var set = function (sel, val) {
+    if (!val) return;
+    var el = panel.querySelector(sel);
+    if (el) el.textContent = val;
+  };
+  set('.pic-num', copy.num);
+  set('.pic-hover-num', copy.num);
+  set('.pic-hover-word', copy.word);
+  set('.pic-hover-text', copy.text);
+  set('.pic-hover-sub', copy.sub);
+}
 function buildLandingGrid() {
   if (!document.querySelector('.pic-panel[data-pic-slot]')) return;
-  fetch(STRAPI_URL + '/api/landing-hero-grid?populate[hands_image]=true&populate[meals_image]=true&populate[lives_image]=true&populate[movement_image]=true')
+  fetch(STRAPI_URL + '/api/landing-hero-grid?populate[hands_image]=true&populate[meals_image]=true&populate[lives_image]=true&populate[movement_image]=true&populate[hero]=true&populate[panels]=true')
     .then(function (r) {
       if (!r.ok) throw new Error('status ' + r.status);
       return r.json();
@@ -3397,12 +3490,241 @@ function buildLandingGrid() {
           || '';
         applyPicSlot(slot, urlField || mediaUrl);
       });
+
+      // ── hero copy (PR-B): tagline + CTA labels; title stays static ────
+      var hero = attrs.hero && (attrs.hero.data && attrs.hero.data.attributes || attrs.hero) || null;
+      if (hero) {
+        var ht = document.getElementById('hero-tagline');
+        if (ht && hero.tagline) ht.textContent = hero.tagline;
+        var p1 = document.getElementById('hero-cta-primary');
+        if (p1 && hero.ctaPrimary) p1.textContent = hero.ctaPrimary;
+        var p2 = document.getElementById('hero-cta-secondary');
+        if (p2 && hero.ctaSecondary) p2.textContent = hero.ctaSecondary;
+      }
+
+      // ── pictorial panel hover copy (PR-B), matched by slot ────────────
+      var panels = attrs.panels && (attrs.panels.data || attrs.panels) || null;
+      if (panels && panels.length) {
+        panels.forEach(function (p) {
+          var c = (p && p.attributes) ? p.attributes : p;
+          if (c && c.slot) applyPanelCopy(c.slot, c);
+        });
+      }
     })
     .catch(function () {
-      // CMS unreachable → fallback images stay.
+      // CMS unreachable → fallback images and copy stay.
     });
 }
 buildLandingGrid();
+
+/* ═══════════════════════════════════════
+   GLOBAL CHROME (PR-A)
+   Hydrates announcement bar, nav labels, and footer text/links from the
+   Strapi Global single-type. Every field is optional: when absent or when
+   the API is unreachable, the hard-coded markup stays exactly as shipped.
+   No PII is involved — Global holds only sitewide chrome.
+═══════════════════════════════════════ */
+function dismissAnnounce() {
+  var bar = document.getElementById('announce-bar');
+  if (bar) bar.style.display = 'none';
+  try { localStorage.setItem('annDismiss', '1'); } catch (e) {}
+}
+function hydrateGlobal() {
+  if (typeof STRAPI_URL === 'undefined') return;
+  var url = STRAPI_URL + '/api/global'
+    + '?populate[announcementBar]=true'
+    + '&populate[navLabels]=true'
+    + '&populate[footer][populate]=qrBullets'
+    + '&populate[legalLinks]=true';
+  fetch(url)
+    .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+    .then(function (body) {
+      var g = (body && body.data && (body.data.attributes || body.data)) || null;
+      if (!g) return;
+      var setText = function (id, val) {
+        var el = document.getElementById(id);
+        if (el && val) el.textContent = val;
+      };
+
+      // ── announcement bar ──────────────────────────────────────────────
+      var ann = g.announcementBar && (g.announcementBar.data && g.announcementBar.data.attributes || g.announcementBar) || null;
+      var dismissed = false;
+      try { dismissed = localStorage.getItem('annDismiss') === '1'; } catch (e) {}
+      if (ann && ann.active && ann.text && !dismissed) {
+        var bar = document.getElementById('announce-bar');
+        var txt = document.getElementById('announce-text');
+        var lnk = document.getElementById('announce-link');
+        var dis = document.getElementById('announce-dismiss');
+        if (txt) txt.textContent = ann.text;
+        if (lnk && ann.linkUrl) {
+          lnk.href = ann.linkUrl;
+          lnk.textContent = ann.linkLabel || 'Learn more';
+          lnk.style.display = 'inline';
+        }
+        if (dis && ann.dismissible !== false) dis.style.display = 'inline';
+        if (bar) bar.style.display = 'block';
+      }
+
+      // ── nav labels ────────────────────────────────────────────────────
+      var nav = g.navLabels && (g.navLabels.data && g.navLabels.data.attributes || g.navLabels) || null;
+      if (nav) {
+        ['story', 'shareMoment', 'join'].forEach(function (key) {
+          if (!nav[key]) return;
+          document.querySelectorAll('[data-nav="' + key + '"]').forEach(function (el) {
+            el.textContent = nav[key];
+          });
+        });
+      }
+
+      // ── footer ────────────────────────────────────────────────────────
+      var ft = g.footer && (g.footer.data && g.footer.data.attributes || g.footer) || null;
+      if (ft) {
+        setText('footer-tagline', ft.tagline);
+        setText('footer-copy', ft.copyright);
+        setText('qr-heading', ft.qrHeading);
+        setText('qr-body', ft.qrBody);
+        var bullets = ft.qrBullets && (ft.qrBullets.data || ft.qrBullets) || null;
+        if (bullets && bullets.length) {
+          var ul = document.getElementById('qr-bullets');
+          if (ul) {
+            ul.innerHTML = '';
+            bullets.forEach(function (b) {
+              var item = (b && b.attributes) ? b.attributes : b;
+              if (!item || !item.text) return;
+              var li = document.createElement('li');
+              li.textContent = item.text;
+              ul.appendChild(li);
+            });
+          }
+        }
+      }
+
+      // ── legal links (appended; do not clobber existing footer nav) ─────
+      var legal = g.legalLinks && (g.legalLinks.data || g.legalLinks) || null;
+      if (legal && legal.length) {
+        var box = document.getElementById('footer-legal-links');
+        if (box && !box.dataset.legalWired) {
+          legal.forEach(function (l) {
+            var li = (l && l.attributes) ? l.attributes : l;
+            if (!li || !li.url || !li.label) return;
+            var a = document.createElement('a');
+            a.href = li.url;
+            a.textContent = li.label;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            box.appendChild(a);
+          });
+          box.dataset.legalWired = '1';
+        }
+      }
+    })
+    .catch(function () { /* CMS unreachable → static chrome stays */ });
+}
+hydrateGlobal();
+
+/* ═══════════════════════════════════════
+   STORY TAB CONTENT (PR-C)
+   Hydrates the long-form Story tabs (Why, India, How It Works, For
+   Speakers) from the story-content single-type. Renders typed prose
+   blocks via textContent (no raw HTML), then flips the tab to
+   .cms-active so the static fallback narrative is hidden while the
+   photo zones and speaker form are preserved. No CMS content for a tab
+   → that tab keeps its shipped static copy.
+═══════════════════════════════════════ */
+function csProseEl(kind, text) {
+  var el;
+  if (kind === 'heading') el = document.createElement('h3');
+  else if (kind === 'subhead') el = document.createElement('h4');
+  else if (kind === 'pullquote') { el = document.createElement('blockquote'); el.className = 'pull'; }
+  else if (kind === 'label') { el = document.createElement('span'); el.className = 'lbl'; }
+  else el = document.createElement('p');
+  el.textContent = text;
+  return el;
+}
+function csRenderProse(container, blocks) {
+  (blocks || []).forEach(function (b) {
+    var c = (b && b.attributes) ? b.attributes : b;
+    if (c && c.text) container.appendChild(csProseEl(c.kind || 'paragraph', c.text));
+  });
+}
+function csRenderSteps(container, steps) {
+  if (!steps || !steps.length) return;
+  var grid = document.createElement('div'); grid.className = 'step-grid';
+  steps.forEach(function (s) {
+    var c = (s && s.attributes) ? s.attributes : s; if (!c) return;
+    var card = document.createElement('div'); card.className = 'step-card';
+    var n = document.createElement('div'); n.className = 'step-num'; n.textContent = c.num || ''; card.appendChild(n);
+    var h = document.createElement('h4'); h.textContent = c.title || ''; card.appendChild(h);
+    var p = document.createElement('p'); p.textContent = c.text || ''; card.appendChild(p);
+    grid.appendChild(card);
+  });
+  container.appendChild(grid);
+}
+function csRenderStats(container, stats) {
+  if (!stats || !stats.length) return;
+  var row = document.createElement('div'); row.className = 'stat-row';
+  stats.forEach(function (s) {
+    var c = (s && s.attributes) ? s.attributes : s; if (!c) return;
+    var st = document.createElement('div'); st.className = 'stat';
+    var n = document.createElement('div'); n.className = 'stat-n'; n.textContent = c.number || ''; st.appendChild(n);
+    var l = document.createElement('div'); l.className = 'stat-l'; l.textContent = c.label || ''; st.appendChild(l);
+    row.appendChild(st);
+  });
+  container.appendChild(row);
+}
+function csActivate(tab, container) {
+  var panel = document.getElementById('tab-' + tab);
+  if (!panel || !container) return;
+  container.hidden = false;
+  panel.classList.add('cms-active');
+}
+function hydrateStoryContent() {
+  if (typeof STRAPI_URL === 'undefined') return;
+  if (!document.querySelector('.tab-cms')) return;
+  var url = STRAPI_URL + '/api/story-content'
+    + '?populate[why]=true&populate[india]=true'
+    + '&populate[how_intro]=true&populate[how_steps]=true&populate[how_stats]=true&populate[how_closing]=true'
+    + '&populate[speakers]=true';
+  fetch(url)
+    .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+    .then(function (body) {
+      var d = (body && body.data && (body.data.attributes || body.data)) || null;
+      if (!d) return;
+      var get = function (f) { return (d[f] && (d[f].data || d[f])) || null; };
+      var cont = function (tab) { return document.querySelector('.tab-cms[data-cms-tab="' + tab + '"]'); };
+
+      var why = get('why');
+      if (why && why.length) { var cw = cont('why'); csRenderProse(cw, why); csActivate('why', cw); }
+
+      var india = get('india');
+      if (india && india.length) { var ci = cont('india'); csRenderProse(ci, india); csActivate('india', ci); }
+
+      var hi = get('how_intro'), hs = get('how_steps'), hst = get('how_stats'), hc = get('how_closing');
+      if ((hi && hi.length) || (hs && hs.length) || (hst && hst.length) || (hc && hc.length)) {
+        var ch = cont('how');
+        csRenderProse(ch, hi); csRenderSteps(ch, hs); csRenderStats(ch, hst); csRenderProse(ch, hc);
+        csActivate('how', ch);
+      }
+
+      var sp = get('speakers');
+      if (sp && sp.length) {
+        var cs = cont('speakers');
+        csRenderProse(cs, sp);
+        if (d.speakers_calendly_url) {
+          var p = document.createElement('p');
+          var a = document.createElement('a');
+          a.href = d.speakers_calendly_url; a.target = '_blank'; a.rel = 'noopener';
+          a.style.color = '#d4a017'; a.style.fontWeight = '700';
+          a.style.textDecoration = 'underline'; a.style.textUnderlineOffset = '3px';
+          a.textContent = 'Schedule a conversation →';
+          p.appendChild(a); cs.appendChild(p);
+        }
+        csActivate('speakers', cs);
+      }
+    })
+    .catch(function () { /* CMS unreachable → static story copy stays */ });
+}
+hydrateStoryContent();
 
 /* ═══════════════════════════════════════
    FILMSTRIP ("Live from the movement")
