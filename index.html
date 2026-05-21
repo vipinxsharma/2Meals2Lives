@@ -1355,6 +1355,13 @@ footer{
 <body>
 <a href="#main" class="skip">Skip to main content</a>
 
+<!-- ANNOUNCEMENT BAR — hydrated from Strapi Global.announcementBar; hidden until active -->
+<div id="announce-bar" role="region" aria-label="Site announcement" style="display:none;background:#0a0800;color:#fffff8;text-align:center;font-size:.85rem;padding:.5rem 2.5rem;position:relative;line-height:1.4">
+  <span id="announce-text"></span>
+  <a id="announce-link" href="#" target="_blank" rel="noopener" style="color:#d4a017;font-weight:700;text-decoration:underline;text-underline-offset:2px;margin-left:.4rem;display:none"></a>
+  <button id="announce-dismiss" aria-label="Dismiss announcement" onclick="dismissAnnounce()" style="display:none;position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:none;color:#fffff8;font-size:1.1rem;line-height:1;cursor:pointer;padding:.2rem .4rem">&times;</button>
+</div>
+
 <!-- NAV -->
 <nav id="site-nav" role="navigation" aria-label="Main navigation">
   <a href="#" onclick="showPage('home');return false" class="nav-logo" aria-label="#2Hands2Meals2Lives1Movement home" title="#2Hands2Meals2Lives1Movement">
@@ -1362,9 +1369,9 @@ footer{
     <span><span class="nav-hash">#</span>2Meals2Lives</span>
   </a>
   <div class="nav-links">
-    <button class="nav-btn" onclick="showPage('story')">The Story</button>
-    <button class="nav-btn" onclick="openSubmit()">Share a Moment</button>
-    <button class="nav-cta" onclick="showStoryTab('join')">Join</button>
+    <button class="nav-btn" data-nav="story" onclick="showPage('story')">The Story</button>
+    <button class="nav-btn" data-nav="shareMoment" onclick="openSubmit()">Share a Moment</button>
+    <button class="nav-cta" data-nav="join" onclick="showStoryTab('join')">Join</button>
     <a class="nav-lock" id="nav-lock-btn" href="https://cms.2hands2meals2lives1movement.org/admin" target="_blank" rel="noopener" data-admin-link data-tip="Admin (Strapi)" aria-label="Admin (Strapi)">
       <svg id="nav-lock-icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
     </a>
@@ -1380,9 +1387,9 @@ footer{
 <!-- MOBILE MENU -->
 <div class="mob-menu" id="mob-menu" role="dialog" aria-modal="true" aria-label="Navigation">
   <button class="mob-close" onclick="closeMob()" aria-label="Close menu"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-  <button onclick="showPage('story');closeMob()">The Story</button>
-  <button onclick="openSubmit();closeMob()">Share a Moment</button>
-  <button onclick="showStoryTab('join');closeMob()">Join</button>
+  <button data-nav="story" onclick="showPage('story');closeMob()">The Story</button>
+  <button data-nav="shareMoment" onclick="openSubmit();closeMob()">Share a Moment</button>
+  <button data-nav="join" onclick="showStoryTab('join');closeMob()">Join</button>
   <a class="mob-cta" href="https://cms.2hands2meals2lives1movement.org/admin" target="_blank" rel="noopener" data-admin-link onclick="closeMob()">Admin</a>
 </div>
 
@@ -1530,9 +1537,9 @@ footer{
         </button>
       </div>
       <div class="qr-text">
-        <h3>Carry the movement in your pocket.</h3>
-        <p>Print this QR code and bring it to your next conference. One scan tells the whole story — what the movement is, how it works, and how to join it.</p>
-        <ul>
+        <h3 id="qr-heading">Carry the movement in your pocket.</h3>
+        <p id="qr-body">Print this QR code and bring it to your next conference. One scan tells the whole story — what the movement is, how it works, and how to join it.</p>
+        <ul id="qr-bullets">
           <li>Add it to your slide deck's final frame</li>
           <li>Print on table cards at your next event</li>
           <li>Include in your speaker bio handout</li>
@@ -1542,15 +1549,15 @@ footer{
     </div>
 
     <div class="footer-logo"><span>#</span>2Meals2Lives</div>
-    <div class="footer-tagline">More Gigs. No Grind.</div>
-    <div class="footer-links">
+    <div class="footer-tagline" id="footer-tagline">More Gigs. No Grind.</div>
+    <div class="footer-links" id="footer-legal-links">
       <a onclick="showPage('story');return false" href="#">The Story</a>
       <a onclick="showStoryTab('how');return false" href="#">How It Works</a>
       <a onclick="showStoryTab('join');return false" href="#">Join</a>
       <a href="https://digitalspeakeragent.com" target="_blank" rel="noopener">Digital Speaker Agent™</a>
       <a href="https://www.linkedin.com/in/glennfreezman/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
-    <div class="footer-copy">An initiative of Glenn Freezman, Chief Evangelist — Digital Speaker Agent™</div>
+    <div class="footer-copy" id="footer-copy">An initiative of Glenn Freezman, Chief Evangelist — Digital Speaker Agent™</div>
   </footer>
 
 </div><!-- /page-home -->
@@ -3403,6 +3410,111 @@ function buildLandingGrid() {
     });
 }
 buildLandingGrid();
+
+/* ═══════════════════════════════════════
+   GLOBAL CHROME (PR-A)
+   Hydrates announcement bar, nav labels, and footer text/links from the
+   Strapi Global single-type. Every field is optional: when absent or when
+   the API is unreachable, the hard-coded markup stays exactly as shipped.
+   No PII is involved — Global holds only sitewide chrome.
+═══════════════════════════════════════ */
+function dismissAnnounce() {
+  var bar = document.getElementById('announce-bar');
+  if (bar) bar.style.display = 'none';
+  try { localStorage.setItem('annDismiss', '1'); } catch (e) {}
+}
+function hydrateGlobal() {
+  if (typeof STRAPI_URL === 'undefined') return;
+  var url = STRAPI_URL + '/api/global'
+    + '?populate[announcementBar]=true'
+    + '&populate[navLabels]=true'
+    + '&populate[footer][populate]=qrBullets'
+    + '&populate[legalLinks]=true';
+  fetch(url)
+    .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+    .then(function (body) {
+      var g = (body && body.data && (body.data.attributes || body.data)) || null;
+      if (!g) return;
+      var setText = function (id, val) {
+        var el = document.getElementById(id);
+        if (el && val) el.textContent = val;
+      };
+
+      // ── announcement bar ──────────────────────────────────────────────
+      var ann = g.announcementBar && (g.announcementBar.data && g.announcementBar.data.attributes || g.announcementBar) || null;
+      var dismissed = false;
+      try { dismissed = localStorage.getItem('annDismiss') === '1'; } catch (e) {}
+      if (ann && ann.active && ann.text && !dismissed) {
+        var bar = document.getElementById('announce-bar');
+        var txt = document.getElementById('announce-text');
+        var lnk = document.getElementById('announce-link');
+        var dis = document.getElementById('announce-dismiss');
+        if (txt) txt.textContent = ann.text;
+        if (lnk && ann.linkUrl) {
+          lnk.href = ann.linkUrl;
+          lnk.textContent = ann.linkLabel || 'Learn more';
+          lnk.style.display = 'inline';
+        }
+        if (dis && ann.dismissible !== false) dis.style.display = 'inline';
+        if (bar) bar.style.display = 'block';
+      }
+
+      // ── nav labels ────────────────────────────────────────────────────
+      var nav = g.navLabels && (g.navLabels.data && g.navLabels.data.attributes || g.navLabels) || null;
+      if (nav) {
+        ['story', 'shareMoment', 'join'].forEach(function (key) {
+          if (!nav[key]) return;
+          document.querySelectorAll('[data-nav="' + key + '"]').forEach(function (el) {
+            el.textContent = nav[key];
+          });
+        });
+      }
+
+      // ── footer ────────────────────────────────────────────────────────
+      var ft = g.footer && (g.footer.data && g.footer.data.attributes || g.footer) || null;
+      if (ft) {
+        setText('footer-tagline', ft.tagline);
+        setText('footer-copy', ft.copyright);
+        setText('qr-heading', ft.qrHeading);
+        setText('qr-body', ft.qrBody);
+        var bullets = ft.qrBullets && (ft.qrBullets.data || ft.qrBullets) || null;
+        if (bullets && bullets.length) {
+          var ul = document.getElementById('qr-bullets');
+          if (ul) {
+            ul.innerHTML = '';
+            bullets.forEach(function (b) {
+              var item = (b && b.attributes) ? b.attributes : b;
+              if (!item || !item.text) return;
+              var li = document.createElement('li');
+              li.textContent = item.text;
+              ul.appendChild(li);
+            });
+          }
+        }
+      }
+
+      // ── legal links (appended; do not clobber existing footer nav) ─────
+      var legal = g.legalLinks && (g.legalLinks.data || g.legalLinks) || null;
+      if (legal && legal.length) {
+        var box = document.getElementById('footer-legal-links');
+        if (box && !box.dataset.legalWired) {
+          legal.forEach(function (l) {
+            var li = (l && l.attributes) ? l.attributes : l;
+            if (!li || !li.url || !li.label) return;
+            var a = document.createElement('a');
+            a.href = li.url;
+            a.textContent = li.label;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            box.appendChild(a);
+          });
+          box.dataset.legalWired = '1';
+        }
+      }
+    })
+    .catch(function () { /* CMS unreachable → static chrome stays */ });
+}
+hydrateGlobal();
 
 /* ═══════════════════════════════════════
    FILMSTRIP ("Live from the movement")
