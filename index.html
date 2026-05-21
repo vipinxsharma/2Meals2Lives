@@ -1025,6 +1025,14 @@ footer{
 @media(max-width:600px){.qr-section{flex-direction:column;align-items:center;text-align:center}.qr-text ul{text-align:left}}
 
 
+/* ── CMS-driven story tab content (PR-C) ──
+   When a tab has CMS prose, .cms-active hides the static fallback
+   narrative but preserves interactive widgets (photo zones, speaker
+   form). The .tab-cms container holds the hydrated copy. */
+.tab-cms{display:none}
+.story-section.cms-active > .tab-cms{display:block}
+.story-section.cms-active > :not(.tab-cms):not(.story-photo-zone):not(.speaker-interest){display:none}
+
 /* ── Story section photo zones ── */
 .story-photo-zone{
   margin:1.75rem 0;
@@ -1585,6 +1593,7 @@ footer{
 
     <!-- THE WHY -->
     <div id="tab-why" class="story-section active" role="tabpanel">
+      <div class="tab-cms" data-cms-tab="why" hidden></div>
       <span class="lbl">The Why — and how it started</span>
       <h2>This is not about food. This is about a moment.</h2>
       <p>A real one. Not planned. Not scripted. Not organized. Just a simple act that turns into something you don't expect.</p>
@@ -1613,6 +1622,7 @@ footer{
 
     <!-- INDIA -->
     <div id="tab-india" class="story-section" role="tabpanel">
+      <div class="tab-cms" data-cms-tab="india" hidden></div>
       <span class="lbl">Ahmedabad · India · Holi Night · 32 Days</span>
       <h2>It was the night of Holi. I had spent the day covered in color.</h2>
       <p>Newark to New Delhi. Then another flight to Ahmedabad. I came to India to build Digital Speaker Agent with Lucent Innovation. I did not come to India to start a movement. But that is what happened.</p>
@@ -1643,6 +1653,7 @@ footer{
 
     <!-- HOW IT WORKS -->
     <div id="tab-how" class="story-section" role="tabpanel">
+      <div class="tab-cms" data-cms-tab="how" hidden></div>
       <span class="lbl">Three steps. No infrastructure.</span>
       <h2>No forms to sign. No permissions to wait for. Just two hands and the choice to care.</h2>
       <div class="step-grid">
@@ -1681,6 +1692,7 @@ footer{
 
     <!-- FOR SPEAKERS -->
     <div id="tab-speakers" class="story-section" role="tabpanel">
+      <div class="tab-cms" data-cms-tab="speakers" hidden></div>
       <span class="lbl">For the speaking community</span>
       <h2>Every stage is a trigger point. Every event is an opportunity.</h2>
       <p>The movement runs through speakers. Through associations. Through conference organizers. Through the thousands of people who stand on stages every day in front of audiences who have just spent three hours sitting at a table covered in food.</p>
@@ -3550,6 +3562,110 @@ function hydrateGlobal() {
     .catch(function () { /* CMS unreachable → static chrome stays */ });
 }
 hydrateGlobal();
+
+/* ═══════════════════════════════════════
+   STORY TAB CONTENT (PR-C)
+   Hydrates the long-form Story tabs (Why, India, How It Works, For
+   Speakers) from the story-content single-type. Renders typed prose
+   blocks via textContent (no raw HTML), then flips the tab to
+   .cms-active so the static fallback narrative is hidden while the
+   photo zones and speaker form are preserved. No CMS content for a tab
+   → that tab keeps its shipped static copy.
+═══════════════════════════════════════ */
+function csProseEl(kind, text) {
+  var el;
+  if (kind === 'heading') el = document.createElement('h3');
+  else if (kind === 'subhead') el = document.createElement('h4');
+  else if (kind === 'pullquote') { el = document.createElement('blockquote'); el.className = 'pull'; }
+  else if (kind === 'label') { el = document.createElement('span'); el.className = 'lbl'; }
+  else el = document.createElement('p');
+  el.textContent = text;
+  return el;
+}
+function csRenderProse(container, blocks) {
+  (blocks || []).forEach(function (b) {
+    var c = (b && b.attributes) ? b.attributes : b;
+    if (c && c.text) container.appendChild(csProseEl(c.kind || 'paragraph', c.text));
+  });
+}
+function csRenderSteps(container, steps) {
+  if (!steps || !steps.length) return;
+  var grid = document.createElement('div'); grid.className = 'step-grid';
+  steps.forEach(function (s) {
+    var c = (s && s.attributes) ? s.attributes : s; if (!c) return;
+    var card = document.createElement('div'); card.className = 'step-card';
+    var n = document.createElement('div'); n.className = 'step-num'; n.textContent = c.num || ''; card.appendChild(n);
+    var h = document.createElement('h4'); h.textContent = c.title || ''; card.appendChild(h);
+    var p = document.createElement('p'); p.textContent = c.text || ''; card.appendChild(p);
+    grid.appendChild(card);
+  });
+  container.appendChild(grid);
+}
+function csRenderStats(container, stats) {
+  if (!stats || !stats.length) return;
+  var row = document.createElement('div'); row.className = 'stat-row';
+  stats.forEach(function (s) {
+    var c = (s && s.attributes) ? s.attributes : s; if (!c) return;
+    var st = document.createElement('div'); st.className = 'stat';
+    var n = document.createElement('div'); n.className = 'stat-n'; n.textContent = c.number || ''; st.appendChild(n);
+    var l = document.createElement('div'); l.className = 'stat-l'; l.textContent = c.label || ''; st.appendChild(l);
+    row.appendChild(st);
+  });
+  container.appendChild(row);
+}
+function csActivate(tab, container) {
+  var panel = document.getElementById('tab-' + tab);
+  if (!panel || !container) return;
+  container.hidden = false;
+  panel.classList.add('cms-active');
+}
+function hydrateStoryContent() {
+  if (typeof STRAPI_URL === 'undefined') return;
+  if (!document.querySelector('.tab-cms')) return;
+  var url = STRAPI_URL + '/api/story-content'
+    + '?populate[why]=true&populate[india]=true'
+    + '&populate[how_intro]=true&populate[how_steps]=true&populate[how_stats]=true&populate[how_closing]=true'
+    + '&populate[speakers]=true';
+  fetch(url)
+    .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+    .then(function (body) {
+      var d = (body && body.data && (body.data.attributes || body.data)) || null;
+      if (!d) return;
+      var get = function (f) { return (d[f] && (d[f].data || d[f])) || null; };
+      var cont = function (tab) { return document.querySelector('.tab-cms[data-cms-tab="' + tab + '"]'); };
+
+      var why = get('why');
+      if (why && why.length) { var cw = cont('why'); csRenderProse(cw, why); csActivate('why', cw); }
+
+      var india = get('india');
+      if (india && india.length) { var ci = cont('india'); csRenderProse(ci, india); csActivate('india', ci); }
+
+      var hi = get('how_intro'), hs = get('how_steps'), hst = get('how_stats'), hc = get('how_closing');
+      if ((hi && hi.length) || (hs && hs.length) || (hst && hst.length) || (hc && hc.length)) {
+        var ch = cont('how');
+        csRenderProse(ch, hi); csRenderSteps(ch, hs); csRenderStats(ch, hst); csRenderProse(ch, hc);
+        csActivate('how', ch);
+      }
+
+      var sp = get('speakers');
+      if (sp && sp.length) {
+        var cs = cont('speakers');
+        csRenderProse(cs, sp);
+        if (d.speakers_calendly_url) {
+          var p = document.createElement('p');
+          var a = document.createElement('a');
+          a.href = d.speakers_calendly_url; a.target = '_blank'; a.rel = 'noopener';
+          a.style.color = '#d4a017'; a.style.fontWeight = '700';
+          a.style.textDecoration = 'underline'; a.style.textUnderlineOffset = '3px';
+          a.textContent = 'Schedule a conversation →';
+          p.appendChild(a); cs.appendChild(p);
+        }
+        csActivate('speakers', cs);
+      }
+    })
+    .catch(function () { /* CMS unreachable → static story copy stays */ });
+}
+hydrateStoryContent();
 
 /* ═══════════════════════════════════════
    FILMSTRIP ("Live from the movement")
