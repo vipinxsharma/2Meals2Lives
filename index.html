@@ -2525,12 +2525,12 @@ function renderStoryPhotoZone(section) {
   if (!zone) return;
   var stored = [];
   try { stored = JSON.parse(localStorage.getItem('2m2l_sp_'+section)||'[]'); } catch(e) {}
-  // Remove existing photo slots (keep the add button)
-  Array.from(zone.querySelectorAll('.story-photo-slot')).forEach(function(el){ el.remove(); });
+  // Remove existing LOCAL photo slots only (keep CMS slots + add button)
+  Array.from(zone.querySelectorAll('.story-photo-slot.local-photo')).forEach(function(el){ el.remove(); });
   var addBtn = zone.querySelector('.sp-add-btn');
   stored.forEach(function(p) {
     var slot = document.createElement('div');
-    slot.className = 'story-photo-slot';
+    slot.className = 'story-photo-slot local-photo';
     slot.innerHTML =
       '<img src="'+p.src+'" alt="Story photo" onclick="openLightbox(this.src)">'
       + '<div class="sp-overlay"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span>View</span></div>'
@@ -2547,9 +2547,68 @@ function removeStoryPhoto(section, id) {
   renderStoryPhotoZone(section);
 }
 
-// Render on load
+// Render on load (localStorage admin-preview photos)
 renderStoryPhotoZone('why');
 renderStoryPhotoZone('india');
+
+/* ═══════════════════════════════════════
+   STORY PHOTOS FROM CMS (PR-D)
+   Replaces the localStorage-only galleries with approved photos from
+   the story-photo collection. Only is_approved=true rows are served
+   publicly (filtered). CMS slots render alongside any local admin
+   preview slots; an unreachable CMS leaves the existing behavior intact.
+═══════════════════════════════════════ */
+function hydrateStoryPhotos(tab) {
+  if (typeof STRAPI_URL === 'undefined') return;
+  var zone = document.getElementById('spz-' + tab);
+  if (!zone) return;
+  var url = STRAPI_URL + '/api/story-photos'
+    + '?filters[tab][$eq]=' + encodeURIComponent(tab)
+    + '&filters[is_approved][$eq]=true'
+    + '&sort=order:asc&pagination[pageSize]=50&populate=image';
+  fetch(url)
+    .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+    .then(function (body) {
+      var rows = (body && body.data) || [];
+      if (!rows.length) return;
+      var addBtn = zone.querySelector('.sp-add-btn');
+      // Clear any prior CMS slots so re-runs don't duplicate.
+      Array.from(zone.querySelectorAll('.story-photo-slot.cms-photo')).forEach(function (el) { el.remove(); });
+      rows.forEach(function (row) {
+        var a = (row && row.attributes) ? row.attributes : row;
+        if (!a) return;
+        var mediaField = a.image;
+        var mediaUrl = (mediaField && mediaField.data && mediaField.data.attributes && mediaField.data.attributes.url)
+          || (mediaField && mediaField.url) || '';
+        var src = a.image_url || mediaUrl;
+        if (!src) return;
+        src = strapiMediaUrl(src);
+        var slot = document.createElement('div');
+        slot.className = 'story-photo-slot cms-photo';
+        var img = document.createElement('img');
+        img.src = src;
+        img.alt = a.caption || 'Story photo';
+        img.loading = 'lazy';
+        img.addEventListener('click', function () { openLightbox(src); });
+        slot.appendChild(img);
+        var ov = document.createElement('div');
+        ov.className = 'sp-overlay';
+        ov.innerHTML = '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span>View</span>';
+        slot.appendChild(ov);
+        if (a.caption) {
+          var cap = document.createElement('div');
+          cap.className = 'sp-caption';
+          cap.textContent = a.caption;
+          slot.appendChild(cap);
+        }
+        if (addBtn) zone.insertBefore(slot, addBtn);
+        else zone.appendChild(slot);
+      });
+    })
+    .catch(function () { /* CMS unreachable → local/static photos stay */ });
+}
+hydrateStoryPhotos('why');
+hydrateStoryPhotos('india');
 
 /* ═══════════════════════════════════════
    LIGHTBOX
