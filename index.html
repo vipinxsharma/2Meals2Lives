@@ -289,6 +289,7 @@ nav.scrolled{background:rgba(10,8,0,.92);border-bottom-color:var(--line);backdro
 }
 .pic-hover-text{
   font-size:.85rem;color:rgba(255,255,255,.72);line-height:1.65;max-width:200px;
+  display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;
 }
 .pic-hover-sub{
   font-size:.72rem;color:rgba(240,184,0,.55);font-style:italic;
@@ -852,7 +853,7 @@ footer{
 .footer-logo{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:400;color:var(--text);margin-bottom:.5rem}
 .footer-logo span{color:var(--gold)}
 /* CMS-driven footer logo (branding PR): swaps in only when Global.footerLogo is set */
-.footer-logo-img{max-height:46px;width:auto;display:block}
+.footer-logo-img{max-height:46px;width:auto;display:block;margin:0 auto}
 .footer-logo.has-cms-logo{font-size:0;line-height:0}
 .footer-tagline{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:1.25rem}
 .footer-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.25rem}
@@ -1038,6 +1039,8 @@ footer{
    form). The .tab-cms container holds the hydrated copy. */
 .tab-cms{display:none}
 .story-section.cms-active > .tab-cms{display:block}
+/* M4: style only CMS subhead blocks (direct children); never .step-card h4 */
+.tab-cms > h4{font-family:'Fraunces',serif;font-size:1.05rem;font-weight:400;color:#1c1a14;margin:1.5rem 0 .5rem}
 .story-section.cms-active > :not(.tab-cms):not(.story-photo-zone):not(.speaker-interest){display:none}
 
 /* ── Story section photo zones ── */
