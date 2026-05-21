@@ -1409,14 +1409,14 @@ footer{
       <h1 id="hero-title" class="hero-title">
         <span class="h">#</span><span class="n">2Hands</span><span class="a">2Meals</span><br><span class="n">2Lives</span><span class="h">1</span><span class="a">Movement</span>
       </h1>
-      <p class="hero-tagline">Two hands. Two meals. Two lives. One movement.</p>
+      <p class="hero-tagline" id="hero-tagline">Two hands. Two meals. Two lives. One movement.</p>
 
       <div class="hero-btns">
         <button class="btn-gold" onclick="showPage('story')">
-          The Story
+          <span id="hero-cta-primary">The Story</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
-        <button class="btn-ghost" onclick="openSubmit()">Share your moment</button>
+        <button class="btn-ghost" id="hero-cta-secondary" onclick="openSubmit()">Share your moment</button>
       </div>
 
     </div>
@@ -3384,9 +3384,24 @@ function applyPicSlot(slot, url) {
   var img = panel.querySelector('img');
   if (img) img.src = strapiMediaUrl(url);
 }
+function applyPanelCopy(slot, copy) {
+  if (!copy) return;
+  var panel = document.querySelector('.pic-panel[data-pic-slot="' + slot + '"]');
+  if (!panel) return;
+  var set = function (sel, val) {
+    if (!val) return;
+    var el = panel.querySelector(sel);
+    if (el) el.textContent = val;
+  };
+  set('.pic-num', copy.num);
+  set('.pic-hover-num', copy.num);
+  set('.pic-hover-word', copy.word);
+  set('.pic-hover-text', copy.text);
+  set('.pic-hover-sub', copy.sub);
+}
 function buildLandingGrid() {
   if (!document.querySelector('.pic-panel[data-pic-slot]')) return;
-  fetch(STRAPI_URL + '/api/landing-hero-grid?populate[hands_image]=true&populate[meals_image]=true&populate[lives_image]=true&populate[movement_image]=true')
+  fetch(STRAPI_URL + '/api/landing-hero-grid?populate[hands_image]=true&populate[meals_image]=true&populate[lives_image]=true&populate[movement_image]=true&populate[hero]=true&populate[panels]=true')
     .then(function (r) {
       if (!r.ok) throw new Error('status ' + r.status);
       return r.json();
@@ -3404,9 +3419,29 @@ function buildLandingGrid() {
           || '';
         applyPicSlot(slot, urlField || mediaUrl);
       });
+
+      // ── hero copy (PR-B): tagline + CTA labels; title stays static ────
+      var hero = attrs.hero && (attrs.hero.data && attrs.hero.data.attributes || attrs.hero) || null;
+      if (hero) {
+        var ht = document.getElementById('hero-tagline');
+        if (ht && hero.tagline) ht.textContent = hero.tagline;
+        var p1 = document.getElementById('hero-cta-primary');
+        if (p1 && hero.ctaPrimary) p1.textContent = hero.ctaPrimary;
+        var p2 = document.getElementById('hero-cta-secondary');
+        if (p2 && hero.ctaSecondary) p2.textContent = hero.ctaSecondary;
+      }
+
+      // ── pictorial panel hover copy (PR-B), matched by slot ────────────
+      var panels = attrs.panels && (attrs.panels.data || attrs.panels) || null;
+      if (panels && panels.length) {
+        panels.forEach(function (p) {
+          var c = (p && p.attributes) ? p.attributes : p;
+          if (c && c.slot) applyPanelCopy(c.slot, c);
+        });
+      }
     })
     .catch(function () {
-      // CMS unreachable → fallback images stay.
+      // CMS unreachable → fallback images and copy stay.
     });
 }
 buildLandingGrid();
