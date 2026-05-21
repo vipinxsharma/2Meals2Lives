@@ -70,6 +70,10 @@ nav.scrolled{background:rgba(10,8,0,.92);border-bottom-color:var(--line);backdro
 .nav-logo-heart{width:28px;height:28px;flex-shrink:0}
 .nav-logo-heart path{fill:var(--gold)}
 .nav-hash{color:var(--gold)}
+/* CMS-driven header logo (branding PR): swaps in only when Global.primaryLogo is set */
+.nav-logo-img{height:30px;width:auto;display:none}
+.nav-logo.has-cms-logo .nav-logo-heart,.nav-logo.has-cms-logo>span{display:none}
+.nav-logo.has-cms-logo .nav-logo-img{display:block}
 
 .nav-links{display:flex;align-items:center;gap:1.5rem}
 .nav-btn{
@@ -847,6 +851,9 @@ footer{
 }
 .footer-logo{font-family:'Fraunces',serif;font-size:1.2rem;font-weight:400;color:var(--text);margin-bottom:.5rem}
 .footer-logo span{color:var(--gold)}
+/* CMS-driven footer logo (branding PR): swaps in only when Global.footerLogo is set */
+.footer-logo-img{max-height:46px;width:auto;display:block}
+.footer-logo.has-cms-logo{font-size:0;line-height:0}
 .footer-tagline{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:1.25rem}
 .footer-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.25rem}
 .footer-links a{font-size:.72rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-weight:600;transition:color .2s}
@@ -3535,7 +3542,9 @@ function hydrateGlobal() {
     + '?populate[announcementBar]=true'
     + '&populate[navLabels]=true'
     + '&populate[footer][populate]=qrBullets'
-    + '&populate[legalLinks]=true';
+    + '&populate[legalLinks]=true'
+    + '&populate[primaryLogo]=true'
+    + '&populate[footerLogo]=true';
   fetch(url)
     .then(function (r) { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
     .then(function (body) {
@@ -3616,6 +3625,46 @@ function hydrateGlobal() {
           });
           box.dataset.legalWired = '1';
         }
+      }
+
+      // ── branding logos (header + footer) ───────────────────────────────
+      // Resolve a media field that may arrive as v4 {data:{attributes:{url}}}
+      // or v5 flat {url}. Returns '' when unset so the static logo stays.
+      var mediaUrl = function (field) {
+        if (!field) return '';
+        var a = (field.data && field.data.attributes) ? field.data.attributes : field;
+        return (a && a.url) || '';
+      };
+      var headerLogo = mediaUrl(g.primaryLogo);
+      if (headerLogo) {
+        var navLogo = document.querySelector('.nav-logo');
+        if (navLogo && !navLogo.querySelector('.nav-logo-img')) {
+          var li = document.createElement('img');
+          li.className = 'nav-logo-img';
+          li.src = strapiMediaUrl(headerLogo);
+          li.alt = (nav && nav.logoAlt) || '#2Meals2Lives';
+          navLogo.insertBefore(li, navLogo.firstChild);
+          navLogo.classList.add('has-cms-logo');
+        }
+      }
+      var footLogo = mediaUrl(g.footerLogo);
+      if (footLogo) {
+        var fl = document.querySelector('.footer-logo');
+        if (fl && !fl.querySelector('.footer-logo-img')) {
+          var fi = document.createElement('img');
+          fi.className = 'footer-logo-img';
+          fi.src = strapiMediaUrl(footLogo);
+          fi.alt = (ft && ft.logoAlt) || '#2Meals2Lives';
+          fl.classList.add('has-cms-logo');
+          fl.insertBefore(fi, fl.firstChild);
+        }
+      }
+
+      // ── CTA target override (optional) ─────────────────────────────────
+      if (nav && nav.ctaUrl) {
+        document.querySelectorAll('.nav-cta[data-nav="join"]').forEach(function (el) {
+          el.onclick = function () { window.open(nav.ctaUrl, '_blank', 'noopener'); };
+        });
       }
     })
     .catch(function () { /* CMS unreachable → static chrome stays */ });
